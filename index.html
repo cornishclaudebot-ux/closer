@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Closer, Match when you actually cross paths</title>
+<meta name="description" content="Closer is the GCU-only dating app where matches only happen in real life. Verify with your GCU email and connect with people when you cross paths.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080907; --bg2:#110d0a; --surface:#17120d; --surface2:#1f1812;
+    --line:rgba(246,239,228,0.09); --text:#f6efe4; --muted:#a7977f; --muted2:#6f6253;
+    --coral:#ff7e33; --pink:#ff5c00; --violet:#e8b15a;
+    --grad:linear-gradient(135deg,#ff7e33 0%,#ff5c00 55%,#e8b15a 100%);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.02em;line-height:1.05}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;padding:14px 22px;border-radius:999px;border:none;cursor:pointer;background:var(--grad);color:#fff;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 8px 30px rgba(255,92,0,.25)}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 38px rgba(255,92,0,.4)}
+  .btn-ghost{background:transparent;border:1px solid var(--line);box-shadow:none}
+  .btn-ghost:hover{border-color:rgba(246,239,228,.25);box-shadow:none}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(14px);background:rgba(8,9,7,.6);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px}
+  .logo .grad-text{font-size:22px}
+  .nav-links{display:flex;align-items:center;gap:28px;font-size:14px;color:var(--muted)}
+  .nav-links a:hover{color:var(--text)}
+  @media(max-width:720px){.nav-links{display:none}}
+
+  /* HERO */
+  header.hero{position:relative;padding:160px 0 90px;overflow:hidden}
+  .hero-glow{position:absolute;top:-200px;right:-120px;width:680px;height:680px;background:radial-gradient(circle,rgba(255,92,0,.2),transparent 60%);pointer-events:none;filter:blur(20px)}
+  .hero-glow.two{left:-200px;top:200px;right:auto;background:radial-gradient(circle,rgba(232,177,90,.16),transparent 60%)}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative}
+  @media(max-width:880px){.hero-grid{grid-template-columns:1fr;gap:40px}}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);background:var(--surface);padding:7px 14px;border-radius:999px;margin-bottom:24px}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--grad);box-shadow:0 0 12px var(--pink)}
+  h1{font-size:clamp(40px,6vw,68px);font-weight:700;margin-bottom:22px}
+  .hero p.lead{font-size:18px;color:var(--muted);max-width:540px;margin-bottom:32px}
+  .hero p.lead b{color:var(--text);font-weight:600}
+
+  /* FORM */
+  .signup{display:flex;gap:10px;max-width:480px;flex-wrap:wrap}
+  .signup input{flex:1;min-width:220px;background:var(--surface);border:1px solid var(--line);color:var(--text);font-family:'Inter';font-size:15px;padding:14px 18px;border-radius:999px;outline:none;transition:border-color .15s}
+  .signup input:focus{border-color:var(--pink)}
+  .signup input::placeholder{color:var(--muted2)}
+  .form-note{font-size:13px;color:var(--muted2);margin-top:14px;display:flex;align-items:center;gap:7px}
+  .msg{font-size:14px;margin-top:14px;min-height:20px;font-weight:500}
+  .msg.err{color:#ff6b5c}
+  .msg.ok{color:#6fd49b}
+  .success-card{display:none;max-width:480px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;animation:pop .4s ease}
+  .success-card.show{display:block}
+  .success-card h3{font-size:20px;margin-bottom:8px}
+  .success-card p{color:var(--muted);font-size:15px}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+
+  /* RADAR VISUAL */
+  .radar-wrap{display:flex;align-items:center;justify-content:center;position:relative;height:420px}
+  .radar{position:relative;width:340px;height:340px;display:flex;align-items:center;justify-content:center}
+  .ring{position:absolute;border-radius:50%;border:1.5px solid rgba(255,92,0,.5);left:50%;top:50%;transform:translate(-50%,-50%);animation:radar 3.6s cubic-bezier(.2,.6,.3,1) infinite}
+  .ring:nth-child(2){animation-delay:.9s}
+  .ring:nth-child(3){animation-delay:1.8s}
+  .ring:nth-child(4){animation-delay:2.7s}
+  @keyframes radar{0%{width:60px;height:60px;opacity:.9;border-color:rgba(255,126,51,.7)}100%{width:340px;height:340px;opacity:0;border-color:rgba(232,177,90,.1)}}
+  .radar-core{position:relative;z-index:2;width:60px;height:60px;border-radius:50%;background:var(--grad);box-shadow:0 0 40px rgba(255,92,0,.6);display:flex;align-items:center;justify-content:center}
+  .pin{position:absolute;width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-align:center;line-height:1;font-size:11px;font-weight:600;font-family:'Space Grotesk';color:var(--text);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+  .pin.p1{top:18%;left:8%;animation:float 5s ease-in-out infinite}
+  .pin.p2{top:24%;right:4%;animation:float 6s ease-in-out infinite .5s}
+  .pin.p3{bottom:16%;left:14%;animation:float 5.5s ease-in-out infinite 1s}
+  .pin.p4{bottom:22%;right:10%;animation:float 6.5s ease-in-out infinite 1.5s}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+  /* SECTION */
+  section{padding:88px 0;position:relative}
+  .sec-head{text-align:center;max-width:660px;margin:0 auto 56px}
+  .sec-eyebrow{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--pink);margin-bottom:14px}
+  h2{font-size:clamp(30px,4.5vw,46px);font-weight:700;margin-bottom:16px}
+  .sec-head p{color:var(--muted);font-size:17px}
+
+  /* STEPS */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:820px){.steps{grid-template-columns:1fr}}
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:32px 28px;position:relative;overflow:hidden}
+  .step .num{font-family:'Space Grotesk';font-weight:700;font-size:54px;line-height:1;margin-bottom:18px}
+  .step h3{font-size:20px;margin-bottom:10px}
+  .step p{color:var(--muted);font-size:15px}
+  .step::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);opacity:.7}
+
+  /* FEATURES */
+  .features{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  @media(max-width:820px){.features{grid-template-columns:1fr}}
+  .feat{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:34px;transition:transform .2s,border-color .2s}
+  .feat:hover{transform:translateY(-4px);border-color:rgba(255,92,0,.3)}
+  .feat .ico{width:50px;height:50px;border-radius:14px;background:var(--surface2);display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:24px}
+  .feat h3{font-size:22px;margin-bottom:10px}
+  .feat p{color:var(--muted);font-size:15.5px}
+  .feat .tag{display:inline-block;font-size:12px;font-weight:600;color:var(--violet);background:rgba(232,177,90,.12);border:1px solid rgba(232,177,90,.25);padding:4px 11px;border-radius:999px;margin-top:14px}
+
+  /* EVENTS STRIP */
+  .events{background:linear-gradient(180deg,var(--bg2),var(--bg));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .events-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  @media(max-width:820px){.events-inner{grid-template-columns:1fr;gap:28px}}
+  .events h2{margin-bottom:18px}
+  .events p{color:var(--muted);font-size:17px;margin-bottom:20px}
+  .brand-pills{display:flex;gap:12px;flex-wrap:wrap}
+  .brand-pill{font-family:'Space Grotesk';font-weight:600;font-size:14px;padding:12px 20px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+  .hotspot{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px;position:relative;overflow:hidden}
+  .hotspot .live{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:#6fd49b;margin-bottom:18px}
+  .hotspot .live .pulse{width:8px;height:8px;border-radius:50%;background:#6fd49b;animation:blink 1.4s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  .hs-row{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .hs-row:last-child{border-bottom:none}
+  .hs-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:600;font-size:15px;color:#fff}
+  .hs-row .hs-name{font-weight:600;font-size:15px}
+  .hs-row .hs-meta{font-size:13px;color:var(--muted2)}
+  .hs-row .hs-dist{margin-left:auto;font-size:12px;font-weight:600;color:var(--pink);background:rgba(255,92,0,.1);padding:5px 10px;border-radius:999px}
+
+  /* SAFETY */
+  .safety{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  @media(max-width:820px){.safety{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:480px){.safety{grid-template-columns:1fr}}
+  .safe-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .safe-card .ico{font-size:22px;margin-bottom:12px}
+  .safe-card h3{font-size:16px;margin-bottom:7px}
+  .safe-card p{font-size:13.5px;color:var(--muted)}
+
+  /* CTA */
+  .cta-final{text-align:center;background:radial-gradient(circle at 50% 0%,rgba(255,92,0,.14),transparent 55%)}
+  .cta-final h2{margin-bottom:18px}
+  .cta-final p{color:var(--muted);font-size:18px;max-width:520px;margin:0 auto 34px}
+  .cta-final .signup{margin:0 auto;justify-content:center}
+  .founding{display:inline-flex;align-items:center;gap:8px;margin-top:26px;font-size:14px;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:10px 18px;border-radius:999px}
+  .founding b{color:var(--text)}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--line);padding:44px 0;text-align:center}
+  footer .logo{justify-content:center;margin-bottom:14px}
+  footer p{color:var(--muted2);font-size:14px}
+  footer .made{margin-top:8px;font-size:13px;color:var(--muted2)}
+</style>
+</head>
+<body>
+
+<!-- pulse logo svg, reused -->
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="pg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#ff7e33"/><stop offset="0.55" stop-color="#ff5c00"/><stop offset="1" stop-color="#e8b15a"/>
+  </linearGradient>
+</defs></svg>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="url(#pg)"/><circle cx="14" cy="14" r="8.5" stroke="url(#pg)" stroke-width="1.8" opacity="0.55"/><circle cx="14" cy="14" r="12.5" stroke="url(#pg)" stroke-width="1.4" opacity="0.25"/></svg>
+      <span class="grad-text">closer</span>
+    </div>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#spotlight">Spotlight</a>
+      <a href="#events">Events</a>
+      <a href="#safety">Safety</a>
+    </div>
+    <a href="#join" class="btn">Join the waitlist</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow two"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>GCU students only</span>
+      <h1>Match when you <span class="grad-text">actually cross paths.</span></h1>
+      <p class="lead">Closer is the dating app where matches only happen in real life. Verify with your <b>GCU email</b>, live your normal day, and connect with people only when you come within <b>about 20 feet</b> of them. At class. On campus. At an event. <b>No randoms. No bots. Just people you'd actually run into.</b></p>
+      <form class="signup" id="waitForm" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="waitlist">
+        <p style="display:none"><label>Skip if human: <input name="bot-field"></label></p>
+        <input type="email" name="email" id="email" placeholder="you@gcu.edu" autocomplete="email" required>
+        <button type="submit" class="btn">Reserve my spot</button>
+      </form>
+      <div class="msg" id="msg"></div>
+      <div class="success-card" id="success">
+        <h3>You're on the list. <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-3px"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></h3>
+        <p>Founding member status locked. We'll email your invite the second Closer goes live at GCU.</p>
+      </div>
+      <div class="form-note" id="note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7v3l-2 4h18l-2-4V9a7 7 0 0 0-7-7z"/></svg>
+        Verify with your real GCU email. We never post anything.
+      </div>
+    </div>
+    <div class="radar-wrap">
+      <div class="radar">
+        <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
+        <div class="radar-core">
+          <svg width="30" height="30" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="#fff"/><circle cx="14" cy="14" r="8.5" stroke="#fff" stroke-width="1.6" opacity="0.7"/></svg>
+        </div>
+        <div class="pin p1">Pool</div>
+        <div class="pin p2">Bar</div>
+        <div class="pin p3">Gym</div>
+        <div class="pin p4">Class</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-eyebrow">How it works</div>
+      <h2>Three steps. One rule: be there.</h2>
+      <p>Closer runs quietly in the background and only lights up when you're physically near another verified student.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num grad-text">1</div>
+        <h3>Verify you're GCU</h3>
+        <p>Sign in with your GCU email through Microsoft. Real students only. No catfish, no bots, no creeps from three states away.</p>
+      </div>
+      <div class="step">
+        <div class="num grad-text">2</div>
+        <h3>Live your life</h3>
+        <p>Go to class, the gym, the dining hall, or a party. Closer works in the background and notices who you genuinely cross paths with.</p>
+      </div>
+      <div class="step">
+        <div class="num grad-text">3</div>
+        <h3>Cross paths to match</h3>
+        <p>Come within about 20 feet of someone and you both unlock. Like them back and it's a match. You already shared a room. Now close the distance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="features">
+      <div class="feat">
+        <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><path d="M8.1 15.9a5.5 5.5 0 0 1 0-7.8"/><path d="M5.6 18.4a9 9 0 0 1 0-12.8"/><path d="M15.9 8.1a5.5 5.5 0 0 1 0 7.8"/><path d="M18.4 5.6a9 9 0 0 1 0 12.8"/></svg></div>
+        <h3>Proximity is the whole point</h3>
+        <p>Other apps show you a thousand strangers you'll never meet. Closer only shows you people you were genuinely near, from your classes, your buildings, your scene. It's the difference between swiping and actually meeting.</p>
+      </div>
+      <div class="feat" id="spotlight">
+        <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2.6l2.65 5.37 5.93.86-4.29 4.18 1.01 5.9L12 16.1l-5.3 2.79 1.01-5.9-4.29-4.18 5.93-.86z"/></svg></div>
+        <h3>Spotlight, if you want it</h3>
+        <p>Opt in to the daily Spotlight board and see who's catching the most likes on campus this week. It's a game you choose to play, ranked by real likes, refreshed every day. Pure FOMO, fully your call.</p>
+        <span class="tag">Opt-in only</span>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.2" fill="currentColor" stroke="none"/></svg></div>
+        <h3>Match-gated by design</h3>
+        <p>Nobody messages you until you both like each other. No surprise DMs, no spam. Closer shows you crossed paths after the fact, never your live location.</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9L12 5l9.5 4L12 13z"/><path d="M6 11v4.2c0 1.2 2.7 2.3 6 2.3s6-1.1 6-2.3V11"/><path d="M21.5 9v4.5"/></svg></div>
+        <h3>Your campus, not the internet</h3>
+        <p>Everyone on Closer is a verified GCU student. The person you matched with sits two rows over, lives in your building, or was at the same event last night.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="events" id="events">
+  <div class="wrap">
+    <div class="events-inner">
+      <div>
+        <div class="sec-eyebrow">The unfair advantage</div>
+        <h2>Closer lights up at every event.</h2>
+        <p>Most dating apps are empty maps. Closer is built by a team that fills rooms with live events for a living. Every event becomes a live hotspot where matching turns on and the whole crowd is right there with you.</p>
+      </div>
+      <div class="hotspot">
+        <div class="live"><span class="pulse"></span>LIVE NOW · Riverside Bar</div>
+        <div class="hs-row">
+          <div class="hs-av" style="background:linear-gradient(135deg,#ff7e33,#ff5c00)">M</div>
+          <div><div class="hs-name">Maya, 20</div><div class="hs-meta">Crossed paths 4 min ago</div></div>
+          <div class="hs-dist">14 ft</div>
+        </div>
+        <div class="hs-row">
+          <div class="hs-av" style="background:linear-gradient(135deg,#ff5c00,#e8b15a)">J</div>
+          <div><div class="hs-name">Jordan, 21</div><div class="hs-meta">Crossed paths 9 min ago</div></div>
+          <div class="hs-dist">11 ft</div>
+        </div>
+        <div class="hs-row">
+          <div class="hs-av" style="background:linear-gradient(135deg,#e8b15a,#ff7e33)">S</div>
+          <div><div class="hs-name">Sofia, 19</div><div class="hs-meta">Crossed paths 12 min ago</div></div>
+          <div class="hs-dist">18 ft</div>
+        </div>
+        <div class="hs-row">
+          <div class="hs-av" style="background:linear-gradient(135deg,#ff5c00,#e8b15a)">D</div>
+          <div><div class="hs-name">Devin, 22</div><div class="hs-meta">Crossed paths 15 min ago</div></div>
+          <div class="hs-dist">9 ft</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="safety">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-eyebrow">Safe by design</div>
+      <h2>Built for real people, not predators.</h2>
+      <p>A proximity app has to earn trust. We designed Closer around it from day one.</p>
+    </div>
+    <div class="safety">
+      <div class="safe-card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 0 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></div><h3>No live location</h3><p>You only ever see that you crossed paths, after the fact. Never where someone is right now.</p></div>
+      <div class="safe-card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#pg)"/><path d="M7.5 12.3l3 3 6-6.5" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Verified students</h3><p>GCU email plus photo verification. Everyone is who they say they are.</p></div>
+      <div class="safe-card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5a2 2 0 0 1-2 2H8l-4 3.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/></svg></div><h3>Match to talk</h3><p>No messages until you both like each other. You control who reaches you.</p></div>
+      <div class="safe-card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></div><h3>One-tap block</h3><p>Block and report instantly. Consent-first Spotlight, nobody ranked without opting in.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final" id="join">
+  <div class="wrap">
+    <h2>Be one of the first on campus.</h2>
+    <p>Closer launches at GCU first. Reserve your spot and lock founding member status before everyone else.</p>
+    <form class="signup" id="waitForm2" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="waitlist">
+      <p style="display:none"><label>Skip if human: <input name="bot-field"></label></p>
+      <input type="email" name="email" id="email2" placeholder="you@gcu.edu" autocomplete="email" required>
+      <button type="submit" class="btn">Reserve my spot</button>
+    </form>
+    <div class="msg" id="msg2" style="text-align:center"></div>
+    <div class="founding"><span style="display:inline-flex;color:var(--coral)"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2.6l2.65 5.37 5.93.86-4.29 4.18 1.01 5.9L12 16.1l-5.3 2.79 1.01-5.9-4.29-4.18 5.93-.86z"/></svg></span><span>First <b>500 verified students</b> get founding member status.</span></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo">
+      <svg width="24" height="24" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="url(#pg)"/><circle cx="14" cy="14" r="8.5" stroke="url(#pg)" stroke-width="1.8" opacity="0.55"/><circle cx="14" cy="14" r="12.5" stroke="url(#pg)" stroke-width="1.4" opacity="0.25"/></svg>
+      <span class="grad-text">closer</span>
+    </div>
+    <p>Match when you actually cross paths.</p>
+    <p class="made">Built in Phoenix, AZ</p>
+  </div>
+</footer>
+
+<script>
+  function isGcu(email){
+    return /@(my\.)?gcu\.edu$/i.test(email.trim());
+  }
+  function handle(form, emailEl, msgEl, successEl, noteEl){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var email = emailEl.value.trim();
+      msgEl.className = 'msg';
+      if(!email || email.indexOf('@')<0){ msgEl.textContent='Enter your email to reserve a spot.'; msgEl.classList.add('err'); return; }
+      if(!isGcu(email)){ msgEl.textContent='Closer is GCU only for now. Use your @gcu.edu email to get in.'; msgEl.classList.add('err'); return; }
+      // Attempt real submit (works once deployed on Netlify); always show success in-app.
+      var body = new URLSearchParams(new FormData(form)).toString();
+      fetch('/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:body}).catch(function(){});
+      if(successEl){
+        form.style.display='none';
+        if(noteEl) noteEl.style.display='none';
+        successEl.classList.add('show');
+      } else {
+        msgEl.textContent="You're in. Founding member status locked. Watch your GCU inbox.";
+        msgEl.classList.add('ok');
+        form.reset();
+      }
+    });
+  }
+  handle(document.getElementById('waitForm'), document.getElementById('email'), document.getElementById('msg'), document.getElementById('success'), document.getElementById('note'));
+  handle(document.getElementById('waitForm2'), document.getElementById('email2'), document.getElementById('msg2'), null, null);
+</script>
+</body>
+</html>
