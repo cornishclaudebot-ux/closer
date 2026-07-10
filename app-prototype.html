@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Closer, Interactive Prototype</title>
 <meta name="description" content="Interactive concept prototype of Closer, the GCU-only dating app where matches happen when you actually cross paths.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Ccircle cx='14' cy='14' r='4' fill='%23ff5c00'/%3E%3Ccircle cx='14' cy='14' r='8.5' stroke='%23ff5c00' stroke-width='1.8' fill='none' opacity='0.55'/%3E%3Ccircle cx='14' cy='14' r='12.5' stroke='%23e8b15a' stroke-width='1.4' fill='none' opacity='0.35'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Ccircle cx='14' cy='14' r='4' fill='%232ec5ff'/%3E%3Ccircle cx='14' cy='14' r='8.5' stroke='%232ec5ff' stroke-width='1.8' fill='none' opacity='0.55'/%3E%3Ccircle cx='14' cy='14' r='12.5' stroke='%23ff5cae' stroke-width='1.4' fill='none' opacity='0.35'/%3E%3C/svg%3E">
 <meta property="og:title" content="Closer, interactive app prototype">
 <meta property="og:description" content="Tap through the Closer concept: paths, hearts, hotspots, and events.">
 <meta name="twitter:card" content="summary">
@@ -353,6 +353,9 @@
   .sheet-card textarea{width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:13px;padding:13px;color:var(--text);font-family:'Inter';font-size:14px;resize:none;height:80px;margin-bottom:16px;outline:none}
 
   .login{position:absolute;inset:0;background:radial-gradient(circle at 50% 18%,#2a1608,#080907 60%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;z-index:45}
+  body.night .login{background:radial-gradient(circle at 50% 18%,#10183a,#070a16 60%)}
+  body.night .pri-modal-card{background:linear-gradient(160deg,#141b38,#0b0f22);border-color:rgba(255,92,174,.4)}
+  body.night .pri-star{color:var(--sand);filter:drop-shadow(0 0 22px rgba(255,92,174,.6))}
   .login .mark{margin-bottom:24px}.login h2{font-family:'Space Grotesk';font-weight:700;font-size:34px;margin-bottom:10px}
   .login p{color:var(--muted);font-size:15px;margin-bottom:34px;max-width:260px}
   .ms-btn{display:flex;align-items:center;gap:12px;background:#fff;color:#1a1a1a;font-family:'Inter';font-weight:600;font-size:15px;padding:15px 22px;border-radius:14px;border:none;width:100%;justify-content:center;transition:transform .15s}.ms-btn:hover{transform:translateY(-2px)}
@@ -523,9 +526,9 @@
   }
 </style>
 </head>
-<body>
+<body class="night">
 <svg width="0" height="0" style="position:absolute"><defs>
-  <linearGradient id="wg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7e33"/><stop offset="0.55" stop-color="#ff5c00"/><stop offset="1" stop-color="#e8b15a"/></linearGradient>
+  <linearGradient id="wg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#39ffd0"/><stop offset="0.55" stop-color="#2ec5ff"/><stop offset="1" stop-color="#ff5cae"/></linearGradient>
 </defs></svg>
 
 <div class="page">
@@ -817,7 +820,7 @@
   var revealsUsed=0, REVEAL_LIMIT=50, revealed={};
   var G_day=['linear-gradient(135deg,#ff7e33,#ff5c00)','linear-gradient(135deg,#ff5c00,#e8b15a)','linear-gradient(135deg,#e8b15a,#ff7e33)','linear-gradient(135deg,#ff7e33,#b34700)','linear-gradient(135deg,#ff5c00,#ff9d4d)'];
   var G_night=['linear-gradient(135deg,#39ffd0,#2ec5ff)','linear-gradient(135deg,#2ec5ff,#ff5cae)','linear-gradient(135deg,#ff5cae,#39ffd0)','linear-gradient(135deg,#2ec5ff,#7a5cff)','linear-gradient(135deg,#39ffa6,#2ec5ff)'];
-  var G=G_day, night=false;
+  var G=G_night, night=true;
   var people=[
     {id:1,name:'Maya',age:20,init:'M',g:0,when:'a week ago',ft:20,times:4,likes:248,mins:12,venue:'Riverside Bar',bio:'Marketing major. Live music, iced lattes, and the best taco truck on campus.',ig:'maya.rose',matched:true,showcase:true,heart:null},
     {id:2,name:'Jordan',age:21,init:'J',g:1,when:'3 days ago',ft:11,times:2,likes:176,mins:22,venue:'Lopes Way',bio:'Business and intramural soccer. Competitive at everything, even mini golf.',ig:'jordan.b',matched:false,showcase:false,heart:'We always end up in the same room. Coffee?'},
@@ -1312,7 +1315,7 @@
     document.getElementById('login').style.display='none';
     document.getElementById('tabbar').style.display='flex';
     renderRecent(); renderPortfolio(''); renderSpot(); renderEvents(); renderHere(false); renderMessages(); renderPosts(); renderQuests(); renderMeds(); updateCounter();
-    var hr=new Date().getHours(); applyNight(hr>=18||hr<6);
+    applyNight(true);
     startToasts(); startDrops();
   }
   function resetProto(){
@@ -1320,7 +1323,7 @@
     clearInterval(hotTimer); clearInterval(dropTimer); clearInterval(adTimer); clearTimeout(toastHide); stopToasts(); hereMine={}; portfolioUnlocked=false;
     document.getElementById('tabbar').style.display='none';
     document.getElementById('login').style.display='flex';
-    priorityLeft=10; revealsUsed=0; REVEAL_LIMIT=50; revealed={}; hereIdx=0; applyNight(false); updateCounter();
+    priorityLeft=10; revealsUsed=0; REVEAL_LIMIT=50; revealed={}; hereIdx=0; applyNight(true); updateCounter();
     recentIds=[1,2,3,4,5,6]; dropQueue=[12,10,7]; dropSecs=40; queuedExtra=0; people.forEach(function(p){ delete p.just; });
     quests[0].cur=0; quests[1].cur=3; quests[2].cur=0; xpPct=62; var xf=document.getElementById('xpFill'); if(xf) xf.style.width='62%';
     meds.forEach(function(m){ m.earned=(m.id==='first'||m.id==='butterfly'||m.id==='owl'||m.id==='dayone'); });
