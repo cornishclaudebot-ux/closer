@@ -553,7 +553,7 @@
   #pane-events .for-you{background:linear-gradient(135deg,rgba(75,224,184,.16),rgba(59,130,246,.14));border-color:rgba(59,130,246,.3)}
   #pane-events .ev-stat b{color:#2f7de1}
   body.night #pane-events .vscore,body.night #pane-events .ev-stat b{color:#6ab8ff}
-  .loc-ok{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;font-family:'Anton';letter-spacing:.04em;color:#0a9e77;background:rgba(18,185,129,.12);border:1px solid rgba(18,185,129,.3);padding:3px 8px;border-radius:999px;margin-top:5px}
+  .loc-ok{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;font-family:'Anton';letter-spacing:.04em;color:#0a7d5f;background:rgba(18,185,129,.14);border:1px solid rgba(18,185,129,.35);padding:3px 8px;border-radius:999px;margin-top:5px}
   .loc-ok .ic{width:11px;height:11px}
   body.night .loc-ok{color:#7dffc4}
   .loc-note{text-align:center;font-size:11px;color:var(--muted2);margin-top:10px;line-height:1.5;padding:0 10px}
@@ -627,10 +627,10 @@
         <div class="login" id="login">
           <div class="mark"><svg width="64" height="64" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="url(#wg)"/><circle cx="14" cy="14" r="8.5" stroke="url(#wg)" stroke-width="1.6" opacity="0.6"/><circle cx="14" cy="14" r="12.5" stroke="url(#wg)" stroke-width="1.3" opacity="0.3"/></svg></div>
           <h2 class="grad-text">closer</h2>
-          <p>Match when you actually cross paths. GCU students only.</p>
+          <p>Match with GCU students you physically cross paths with, within about 20 feet. Real students only.</p>
           <button class="ms-btn" onclick="enterApp()"><span class="ms-grid"><span style="background:#F25022"></span><span style="background:#7FBA00"></span><span style="background:#00A4EF"></span><span style="background:#FFB900"></span></span>Continue with GCU email</button>
           <div class="verified-chip"><span id="lockIc"></span> Verified through Microsoft, @gcu.edu</div>
-          <div class="legal">You must be a verified GCU student, 18 or older. Age is verified at signup. By continuing you agree to the <a href="#" style="color:var(--orange)" onclick="event.preventDefault();openGuidelines()">Community Guidelines</a>.<br><br>This is a concept demo. <a href="index.html" style="color:var(--sand)">Join the real waitlist</a></div>
+          <div class="legal">GCU students only, 18 and over. We verify your GCU affiliation through Microsoft, and you confirm you are 18 or older to continue. By continuing you agree to the <a href="#" style="color:var(--orange)" onclick="event.preventDefault();openGuidelines()">Community Guidelines</a>.<br><br>This is a concept demo. <a href="index.html" style="color:var(--sand)">Join the real waitlist</a></div>
         </div>
 
         <div class="statusbar"><span>9:41</span><span class="right"><button class="theme-toggle" id="themeBtn" aria-label="Switch day and night theme" onclick="toggleNight()"></button><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.7" y="4.5" width="3" height="6.5" rx="1"/><rect x="9.4" y="2" width="3" height="9" rx="1"/><rect x="14.1" y="0" width="3" height="11" rx="1"/></svg><span>100%</span><svg width="24" height="12" viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2.5" stroke="currentColor" opacity="0.5"/><rect x="3" y="3" width="16" height="6" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor" opacity="0.5"/></svg></span></div>
@@ -656,7 +656,7 @@
               </div>
             </div>
             <div id="pane-spotlight" style="display:none">
-              <div class="spot-toggle"><div class="txt"><div class="t">You are in Spotlight</div><div class="s">Opt out anytime. Only people who opt in are ranked.</div></div><button class="switch" role="switch" aria-checked="true" aria-label="Spotlight opt-in" onclick="this.classList.toggle('off');this.setAttribute('aria-checked',this.classList.contains('off')?'false':'true')"><span class="knob"></span></button></div>
+              <div class="spot-toggle"><div class="txt"><div class="t">Join Spotlight</div><div class="s">Off by default. Opt in to appear on the leaderboard.</div></div><button class="switch off" role="switch" aria-checked="false" aria-label="Spotlight opt-in" onclick="this.classList.toggle('off');this.setAttribute('aria-checked',this.classList.contains('off')?'false':'true')"><span class="knob"></span></button></div>
               <div id="spot-list"></div>
               <div class="spot-foot">Showing the top of 100. Showcase profiles chose to link their Instagram. Ranked by likes from people who crossed their path. Resets Monday.</div>
             </div>
@@ -794,10 +794,10 @@
             <div class="acc" id="acc-set">
               <button class="acc-h" onclick="toggleAcc('acc-set')"><span>Settings &amp; safety</span><span class="acc-side"><span class="acc-chev"></span></span></button>
               <div class="acc-b" style="padding-top:12px">
-                <div class="setting"><span class="si" id="set-star"></span><span class="lbl">Spotlight</span><span class="val on">On</span></div>
-                <div class="setting"><span class="si" id="set-pin"></span><span class="lbl">Share live location</span><span class="val">Off, always</span></div>
+                <div class="setting"><span class="si" id="set-star"></span><span class="lbl">Spotlight</span><span class="val">Off</span></div>
+                <div class="setting"><span class="si" id="set-pin"></span><span class="lbl">Show my exact location to others</span><span class="val on">Never</span></div>
                 <div class="setting"><span class="si" id="set-shield"></span><span class="lbl">AI verification</span><span class="val on">Verified</span></div>
-                <div class="setting"><span class="si" id="set-age"></span><span class="lbl">Age verified</span><span class="val on">18+</span></div>
+                <div class="setting"><span class="si" id="set-age"></span><span class="lbl">Age</span><span class="val on">18+ confirmed</span></div>
                 <div class="setting"><span class="si" id="set-block"></span><span class="lbl">Blocked &amp; reported</span><span class="val">Manage</span></div>
                 <div class="setting" onclick="openGuidelines()" style="cursor:pointer"><span class="si" id="set-guide"></span><span class="lbl">Community Guidelines</span><span class="val">View</span></div>
               </div>
@@ -915,7 +915,7 @@
     updatePriPill();
   }
 
-  var priorityLeft=10;
+  var priorityLeft=10, isPlus=false;
   var invites=5, joined=3, priorityEarned=9;
   var revealsUsed=0, REVEAL_LIMIT=50, revealed={};
   var G_day=['linear-gradient(135deg,#ff8a4c,#f43f6e)','linear-gradient(135deg,#4be0b8,#3b82f6)','linear-gradient(135deg,#f43f6e,#a855f7)','linear-gradient(135deg,#ffb14c,#ff5c7a)','linear-gradient(135deg,#38d0e0,#6366f1)'];
@@ -991,7 +991,7 @@
     burst(document.getElementById('v-paths'));
   }
   /* PORTFOLIO PAYWALL: 10 free, the rest locked behind Closer+ or a rewarded ad */
-  var PORT_FREE=10, portfolioUnlocked=false, LOCKED_TOTAL=37;
+  var PORT_FREE=10, portfolioUnlocked=false, FILLER_LOCKED=14;
   function renderPortfolio(q){
     q=(q||'').toLowerCase();
     var freeIds=people.slice(0,PORT_FREE).map(function(p){return p.id;});
@@ -1012,8 +1012,15 @@
         +'<div class="pmini">'+(p.matched?'<button onclick="event.stopPropagation();openChat('+p.id+')">'+ic('chat')+' Message</button>':'<button onclick="event.stopPropagation();window.open(\'https://instagram.com/'+p.ig+'\',\'_blank\')">'+ic('insta')+' Instagram</button>')+'<button class="h" onclick="event.stopPropagation();openHeartSheet('+p.id+')">'+ic('heart')+'</button></div></div></div>';
     }).join('');
     if(!portfolioUnlocked&&!q){
+      for(var fi=0;fi<FILLER_LOCKED;fi++){
+        html+='<div class="pitem locked" onclick="openUnlock()"><div class="pphoto" style="background:'+G[fi%5]+'"></div>'
+          +'<div class="lock-ov"><div class="lc">'+ic('lock')+'</div><div class="lt">LOCKED</div></div>'
+          +'<div class="pbody"><div class="pn">Hidden</div><div class="psub">Unlock to see</div>'
+          +'<div class="pmini"><button onclick="event.stopPropagation();openUnlock()">'+ic('lock')+' Unlock</button></div></div></div>';
+      }
+      var lockedCount=Math.max(0, people.length-PORT_FREE)+FILLER_LOCKED;
       html+='<div class="unlock-card"><div class="uc-ic">'+ic('lock')+'</div>'
-        +'<div class="uc-t">'+LOCKED_TOTAL+' more people are locked</div>'
+        +'<div class="uc-t">'+lockedCount+' more people are locked</div>'
         +'<div class="uc-s">Your first 10 crossings are free. Unlock everyone you have ever crossed paths with.</div>'
         +'<button class="btn" onclick="watchAd()">'+ic('spark')+' Watch an ad, unlock 24 hours</button>'
         +'<button class="btn outline" onclick="buyCloserPlus()">'+ic('star')+' Closer+, unlock forever</button></div>';
@@ -1060,7 +1067,7 @@
   function buyCloserPlus(){
     document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star">'+ic('star')+'</div>'
       +'<h2>Closer+</h2><div class="pri-count" style="font-size:15px">$4.99/mo<span style="color:var(--muted);font-weight:400;font-family:Inter"> · cancel anytime</span></div><p>Your full portfolio forever, unlimited priority matches, and zero ads. Founding members lock this rate for life.</p>'
-      +'<button class="btn" onclick="closeOverlay(\'priorityModal\');portfolioUnlocked=true;renderPortfolio(document.getElementById(\'searchBox\').value);toastNow(\'star\',\'Closer+ active, portfolio unlocked\')">Activate Closer+ (demo)</button>'
+      +'<button class="btn" onclick="closeOverlay(\'priorityModal\');portfolioUnlocked=true;isPlus=true;renderPortfolio(document.getElementById(\'searchBox\').value);updateCounter();toastNow(\'star\',\'Closer+ active. Portfolio unlocked, priority matches unlimited.\')">Activate Closer+ (demo)</button>'
       +'<div class="dismiss" onclick="closeOverlay(\'priorityModal\')">Maybe later</div></div>';
     showOverlay('priorityModal');
   }
@@ -1096,7 +1103,7 @@
     var c=document.getElementById('hereCard');
     c.classList.remove('pop');
     if(action==='pass') c.classList.add('fly-left');
-    else if(action==='like'){ c.classList.add('fly-right'); showMatchP(cur.id); }
+    else if(action==='like'){ c.classList.add('fly-right'); toastNow('heart','Liked '+cur.name+'. If they like you back, it becomes a match.'); }
     else if(action==='star'){ c.classList.add('fly-up'); sendPriority(cur.id); }
     setTimeout(function(){ hereIdx=(hereIdx+1)%hereOrder.length; renderHere(true); }, 330);
   }
@@ -1223,8 +1230,8 @@
   function openDetail(id){
     var p=byId(id);
     var unlocked=p.matched||p.showcase;
-    var soc=unlocked?socialRow(p):'<div class="locked-soc">'+ic('lock')+'<span>Instagram and socials unlock after you match. You can still message '+p.name+' now, because you crossed paths.</span></div>';
-    document.getElementById('detailSheet').innerHTML='<button class="sheet-close" onclick="closeOverlay(\'detailSheet\')">'+ic('x')+'</button>'
+    var soc=unlocked?socialRow(p):'<div class="locked-soc">'+ic('lock')+'<span>Instagram is open so you can check '+p.name+' out. Full socials and chat unlock when you match.</span></div>';
+    document.getElementById('detailSheet').innerHTML='<button class="sheet-close" aria-label="Close" onclick="closeOverlay(\'detailSheet\')">'+ic('x')+'</button>'
       +'<div class="d-photo" style="background:'+(p.photo?'url('+p.photo+') center/cover, ':'')+G[p.g]+'">'+(p.photo?'':'<span class="d-init">'+p.init+'</span>')+(p.showcase?'<span class="d-showcase">'+ic('star')+'Spotlight showcase</span>':'')+'<div class="d-photo-grad"></div><div class="d-name">'+p.name+', '+p.age+(p.matched?' <span class="mini-badge">MATCHED</span>':'')+'</div></div>'
       +'<div class="d-body"><div class="d-cross"><span>Came within their space, '+p.when+', within '+p.ft+' ft</span></div>'
       +'<div class="d-times"><div class="num">'+p.times+'</div><div><div class="tl">You have crossed paths <b>'+p.times+' times</b></div><div class="ts">Across campus and events this semester</div></div></div>'
@@ -1238,7 +1245,7 @@
     var p=byId(id);
     if(!p.matched){ toastNow('heart','Match with '+p.name+' first. Send a heart, or reveal theirs.'); return; }
     var soc='<div style="margin-top:6px">'+socialRow(p)+'</div>';
-    document.getElementById('chatView').innerHTML='<div class="chat-head"><button class="back" onclick="closeOverlay(\'chatView\')">'+ic('back')+'</button>'
+    document.getElementById('chatView').innerHTML='<div class="chat-head"><button class="back" aria-label="Back" onclick="closeOverlay(\'chatView\')">'+ic('back')+'</button>'
       +'<div class="ch-main" onclick="openDetail('+p.id+')">'+av(p,'sm')+'<div><div class="pn" style="font-size:16px">'+p.name+', '+p.age+'</div><div class="cross">'+ic('pin')+'Came within their space, '+p.times+'x</div></div></div>'
       +'<span class="chev" onclick="openDetail('+p.id+')">'+ic('chevron')+'</span></div>'
       +'<div class="chat-body" id="chatBody"><div class="day">You matched with '+p.name+'. Tap the name to see the profile.</div>'
@@ -1258,11 +1265,12 @@
   function confirmHeart(name){ questTick(2); document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star sent">'+ic('heart')+'</div><h3>Heart sent</h3><p>'+name+' will see a blurred heart in their Messages until they reveal you. You can already message them, since you crossed paths.</p><button class="btn" onclick="closeOverlay(\'heartSheet\')">Done</button></div>'; }
   function sendPriority(id){
     var p=byId(id);
-    if(priorityLeft>0){
-      priorityLeft--; updateCounter();
-      document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star">'+ic('star')+'</div><h2>Priority Match sent</h2><p>'+p.name+' jumps to the top of their hearts with a glow. Priority Matches get noticed first.</p><div class="pri-count">'+priorityLeft+' priority matches left today</div><button class="btn" onclick="closeOverlay(\'priorityModal\')">Nice</button></div>';
+    if(isPlus||priorityLeft>0){
+      if(!isPlus){ priorityLeft--; updateCounter(); }
+      var leftTxt=isPlus?'Unlimited with Closer+':priorityLeft+' priority matches left today';
+      document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star">'+ic('star')+'</div><h2>Priority Match sent</h2><p>'+p.name+' jumps to the top of their hearts with a glow. Priority Matches get noticed first.</p><div class="pri-count">'+leftTxt+'</div><button class="btn" onclick="closeOverlay(\'priorityModal\')">Nice</button></div>';
     } else {
-      document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star dim">'+ic('star')+'</div><h2>Out of priority matches</h2><p>Invite friends to earn unlimited priority matches, or get Closer+.</p><button class="btn" onclick="closeOverlay(\'priorityModal\');go(document.getElementById(\'tab-prof\'))">'+ic('users')+' Invite friends</button><div class="dismiss" onclick="closeOverlay(\'priorityModal\')">Maybe later</div></div>';
+      document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star dim">'+ic('star')+'</div><h2>Out of priority matches</h2><p>Get unlimited with Closer+, or invite friends to earn more.</p><button class="btn" onclick="buyCloserPlus()">'+ic('star')+' Get Closer+</button><button class="btn" style="background:transparent;border:1px solid var(--line);color:var(--text);margin-top:9px" onclick="closeOverlay(\'priorityModal\');go(document.getElementById(\'tab-prof\'))">'+ic('users')+' Invite friends</button><div class="dismiss" onclick="closeOverlay(\'priorityModal\')">Maybe later</div></div>';
     }
     showOverlay('priorityModal');
   }
@@ -1422,7 +1430,7 @@
   function openGuidelines(){
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('shield')+'</div>'
       +'<h3>Community Guidelines</h3><p>Closer works because everyone here is real, verified, and safe. One strike and you are out.</p>'
-      +'<div class="g-row"><span class="gd"></span><span><b>18 and over, verified.</b> Age is checked at signup. Anyone under 18 is removed.</span></div>'
+      +'<div class="g-row"><span class="gd"></span><span><b>18 and over.</b> We verify GCU affiliation, and you confirm you are 18 or older. Anyone found to be under 18 is removed.</span></div>'
       +'<div class="g-row"><span class="gd"></span><span><b>GCU students only.</b> Verified through your school Microsoft account.</span></div>'
       +'<div class="g-row"><span class="gd"></span><span><b>Real faces only.</b> AI matches your photos to your Instagram for the blue check.</span></div>'
       +'<div class="g-row"><span class="gd"></span><span><b>Zero tolerance</b> for harassment, hate, nudity, threats, or spam. Same standards as every major dating app.</span></div>'
@@ -1512,7 +1520,7 @@
   }
   function resetProto(){
     ['detailSheet','chatView','matchModal','priorityModal','heartSheet','revealModal','adModal'].forEach(closeOverlay);
-    clearInterval(hotTimer); clearInterval(dropTimer); clearInterval(adTimer); clearTimeout(toastHide); stopToasts(); hereMine={}; portfolioUnlocked=false;
+    clearInterval(hotTimer); clearInterval(dropTimer); clearInterval(adTimer); clearTimeout(toastHide); stopToasts(); hereMine={}; portfolioUnlocked=false; isPlus=false;
     document.getElementById('tabbar').style.display='none';
     document.getElementById('login').style.display='flex';
     priorityLeft=10; revealsUsed=0; REVEAL_LIMIT=50; revealed={}; hereIdx=0; applyNight(false); updateCounter();

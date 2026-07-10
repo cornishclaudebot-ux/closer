@@ -158,6 +158,8 @@
     .eyebrow{margin-bottom:16px}
     h1{margin-bottom:16px}
     .hero p.lead{margin-bottom:24px}
+    .radar-wrap{height:250px}
+    .radar{transform:scale(.72)}
   }
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -199,11 +201,12 @@
     <div>
       <span class="eyebrow"><span class="dot"></span>GCU students only</span>
       <h1>Match when you <span class="grad-text">actually cross paths.</span></h1>
-      <p class="lead">Closer is the dating app where matches only happen in real life. Verify with your <b>GCU email</b>, live your normal day, and connect with people only when you come within <b>about 20 feet</b> of them. At class. On campus. At an event. <b>No randoms. No bots. Just people you'd actually run into.</b></p>
+      <p class="lead">Match only with GCU students you <b>actually cross paths with</b>, within about 20 feet (6 meters). No randoms, no bots, just people you'd run into anyway.</p>
       <form class="signup" id="waitForm" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="waitlist">
         <p style="display:none"><label>Skip if human: <input name="bot-field"></label></p>
         <input type="hidden" name="school" value="gcu">
+        <input type="hidden" name="cta_location" value="hero">
         <input type="email" name="email" id="email" placeholder="you@my.gcu.edu" autocomplete="email" aria-label="Your GCU email address" required>
         <button type="submit" class="btn">Reserve my spot</button>
       </form>
@@ -347,6 +350,7 @@
       <input type="hidden" name="form-name" value="waitlist">
       <p style="display:none"><label>Skip if human: <input name="bot-field"></label></p>
       <input type="hidden" name="school" value="gcu">
+      <input type="hidden" name="cta_location" value="final-cta">
       <input type="email" name="email" id="email2" placeholder="you@my.gcu.edu" autocomplete="email" aria-label="Your GCU email address" required>
       <button type="submit" class="btn">Reserve my spot</button>
     </form>
@@ -382,6 +386,8 @@
       // Non-GCU emails are captured too (flagged school=other) instead of hard-bounced,
       // so expansion demand isn't lost. GCU addresses keep founding-member framing.
       var gcu = isGcu(email);
+      if(!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(email)){ msgEl.textContent='That email looks incomplete. Double-check for a typo.'; msgEl.classList.add('err'); return; }
+      if(!gcu && !form._warned){ form._warned=true; msgEl.textContent='That is not a @my.gcu.edu address. GCU students get founding-member access. Fix it, or submit again to join the general list.'; msgEl.classList.add('err'); return; }
       var school = form.querySelector('input[name="school"]');
       if(school) school.value = gcu ? 'gcu' : 'other';
       // Only confirm once the server actually accepts the submission — otherwise
