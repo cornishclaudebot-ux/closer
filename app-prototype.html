@@ -192,10 +192,10 @@
   .for-you .fyn{font-family:'Anton';font-weight:600;font-size:16px}
   .for-you .fyd{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
   .ev-intro{font-size:12px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.5}
-  .ev-card{display:flex;align-items:stretch;gap:11px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
+  .ev-card{display:flex;align-items:stretch;gap:11px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 14px 14px 0;margin-bottom:12px;overflow:hidden}
   .ev-card.bump{animation:evbump .55s ease}
   @keyframes evbump{0%{transform:scale(1)}30%{transform:scale(1.025);border-color:var(--orange)}100%{transform:scale(1);border-color:var(--line)}}
-  .ev-rank{font-family:'Anton';font-weight:700;font-size:17px;color:var(--orange2);width:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .ev-rank{font-family:'Anton';font-weight:700;font-size:17px;color:#fff;width:38px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#2f5db8;border-right:2px solid #1d4487;border-radius:18px 40% 40% 18px / 18px 50% 50% 18px;margin:-14px 0}
   .ev-body{flex:1;min-width:0}
   .ev-head{display:flex;gap:12px;align-items:center}
   .ev-date{width:50px;height:50px;border-radius:13px;background:var(--surface2);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
@@ -545,13 +545,14 @@
 
   /* EVENTS: sea palette (teal to blue) */
   #pane-events .ev-card{background:linear-gradient(135deg,rgba(75,224,184,.10),rgba(59,130,246,.10));border-color:rgba(59,130,246,.22)}
-  #pane-events .ev-rank{color:#2f7de1}
+  #pane-events .ev-rank{color:#fff}
+  body.night .ev-rank{background:#1d2f5e;border-right-color:#2ec5ff}
   #pane-events .vscore{color:#2f7de1}
   #pane-events .varrow.up.on{background:rgba(75,224,184,.2);color:#0a9e77;border-color:rgba(18,185,129,.45)}
   #pane-events .varrow.down.on{background:rgba(59,130,246,.14);color:#2f7de1;border-color:rgba(59,130,246,.4)}
   #pane-events .for-you{background:linear-gradient(135deg,rgba(75,224,184,.16),rgba(59,130,246,.14));border-color:rgba(59,130,246,.3)}
   #pane-events .ev-stat b{color:#2f7de1}
-  body.night #pane-events .ev-rank,body.night #pane-events .vscore,body.night #pane-events .ev-stat b{color:#6ab8ff}
+  body.night #pane-events .vscore,body.night #pane-events .ev-stat b{color:#6ab8ff}
   .loc-ok{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;font-family:'Anton';letter-spacing:.04em;color:#0a9e77;background:rgba(18,185,129,.12);border:1px solid rgba(18,185,129,.3);padding:3px 8px;border-radius:999px;margin-top:5px}
   .loc-ok .ic{width:11px;height:11px}
   body.night .loc-ok{color:#7dffc4}
