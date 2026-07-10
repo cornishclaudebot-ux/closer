@@ -202,12 +202,11 @@
       <span class="eyebrow"><span class="dot"></span>GCU students only</span>
       <h1>Match when you <span class="grad-text">actually cross paths.</span></h1>
       <p class="lead">Match only with GCU students you <b>actually cross paths with</b>, within about 20 feet (6 meters). No randoms, no bots, just people you'd run into anyway.</p>
-      <form class="signup" id="waitForm" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="waitlist">
-        <p style="display:none"><label>Skip if human: <input name="bot-field"></label></p>
-        <input type="hidden" name="school" value="gcu">
+      <form class="signup" id="waitForm">
+        <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <input type="hidden" name="cta_location" value="hero">
         <input type="email" name="email" id="email" placeholder="you@my.gcu.edu" autocomplete="email" aria-label="Your GCU email address" required>
+        <input type="tel" name="phone" id="phone" placeholder="Phone number" autocomplete="tel" aria-label="Your phone number" required>
         <button type="submit" class="btn">Reserve my spot</button>
       </form>
       <div class="msg" id="msg" role="status" aria-live="polite"></div>
@@ -346,12 +345,11 @@
   <div class="wrap">
     <h2>Be one of the first on campus.</h2>
     <p>Closer launches at GCU first. Reserve your spot and lock founding member status before everyone else.</p>
-    <form class="signup" id="waitForm2" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-      <input type="hidden" name="form-name" value="waitlist">
-      <p style="display:none"><label>Skip if human: <input name="bot-field"></label></p>
-      <input type="hidden" name="school" value="gcu">
+    <form class="signup" id="waitForm2">
+      <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
       <input type="hidden" name="cta_location" value="final-cta">
       <input type="email" name="email" id="email2" placeholder="you@my.gcu.edu" autocomplete="email" aria-label="Your GCU email address" required>
+      <input type="tel" name="phone" id="phone2" placeholder="Phone number" autocomplete="tel" aria-label="Your phone number" required>
       <button type="submit" class="btn">Reserve my spot</button>
     </form>
     <div class="msg" id="msg2" style="text-align:center" role="status" aria-live="polite"></div>
@@ -372,53 +370,57 @@
 </footer>
 
 <script>
-  function isGcu(email){
-    return /@(my\.)?gcu\.edu$/i.test(email.trim());
-  }
-  function handle(form, emailEl, msgEl, successEl, noteEl){
+  var API='/.netlify/functions/waitlist';
+  function isGcu(e){ return /@(my\.)?gcu\.edu$/i.test(String(e||'').trim()); }
+  function validEmail(e){ return /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(e); }
+  function digits(p){ return String(p||'').replace(/\D/g,''); }
+  function handle(form, emailEl, phoneEl, msgEl, successEl, noteEl){
     var btn = form.querySelector('button[type="submit"]');
+    function ok(gcu){
+      if(successEl){ form.style.display='none'; if(noteEl) noteEl.style.display='none';
+        if(!gcu){ successEl.querySelector('p').textContent='Closer opens at GCU first. You are on the general list, and we will email you the moment your campus unlocks.'; }
+        successEl.classList.add('show');
+      } else { msgEl.textContent = gcu ? "You're in. Founding member status locked." : "You're on the general list. GCU students get in first."; msgEl.className='msg ok'; }
+    }
+    function fail(t){ msgEl.innerHTML = t || 'Could not reserve your spot just now. Try again, or email <a href="mailto:cornishclaudebot@gmail.com" style="color:var(--pink)">cornishclaudebot@gmail.com</a> and we will add you by hand.'; msgEl.className='msg err'; }
+    function showCode(email, phone, gcu){
+      form.innerHTML = '<input class="code-in" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit code" aria-label="Verification code" required><button type="button" class="btn code-verify">Verify</button>';
+      msgEl.textContent = 'We texted a code to '+phone+'. Enter it to lock your spot.'; msgEl.className='msg';
+      var ci = form.querySelector('.code-in'), cv = form.querySelector('.code-verify');
+      ci.focus();
+      cv.addEventListener('click', function(){
+        var code = digits(ci.value); if(code.length<6){ fail('Enter the 6-digit code we texted you.'); return; }
+        cv.disabled=true; cv.textContent='Verifying...';
+        fetch(API+'?action=verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:phone,code:code})})
+          .then(function(r){return r.json();}).then(function(j){
+            cv.disabled=false; cv.textContent='Verify';
+            if(j&&j.ok){ ok(gcu); }
+            else { fail(j&&j.error==='bad-code'?'That code is not right. Check and try again.':(j&&j.error==='expired'?'That code expired. Reserve again for a fresh one.':'Could not verify. Try again.')); }
+          }).catch(function(){ cv.disabled=false; cv.textContent='Verify'; fail(); });
+      });
+    }
     form.addEventListener('submit', function(e){
       e.preventDefault();
       if(btn && btn.disabled) return;
-      var email = emailEl.value.trim();
-      msgEl.className = 'msg';
-      if(!email || email.indexOf('@')<0){ msgEl.textContent='Enter your email to reserve a spot.'; msgEl.classList.add('err'); return; }
-      // Non-GCU emails are captured too (flagged school=other) instead of hard-bounced,
-      // so expansion demand isn't lost. GCU addresses keep founding-member framing.
-      var gcu = isGcu(email);
-      if(!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(email)){ msgEl.textContent='That email looks incomplete. Double-check for a typo.'; msgEl.classList.add('err'); return; }
-      if(!gcu && !form._warned){ form._warned=true; msgEl.textContent='That is not a @my.gcu.edu address. GCU students get founding-member access. Fix it, or submit again to join the general list.'; msgEl.classList.add('err'); return; }
-      var school = form.querySelector('input[name="school"]');
-      if(school) school.value = gcu ? 'gcu' : 'other';
-      // Only confirm once the server actually accepts the submission — otherwise
-      // a failed POST (e.g. on static hosting) would silently drop the signup.
-      var body = new URLSearchParams(new FormData(form)).toString();
-      function showOk(){
-        if(successEl){
-          form.style.display='none';
-          if(noteEl) noteEl.style.display='none';
-          if(!gcu){ successEl.querySelector('p').textContent='Closer opens at GCU first. You are on the general list, and we will email you the moment your campus unlocks.'; }
-          successEl.classList.add('show');
-        } else {
-          msgEl.textContent = gcu ? "You're in. Founding member status locked. Watch your GCU inbox." : "You're on the general list. GCU students get in first, and we'll email you when your campus unlocks.";
-          msgEl.classList.add('ok');
-          form.reset();
-        }
-      }
-      function showFail(){
-        msgEl.className='msg';
-        msgEl.innerHTML='Could not reserve your spot just now. Try again in a minute, or email <a href="mailto:cornishclaudebot@gmail.com" style="color:var(--violet)">cornishclaudebot@gmail.com</a> and we will add you by hand.';
-        msgEl.classList.add('err');
-      }
-      if(btn){ btn.disabled = true; btn.textContent = 'Reserving...'; }
-      function done(){ if(btn){ btn.disabled = false; btn.textContent = 'Reserve my spot'; } }
-      fetch('/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:body})
-        .then(function(r){ done(); if(r && r.ok){ showOk(); } else { showFail(); } })
-        .catch(function(){ done(); showFail(); });
+      var email=(emailEl.value||'').trim(), phone=(phoneEl.value||'').trim();
+      msgEl.className='msg';
+      if(!validEmail(email)){ fail('Enter a valid email.'); return; }
+      if(digits(phone).length<10){ fail('Enter a valid phone number so we can verify you.'); return; }
+      var gcu=isGcu(email);
+      if(!gcu && !form._warned){ form._warned=true; msgEl.textContent='That is not a @my.gcu.edu address. GCU students get founding-member access. Fix it, or submit again to join the general list.'; msgEl.className='msg err'; return; }
+      var cta=(form.querySelector('[name="cta_location"]')||{}).value||'';
+      var hp=(form.querySelector('[name="company"]')||{}).value||'';
+      if(btn){ btn.disabled=true; btn.textContent='Reserving...'; }
+      fetch(API+'?action=submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email,phone:phone,cta_location:cta,hp:hp})})
+        .then(function(r){return r.json();}).then(function(j){
+          if(btn){ btn.disabled=false; btn.textContent='Reserve my spot'; }
+          if(!j||!j.ok){ fail(j&&j.error==='bad-email'?'That email looks off. Check it.':(j&&j.error==='bad-phone'?'That phone number looks off.':undefined)); return; }
+          if(j.needCode){ showCode(email, phone, gcu); } else { ok(gcu); }
+        }).catch(function(){ if(btn){ btn.disabled=false; btn.textContent='Reserve my spot'; } fail(); });
     });
   }
-  handle(document.getElementById('waitForm'), document.getElementById('email'), document.getElementById('msg'), document.getElementById('success'), document.getElementById('note'));
-  handle(document.getElementById('waitForm2'), document.getElementById('email2'), document.getElementById('msg2'), null, null);
+  handle(document.getElementById('waitForm'), document.getElementById('email'), document.getElementById('phone'), document.getElementById('msg'), document.getElementById('success'), document.getElementById('note'));
+  handle(document.getElementById('waitForm2'), document.getElementById('email2'), document.getElementById('phone2'), document.getElementById('msg2'), null, null);
 </script>
 </body>
 </html>

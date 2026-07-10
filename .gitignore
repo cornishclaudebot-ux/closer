@@ -6,3 +6,5 @@ founder-brief.pdf
 .netlify
 build-kit.html
 marketing-plan.html
+node_modules/
+package-lock.json
