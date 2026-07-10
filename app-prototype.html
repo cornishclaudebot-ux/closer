@@ -557,7 +557,8 @@
   /* REAL MAP */
   #hotMap{height:300px}
   #hotMap.leaflet-container{background:var(--surface2);border-radius:20px;font-family:'Inter',sans-serif}
-  body.night .leaflet-tile{filter:invert(1) hue-rotate(180deg) brightness(.85) saturate(.7)}
+  .leaflet-container .leaflet-control-attribution{background:rgba(255,255,255,.6);font-size:8px;color:#7a8aa5}
+  body.night .leaflet-container .leaflet-control-attribution{background:rgba(10,14,30,.6);color:#5e6e96}
   .spot-pin{background:var(--grad);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ongrad);font-family:'Space Grotesk';font-weight:700;box-shadow:0 4px 14px rgba(23,26,46,.3);border:2px solid rgba(255,255,255,.85)}
   .you-pin{width:22px;height:22px;border-radius:50%;background:#0095f6;border:3px solid #fff;box-shadow:0 0 0 6px rgba(0,149,246,.25)}
   .hot-dist{font-size:10.5px;color:var(--muted2);font-weight:600;white-space:nowrap}
@@ -1267,6 +1268,7 @@
     var col = on?['#39ffd0','#2ec5ff','#ff5cae']:['#ff9d45','#ff5c56','#f43f6e'];
     document.querySelectorAll('#wg stop').forEach(function(s,i){ s.setAttribute('stop-color',col[i]); });
     var b=document.getElementById('themeBtn'); if(b) b.innerHTML=ic(on?'sun':'moon');
+    if(lmap&&tileLight&&tileDark){ if(on){ lmap.removeLayer(tileLight); tileDark.addTo(lmap); } else { lmap.removeLayer(tileDark); tileLight.addTo(lmap); } }
     if(document.getElementById('tabbar').style.display!=='none'){
       renderRecent(); renderPortfolio(document.getElementById('searchBox').value); renderSpot(); renderHere(false); renderMessages(); renderPosts();
       if(document.getElementById('pane-hotspots').style.display!=='none') renderHotMap();
@@ -1405,7 +1407,7 @@
     {id:'pickle',name:'Pickleball Courts',count:29,go:'Open courts, bring a paddle',admin:'Bella',ai:'B',ag:1,lat:33.5000,lng:-112.1250,q:'Pickleball Courts Phoenix AZ'}
   ];
   var hereMine={}, hotTimer=null;
-  var lmap=null, spotMarkers={}, youMarker=null, userLoc=[33.5165,-112.1298]; /* GCU campus fallback until live location grants */
+  var lmap=null, spotMarkers={}, youMarker=null, tileLight=null, tileDark=null, userLoc=[33.5165,-112.1298]; /* GCU campus fallback until live location grants */
   function pinSize(c){ return Math.max(30,Math.min(58, 24+c*0.22)); }
   function spotIcon(s){ var d=pinSize(s.count); return L.divIcon({className:'', html:'<div class="spot-pin" style="width:'+d+'px;height:'+d+'px;font-size:'+Math.round(d*0.34)+'px">'+s.count+'</div>', iconSize:[d,d], iconAnchor:[d/2,d/2]}); }
   function distMi(a,b){ var R=3958.8,dLa=(b[0]-a[0])*Math.PI/180,dLo=(b[1]-a[1])*Math.PI/180,la1=a[0]*Math.PI/180,la2=b[0]*Math.PI/180; var h=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(la1)*Math.cos(la2)*Math.sin(dLo/2)*Math.sin(dLo/2); return R*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h)); }
@@ -1414,8 +1416,12 @@
     var el=document.getElementById('hotMap'); if(!el)return;
     if(typeof L==='undefined'){ el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted2);font-size:12px">Map needs a connection</div>'; return; }
     if(!lmap){
-      lmap=L.map('hotMap',{zoomControl:false,attributionControl:false}).setView(userLoc,13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(lmap);
+      lmap=L.map('hotMap',{zoomControl:false,attributionControl:true}).setView(userLoc,13);
+      lmap.attributionControl.setPrefix('');
+      /* Apple-Maps-style cartography: CARTO Positron by day, Dark Matter after sunset, retina tiles */
+      tileLight=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'});
+      tileDark=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'});
+      (night?tileDark:tileLight).addTo(lmap);
       youMarker=L.marker(userLoc,{icon:L.divIcon({className:'',html:'<div class="you-pin"></div>',iconSize:[22,22],iconAnchor:[11,11]}),zIndexOffset:1000}).addTo(lmap);
       spots.forEach(function(s){ spotMarkers[s.id]=L.marker([s.lat,s.lng],{icon:spotIcon(s)}).addTo(lmap).on('click',function(){ openSpot(s.id); }); });
       if(navigator.geolocation){ navigator.geolocation.getCurrentPosition(function(pos){ userLoc=[pos.coords.latitude,pos.coords.longitude]; if(youMarker) youMarker.setLatLng(userLoc); renderHotList(); },function(){},{ timeout:4000 }); }
