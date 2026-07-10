@@ -12,6 +12,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
     --bg:#ffffff;--bg2:#faf8f5;--surface:#f7f5f1;--surface2:#efece6;--line:rgba(23,26,46,0.10);
@@ -369,8 +371,8 @@
   body.night .tabbar{background:rgba(13,16,32,.95)}
   .dial{position:absolute;top:-1px;left:0;width:25%;height:3px;padding:0 28px;transition:transform .42s cubic-bezier(.5,0,.15,1)}
   .dial::after{content:"";display:block;height:3px;border-radius:0 0 4px 4px;background:var(--grad);box-shadow:0 0 14px rgba(255,92,0,.7)}
-  .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--muted);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;background:none;border:none;transition:transform .15s}
-  .tab .ic{width:24px;height:24px}.tab.active{color:var(--text)}.tab.active .ic{transform:scale(1.06)}
+  .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--muted2);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;background:none;border:none;transition:transform .15s,color .2s}
+  .tab .ic{width:25px;height:25px}.tab.active{color:var(--text)}.tab.active .ic{transform:scale(1.06)}.tab.active svg{stroke-width:2.5}
   .replay{display:block;margin:26px auto 0;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:13px;padding:10px 18px;border-radius:999px;font-family:'Inter';display:flex;align-items:center;gap:8px}.replay:hover{color:var(--text)}.replay .ic{width:15px;height:15px}
   /* 3-way dongle + hotspots */
   .dongle.three .dongle-pill{width:calc(33.333% - 2.7px)}
@@ -509,6 +511,59 @@
   .med-gate .ic{width:13px;height:13px}
   .med-pct{font-size:11.5px;color:var(--muted2);margin-bottom:16px}
 
+  /* PROFILE ACCORDIONS (consolidated) */
+  .acc{border:1px solid var(--line);border-radius:16px;margin-bottom:10px;background:var(--surface);overflow:hidden}
+  .acc-h{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:none;border:none;color:var(--text);padding:14px 16px;font-family:'Space Grotesk';font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.06em}
+  .acc-side{display:inline-flex;align-items:center;gap:8px;color:var(--muted2);font-size:11px;font-family:'Inter';font-weight:600;text-transform:none;letter-spacing:0}
+  .acc-chev{display:inline-flex;transition:transform .25s}
+  .acc-chev .ic{width:15px;height:15px}
+  .acc.open .acc-chev{transform:rotate(90deg)}
+  .acc-b{display:none;padding:0 14px 14px}
+  .acc.open .acc-b{display:block}
+  .acc .card,.acc .pri-card,.acc .inv-card{background:var(--bg);margin-top:10px;margin-bottom:0}
+  .verify-cap{font-size:11px;color:var(--muted2);margin-top:9px;max-width:270px;line-height:1.5}
+  .vcheck.blue{background:#0095f6}
+  .prof-badge.blue{background:#0095f6}
+
+  /* HINGE-STYLE ABOUT CHIPS */
+  .chips-note{font-size:11px;color:var(--muted2);margin:13px 0 9px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+  .chip-grid{display:flex;flex-wrap:wrap;gap:8px}
+  .chip-btn{border:1px solid var(--line);background:var(--surface2);color:var(--text);font-size:12.5px;font-weight:500;padding:8px 14px;border-radius:999px;transition:transform .1s}
+  .chip-btn:active{transform:scale(.95)}
+  .chip-btn.on{background:var(--grad);border-color:transparent;color:var(--ongrad);font-weight:600}
+
+  /* REPORT + GUIDELINES */
+  .rep-link{text-align:center;font-size:12.5px;color:var(--muted2);padding:14px 0 4px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+  .rep-reason{width:100%;display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:13px 15px;color:var(--text);font-size:13.5px;font-weight:500;margin-bottom:8px;text-align:left}
+  .rep-reason:hover{border-color:rgba(244,63,110,.4)}
+  .g-row{display:flex;gap:10px;align-items:flex-start;text-align:left;font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+  .g-row .gd{width:7px;height:7px;border-radius:50%;background:var(--grad);flex-shrink:0;margin-top:5px}
+  .g-row b{color:var(--text)}
+
+  /* EVENTS: sea palette (teal to blue) */
+  #pane-events .ev-card{background:linear-gradient(135deg,rgba(75,224,184,.10),rgba(59,130,246,.10));border-color:rgba(59,130,246,.22)}
+  #pane-events .ev-rank{color:#2f7de1}
+  #pane-events .vscore{color:#2f7de1}
+  #pane-events .varrow.up.on{background:rgba(75,224,184,.2);color:#0a9e77;border-color:rgba(18,185,129,.45)}
+  #pane-events .varrow.down.on{background:rgba(59,130,246,.14);color:#2f7de1;border-color:rgba(59,130,246,.4)}
+  #pane-events .for-you{background:linear-gradient(135deg,rgba(75,224,184,.16),rgba(59,130,246,.14));border-color:rgba(59,130,246,.3)}
+  #pane-events .ev-stat b{color:#2f7de1}
+  body.night #pane-events .ev-rank,body.night #pane-events .vscore,body.night #pane-events .ev-stat b{color:#6ab8ff}
+  .loc-ok{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;font-family:'Space Grotesk';letter-spacing:.04em;color:#0a9e77;background:rgba(18,185,129,.12);border:1px solid rgba(18,185,129,.3);padding:3px 8px;border-radius:999px;margin-top:5px}
+  .loc-ok .ic{width:11px;height:11px}
+  body.night .loc-ok{color:#7dffc4}
+  .loc-note{text-align:center;font-size:11px;color:var(--muted2);margin-top:10px;line-height:1.5;padding:0 10px}
+
+  /* REAL MAP */
+  #hotMap{height:300px}
+  #hotMap.leaflet-container{background:var(--surface2);border-radius:20px;font-family:'Inter',sans-serif}
+  body.night .leaflet-tile{filter:invert(1) hue-rotate(180deg) brightness(.85) saturate(.7)}
+  .spot-pin{background:var(--grad);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ongrad);font-family:'Space Grotesk';font-weight:700;box-shadow:0 4px 14px rgba(23,26,46,.3);border:2px solid rgba(255,255,255,.85)}
+  .you-pin{width:22px;height:22px;border-radius:50%;background:#0095f6;border:3px solid #fff;box-shadow:0 0 0 6px rgba(0,149,246,.25)}
+  .hot-dist{font-size:10.5px;color:var(--muted2);font-weight:600;white-space:nowrap}
+  .ring-av{padding:2.5px;background:var(--grad);border-radius:50%;display:inline-flex;flex-shrink:0}
+  .ring-av .av{border:2px solid var(--bg)}
+
   /* touch + a11y */
   .swipe-acts .big-circ{padding:0}
   .deck-card{touch-action:pan-y}
@@ -561,7 +616,7 @@
           <p>Match when you actually cross paths. GCU students only.</p>
           <button class="ms-btn" onclick="enterApp()"><span class="ms-grid"><span style="background:#F25022"></span><span style="background:#7FBA00"></span><span style="background:#00A4EF"></span><span style="background:#FFB900"></span></span>Continue with GCU email</button>
           <div class="verified-chip"><span id="lockIc"></span> Verified through Microsoft, @gcu.edu</div>
-          <div class="legal">You must be a verified GCU student, 18 or older. By continuing you agree to the Community Guidelines.<br><br>This is a concept demo. <a href="index.html" style="color:var(--sand)">Join the real waitlist</a></div>
+          <div class="legal">You must be a verified GCU student, 18 or older. Age is verified at signup. By continuing you agree to the <a href="#" style="color:var(--orange)" onclick="event.preventDefault();openGuidelines()">Community Guidelines</a>.<br><br>This is a concept demo. <a href="index.html" style="color:var(--sand)">Join the real waitlist</a></div>
         </div>
 
         <div class="statusbar"><span>9:41</span><span class="right"><button class="theme-toggle" id="themeBtn" aria-label="Switch day and night theme" onclick="toggleNight()"></button><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.7" y="4.5" width="3" height="6.5" rx="1"/><rect x="9.4" y="2" width="3" height="9" rx="1"/><rect x="14.1" y="0" width="3" height="11" rx="1"/></svg><span>100%</span><svg width="24" height="12" viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2.5" stroke="currentColor" opacity="0.5"/><rect x="3" y="3" width="16" height="6" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor" opacity="0.5"/></svg></span></div>
@@ -609,7 +664,7 @@
               </div>
             </div>
             <div id="pane-hotspots" style="display:none">
-              <div class="hot-intro">Where Closers are gathering right now. The center orb is you, drifting toward the hottest spot. Tap a place, or add your own and become its owner.</div>
+              <div class="hot-intro">A real map. The blue dot is you. Counts come straight from live location, you only show up somewhere when you are actually there. Tap a spot to see how far it is and get directions.</div>
               <div class="hot-map" id="hotMap"></div>
               <div class="hot-list-title">Today's hotspots <span>updated live</span></div>
               <div id="hot-list"></div>
@@ -617,8 +672,8 @@
             </div>
             <div id="pane-events" style="display:none">
               <div class="for-you"><div class="fyt" id="fyIc">Recommended for you</div><div class="fyn">Sunset Rooftop Social</div><div class="fyd">Based on who you like, you will vibe with this crowd. A lot of marketing and design students go.</div></div>
-              <div class="ev-intro">Upvote the events you are going to. The more upvotes, the higher they climb. See how many Closers you could cross paths with there.</div>
               <div id="events-list"></div>
+              <div class="loc-note">Every event is a pin on a real, checked map location. No event names, just where and when to be there.</div>
               <div class="posh-note"><span class="d"></span>Synced with Posh</div>
             </div>
           </div>
@@ -643,46 +698,10 @@
           <div class="vhead"><div><h2>Profile</h2></div></div>
           <div class="vbody">
             <div class="prof-top">
-              <div class="av" id="profAv" style="background:linear-gradient(135deg,#ff7e33,#e8b15a)">AC<div class="prof-badge" id="profCheck"></div></div>
+              <div class="av" id="profAv" style="background:linear-gradient(135deg,#ff8a4c,#f43f6e)">AC<div class="prof-badge" id="profCheck"></div></div>
               <h2>Alex, 21</h2>
-              <div class="vbadges"><span class="vbadge"><span class="vcheck" id="vc1"></span> GCU VERIFIED</span><span class="vbadge"><span class="vcheck" id="vc2"></span> PHOTO VERIFIED</span></div>
-            </div>
-
-            <div class="card lv-card">
-              <div class="lv-ring"><div class="in"><span class="lv">7</span><span class="lvl">LVL</span></div></div>
-              <div class="lv-meta"><div class="rank">Regular</div><div class="nxt">13 crossings to Level 8</div><div class="xp-track"><div class="xp-fill" id="xpFill" style="width:62%"></div></div><div class="note">Level up by going out and crossing paths with new people. The more spots you frequent, the faster you climb.</div></div>
-            </div>
-
-            <div class="card streak-card">
-              <div class="flame-ring"><span id="flameIc"></span><b>6</b></div>
-              <div class="streak-meta"><div class="streak-t">6 night streak</div><div class="streak-s">Cross paths with someone new tonight to keep it alive. Longest: 11.</div>
-              <div class="week"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
-            </div>
-
-            <div class="card">
-              <div class="ct">Tonight's quests</div>
-              <div id="questList"></div>
-            </div>
-
-            <div class="card">
-              <div class="ct">Medallion case <span class="med-count" id="medCount"></span></div>
-              <div class="med-grid" id="medGrid"></div>
-            </div>
-
-            <div class="pri-card">
-              <div class="top"><div class="t"><span id="priStarIc"></span> Priority Matches</div><div class="n"><span class="priCount">10</span> today</div></div>
-              <div class="track"><div class="fill priBar" style="width:100%"></div></div>
-              <div class="note">10 free every day. Invite friends to earn unlimited extras. They land at the top of someone's hearts with a glow.</div>
-            </div>
-
-            <div class="inv-card">
-              <div class="inv-top"><div class="ico" id="invIco"></div><div><div class="t">Invite friends</div><div class="s">Every friend who joins, plus 3 priority matches. No cap.</div></div></div>
-              <div class="inv-nums">
-                <div class="inv-num"><div class="n" id="invSent">5</div><div class="l">Invited</div></div>
-                <div class="inv-num"><div class="n" id="invJoined">3</div><div class="l">Joined</div></div>
-                <div class="inv-num hot"><div class="n" id="invEarned">9</div><div class="l">Priority earned</div></div>
-              </div>
-              <button class="inv-btn" id="invBtn" onclick="inviteFriend(false)">Invite a friend</button>
+              <div class="vbadges"><span class="vbadge"><span class="vcheck" id="vc1"></span> GCU VERIFIED</span><span class="vbadge"><span class="vcheck blue" id="vc2"></span> AI VERIFIED</span></div>
+              <div class="verify-cap">The blue check means AI matched this face to their Instagram. A real person, not a bot.</div>
             </div>
 
             <div class="stats">
@@ -691,28 +710,84 @@
               <div class="stat"><div class="n grad-text">12</div><div class="l">Matches</div></div>
             </div>
 
-            <div class="card">
-              <div class="ct">Your type, learned from who you like</div>
-              <div class="ins-row"><span class="ins-chip">Marketing majors</span><span class="ins-chip">The 44 regulars</span><span class="ins-chip">Live music</span></div>
-              <div class="ins-rec">Most of your matches start at <b>The 44</b> and <b>Lopes Way</b>. Go where more of your type gathers: <b>Sunset Rooftop Social</b>, <b>Foam Nation</b>.</div>
-              <div class="ins-note" id="insNote"><span></span>Closer tracks who you like and where you cross to suggest where to go next.</div>
+            <div class="acc" id="acc-progress">
+              <button class="acc-h" onclick="toggleAcc('acc-progress')"><span>Progress</span><span class="acc-side">LVL 7 · 6 nights<span class="acc-chev"></span></span></button>
+              <div class="acc-b">
+                <div class="card lv-card">
+                  <div class="lv-ring"><div class="in"><span class="lv">7</span><span class="lvl">LVL</span></div></div>
+                  <div class="lv-meta"><div class="rank">Regular</div><div class="nxt">13 crossings to Level 8</div><div class="xp-track"><div class="xp-fill" id="xpFill" style="width:62%"></div></div><div class="note">Level up by going out and crossing paths with new people.</div></div>
+                </div>
+                <div class="card streak-card">
+                  <div class="flame-ring"><span id="flameIc"></span><b>6</b></div>
+                  <div class="streak-meta"><div class="streak-t">6 night streak</div><div class="streak-s">Cross paths with someone new tonight to keep it alive. Longest: 11.</div>
+                  <div class="week"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+                </div>
+                <div class="card"><div class="ct">Tonight's quests</div><div id="questList"></div></div>
+              </div>
             </div>
 
-            <div class="card">
-              <div class="ct">About you <span class="ed" onclick="editBio()">Edit</span></div>
-              <div id="bioWrap"><div class="bio-text" id="bioText">Marketing junior. Always at the Darty or chasing live music. Add three things you cannot live without and the rest is conversation.</div></div>
+            <div class="acc" id="acc-meds">
+              <button class="acc-h" onclick="toggleAcc('acc-meds')"><span>Medallions</span><span class="acc-side"><span class="med-count" id="medCount"></span><span class="acc-chev"></span></span></button>
+              <div class="acc-b"><div class="med-grid" id="medGrid" style="margin-top:12px"></div></div>
             </div>
 
-            <div class="card">
-              <div class="ct">Instagram showcase <span class="ed">@alex.c</span></div>
-              <div class="ig-showcase-label">Pick up to 6 posts to feature. Tap a circle.</div>
-              <div class="ig-posts" id="myPosts"></div>
+            <div class="acc" id="acc-pri">
+              <button class="acc-h" onclick="toggleAcc('acc-pri')"><span>Priority &amp; invites</span><span class="acc-side"><span class="priCount">10</span> left<span class="acc-chev"></span></span></button>
+              <div class="acc-b">
+                <div class="pri-card">
+                  <div class="top"><div class="t"><span id="priStarIc"></span> Priority Matches</div><div class="n"><span class="priCount">10</span> today</div></div>
+                  <div class="track"><div class="fill priBar" style="width:100%"></div></div>
+                  <div class="note">10 free every day. Invite friends to earn unlimited extras.</div>
+                </div>
+                <div class="inv-card">
+                  <div class="inv-top"><div class="ico" id="invIco"></div><div><div class="t">Invite friends</div><div class="s">Every friend who joins, plus 3 priority matches. No cap.</div></div></div>
+                  <div class="inv-nums">
+                    <div class="inv-num"><div class="n" id="invSent">5</div><div class="l">Invited</div></div>
+                    <div class="inv-num"><div class="n" id="invJoined">3</div><div class="l">Joined</div></div>
+                    <div class="inv-num hot"><div class="n" id="invEarned">9</div><div class="l">Priority earned</div></div>
+                  </div>
+                  <button class="inv-btn" id="invBtn" onclick="inviteFriend(false)">Invite a friend</button>
+                </div>
+              </div>
             </div>
 
-            <div class="setting"><span class="si" id="set-star"></span><span class="lbl">Spotlight</span><span class="val on">On</span></div>
-            <div class="setting"><span class="si" id="set-pin"></span><span class="lbl">Share live location</span><span class="val">Off, always</span></div>
-            <div class="setting"><span class="si" id="set-shield"></span><span class="lbl">Photo verification</span><span class="val on">Verified</span></div>
-            <div class="setting"><span class="si" id="set-block"></span><span class="lbl">Blocked &amp; reported</span><span class="val">Manage</span></div>
+            <div class="acc" id="acc-paths">
+              <button class="acc-h" onclick="toggleAcc('acc-paths')"><span>Learned from your paths</span><span class="acc-side"><span class="acc-chev"></span></span></button>
+              <div class="acc-b">
+                <div class="ins-row" style="margin-top:12px"><span class="ins-chip">Marketing majors</span><span class="ins-chip">Riverside Bar regulars</span><span class="ins-chip">Live music</span></div>
+                <div class="ins-rec">The paths you have walked keep crossing at <b>Riverside Bar</b> and <b>Lopes Way</b>. The journey ahead points to <b>Sunset Rooftop Social</b> and <b>Rivers Pool</b>, more of your kind of people gather there.</div>
+                <div class="ins-note" id="insNote"><span></span>Closer learns from every path you cross to guide where you go next.</div>
+              </div>
+            </div>
+
+            <div class="acc open" id="acc-about">
+              <button class="acc-h" onclick="toggleAcc('acc-about')"><span>About you</span><span class="acc-side"><span class="ed" onclick="event.stopPropagation();editBio()">Edit</span><span class="acc-chev"></span></span></button>
+              <div class="acc-b">
+                <div id="bioWrap" style="margin-top:10px"><div class="bio-text" id="bioText">Marketing junior. Always at a pool day or chasing live music. Add three things you cannot live without and the rest is conversation.</div></div>
+                <div class="chips-note">Tap what you are about. Up to 6 show on your profile.</div>
+                <div class="chip-grid" id="aboutChips"></div>
+              </div>
+            </div>
+
+            <div class="acc" id="acc-ig">
+              <button class="acc-h" onclick="toggleAcc('acc-ig')"><span>Instagram showcase</span><span class="acc-side">@alex.c<span class="acc-chev"></span></span></button>
+              <div class="acc-b">
+                <div class="ig-showcase-label" style="margin-top:10px">Pick up to 6 posts to feature. Tap a circle.</div>
+                <div class="ig-posts" id="myPosts"></div>
+              </div>
+            </div>
+
+            <div class="acc" id="acc-set">
+              <button class="acc-h" onclick="toggleAcc('acc-set')"><span>Settings &amp; safety</span><span class="acc-side"><span class="acc-chev"></span></span></button>
+              <div class="acc-b" style="padding-top:12px">
+                <div class="setting"><span class="si" id="set-star"></span><span class="lbl">Spotlight</span><span class="val on">On</span></div>
+                <div class="setting"><span class="si" id="set-pin"></span><span class="lbl">Share live location</span><span class="val">Off, always</span></div>
+                <div class="setting"><span class="si" id="set-shield"></span><span class="lbl">AI verification</span><span class="val on">Verified</span></div>
+                <div class="setting"><span class="si" id="set-age"></span><span class="lbl">Age verified</span><span class="val on">18+</span></div>
+                <div class="setting"><span class="si" id="set-block"></span><span class="lbl">Blocked &amp; reported</span><span class="val">Manage</span></div>
+                <div class="setting" onclick="openGuidelines()" style="cursor:pointer"><span class="si" id="set-guide"></span><span class="lbl">Community Guidelines</span><span class="val">View</span></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -762,6 +837,7 @@
       crown:'<path d="M4 18.5h16M4.6 17l-1.1-8 4.3 3.3L12 5.6l4.2 6.7 4.3-3.3-1.1 8z"/>',
       shield:'<path d="M12 3l7 3v5c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/>',
       block:'<circle cx="12" cy="12" r="8"/><path d="M6.5 6.5l11 11"/>',
+      flag:'<path d="M5 21V4"/><path d="M5 4h12l-2.5 4L17 12H5"/>',
       x:'<path d="M6 6l12 12M18 6L6 18"/>',
       chevron:'<path d="M9 6l6 6-6 6"/>',
       back:'<path d="M15 6l-6 6 6 6"/>',
@@ -782,11 +858,11 @@
     return '<svg class="ic" viewBox="0 0 24 24" '+fill+'>'+p[n]+'</svg>';
   }
   function navIc(v){
-    if(v==='messages') return '<svg class="ic" viewBox="0 0 24 24"><path d="M5 4.5h14a2.8 2.8 0 0 1 2.8 2.8v6.4a2.8 2.8 0 0 1-2.8 2.8h-7.2l-4.3 3.2a.6.6 0 0 1-1-.5v-2.7H5a2.8 2.8 0 0 1-2.8-2.8V7.3A2.8 2.8 0 0 1 5 4.5z" fill="url(#wg)"/></svg>';
     var paths={paths:'<path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8" opacity="0.5"/>',
       here:'<path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+      messages:'<path d="M21 11.5a7.5 7.5 0 0 1-10.9 6.7L4.5 19.5l1.3-4.6A7.5 7.5 0 1 1 21 11.5z"/>',
       prof:'<circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/>'};
-    return '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="url(#wg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+paths[v]+'</svg>';
+    return '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+paths[v]+'</svg>';
   }
   function icHere(){
     document.getElementById('lockIc').innerHTML=ic('lock');
@@ -806,6 +882,11 @@
     document.getElementById('set-pin').innerHTML=ic('pin');
     document.getElementById('set-shield').innerHTML=ic('shield');
     document.getElementById('set-block').innerHTML=ic('block');
+    var sa=document.getElementById('set-age'); if(sa) sa.innerHTML='<span style="font-family:Space Grotesk;font-weight:700;font-size:10px">18+</span>';
+    var sg=document.getElementById('set-guide'); if(sg) sg.innerHTML=ic('shield');
+    document.querySelectorAll('.acc-chev').forEach(function(el){ el.innerHTML=ic('chevron'); });
+    var pc=document.getElementById('profCheck'); if(pc) pc.classList.add('blue');
+    renderChips();
     document.getElementById('tab-paths').innerHTML=navIc('paths')+'Paths';
     document.getElementById('tab-here').innerHTML=navIc('here')+'Here';
     document.getElementById('tab-messages').innerHTML=navIc('messages')+'Messages';
@@ -865,7 +946,7 @@
       +'<div class="drop-sub">Paths land in drops. Who you walked past stays hidden until the clock hits zero. The only way to fill the next one is to be out there.</div>'
       +'<div class="drop-q">'+avs+'<span class="qmore">'+qn+' waiting</span></div></div>';
     document.getElementById('seg-recent').innerHTML=qHtml+recentIds.map(function(id){ var p=byId(id);
-      return '<div class="pcard'+(p.just?' just':'')+'" onclick="openDetail('+p.id+')">'+av(p)
+      return '<div class="pcard'+(p.just?' just':'')+'" onclick="openDetail('+p.id+')">'+ringAv(p)
         +'<div class="pinfo"><div class="pn">'+p.name+', '+p.age+(p.just?'<span class="just-tag">NEW DROP</span>':'')+'</div>'
         +'<div class="pmeta">'+(p.just?'Path crossed, '+p.mins+' mins ago':'Came within their space, '+p.when)+', within '+p.ft+' ft</div>'
         +'<div class="prow"><div class="pacts">'
@@ -1009,11 +1090,11 @@
     document.getElementById('events-list').innerHTML=sorted.map(function(e,i){
       return '<div class="ev-card" id="ev-'+e.id+'"><div class="ev-rank">'+(i+1)+'</div>'
         +'<div class="ev-body"><div class="ev-head"><div class="ev-date"><span class="mo">'+e.mo+'</span><span class="dy">'+e.dy+'</span></div>'
-        +'<div><div class="ev-name">'+e.name+'</div><div class="ev-venue">'+ic('pin')+e.venue+'</div></div></div>'
+        +'<div><div class="ev-name">'+e.venue+'</div><div class="loc-ok">'+ic('check')+'LOCATION VERIFIED</div></div></div>'
         +'<div class="ev-stats"><span class="ev-stat"><b>~'+e.cross+'</b> could cross</span><span class="ev-stat"><b>'+e.going+'</b> going</span></div></div>'
-        +'<div class="voter"><button class="varrow up'+(e.v===1?' on':'')+'" aria-label="Upvote '+e.name+'" onclick="voteEvent('+e.id+',1)">'+ic('arrowup')+'</button>'
+        +'<div class="voter"><button class="varrow up'+(e.v===1?' on':'')+'" aria-label="Upvote the event at '+e.venue+'" onclick="voteEvent('+e.id+',1)">'+ic('arrowup')+'</button>'
         +'<div class="vscore">'+e.score+'</div>'
-        +'<button class="varrow down'+(e.v===-1?' on':'')+'" aria-label="Downvote '+e.name+'" onclick="voteEvent('+e.id+',-1)">'+ic('arrowdown')+'</button></div></div>';
+        +'<button class="varrow down'+(e.v===-1?' on':'')+'" aria-label="Downvote the event at '+e.venue+'" onclick="voteEvent('+e.id+',-1)">'+ic('arrowdown')+'</button></div></div>';
     }).join('');
     if(hid){ var el=document.getElementById('ev-'+hid); if(el) el.classList.add('bump'); }
   }
@@ -1040,7 +1121,7 @@
       var rv=revealed[p.id];
       var prev=rv?'<span style="color:var(--orange2)">'+p.heart+'</span>':(p.matched?'You matched. Say something.':'You came within their space. Message them.');
       var tag=rv?'<span class="heart-tag">HEART</span>':(p.matched?'<span class="mini-badge">MATCHED</span>':'');
-      return '<div class="conv" onclick="openChat('+p.id+')">'+av(p,'sm')+'<div class="ci"><div class="cn">'+p.name+', '+p.age+' '+tag+'</div><div class="cp">'+prev+'</div></div><div class="ct">'+p.times+'x</div></div>';
+      return '<div class="conv" onclick="openChat('+p.id+')">'+(p.heart&&!revealed[p.id]?ringAv(p,'sm'):av(p,'sm'))+'<div class="ci"><div class="cn">'+p.name+', '+p.age+' '+tag+'</div><div class="cp">'+prev+'</div></div><div class="ct">'+p.times+'x</div></div>';
     }).join('');
   }
   function revealHeart(id){
@@ -1105,7 +1186,8 @@
       +'<div class="d-body"><div class="d-cross"><span>Came within their space, '+p.when+', within '+p.ft+' ft</span></div>'
       +'<div class="d-times"><div class="num">'+p.times+'</div><div><div class="tl">You have crossed paths <b>'+p.times+' times</b></div><div class="ts">Across campus and events this semester</div></div></div>'
       +'<div class="d-bio">'+p.bio+'</div>'+soc
-      +'<div class="d-acts"><button class="d-btn msg" onclick="openChat('+p.id+')">'+ic('chat')+' Message</button><button class="d-btn heart" onclick="openHeartSheet('+p.id+')">'+ic('heart')+' Heart</button><button class="d-btn star" onclick="sendPriority('+p.id+')">'+ic('star')+'</button></div></div>';
+      +'<div class="d-acts"><button class="d-btn msg" onclick="openChat('+p.id+')">'+ic('chat')+' Message</button><button class="d-btn heart" onclick="openHeartSheet('+p.id+')">'+ic('heart')+' Heart</button><button class="d-btn star" onclick="sendPriority('+p.id+')">'+ic('star')+'</button></div>'
+      +'<div class="rep-link" onclick="openReport('+p.id+')">Report or block '+p.name+'</div></div>';
     showOverlay('detailSheet');
   }
   function openChat(id){
@@ -1256,37 +1338,95 @@
     toastNow(m.icn,'Medallion earned, '+m.n,'surge');
     var v=document.querySelector('.view.active'); if(v) burst(v);
   }
+
+  /* PROFILE ACCORDIONS */
+  function toggleAcc(id){ var el=document.getElementById(id); if(el) el.classList.toggle('open'); }
+
+  /* HINGE-STYLE ABOUT CHIPS */
+  var aboutOpts=['Live music','Pool days','Gym rat','Coffee runs','Church','Intramurals','Greek life','Foodie','Hiking','Dog person','Study dates','Night owl','Concerts','Thrifting','Gamer','Road trips'];
+  var aboutPicked={'Live music':1,'Pool days':1,'Night owl':1};
+  function renderChips(){
+    var el=document.getElementById('aboutChips'); if(!el)return;
+    el.innerHTML=aboutOpts.map(function(o){
+      return '<button class="chip-btn'+(aboutPicked[o]?' on':'')+'" onclick="toggleChip(\''+o.replace(/'/g,"\\'")+'\')">'+o+'</button>';
+    }).join('');
+  }
+  function toggleChip(o){
+    if(aboutPicked[o]){ delete aboutPicked[o]; }
+    else{
+      if(Object.keys(aboutPicked).length>=6){ toastNow('spark','Six max. Unpick one first.'); return; }
+      aboutPicked[o]=1;
+    }
+    renderChips();
+  }
+
+  /* REPORT + PERMANENT BAN */
+  function openReport(id){
+    var p=byId(id);
+    var reasons=['Fake profile or catfish','Harassment or threats','Inappropriate content','Looks under 18','Spam or scam'];
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('flag')+'</div>'
+      +'<h3>Report '+p.name+'</h3><p>Reports are anonymous. '+p.name+' will never know it was you.</p>'
+      +reasons.map(function(r){return '<button class="rep-reason" onclick="submitReport()">'+ic('flag')+r+'</button>';}).join('')
+      +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>';
+    showOverlay('heartSheet');
+  }
+  function submitReport(){
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('shield')+'</div>'
+      +'<h3>Report received</h3><p>Our team reviews every report within 24 hours. Policy violations mean permanent removal, and we block their device and network fingerprint so they cannot come back on a new account.</p>'
+      +'<button class="btn" onclick="closeOverlay(\'heartSheet\')">Done</button></div>';
+  }
+  function openGuidelines(){
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('shield')+'</div>'
+      +'<h3>Community Guidelines</h3><p>Closer works because everyone here is real, verified, and safe. One strike and you are out.</p>'
+      +'<div class="g-row"><span class="gd"></span><span><b>18 and over, verified.</b> Age is checked at signup. Anyone under 18 is removed.</span></div>'
+      +'<div class="g-row"><span class="gd"></span><span><b>GCU students only.</b> Verified through your school Microsoft account.</span></div>'
+      +'<div class="g-row"><span class="gd"></span><span><b>Real faces only.</b> AI matches your photos to your Instagram for the blue check.</span></div>'
+      +'<div class="g-row"><span class="gd"></span><span><b>Zero tolerance</b> for harassment, hate, nudity, threats, or spam. Same standards as every major dating app.</span></div>'
+      +'<div class="g-row"><span class="gd"></span><span><b>One strike, permanent.</b> Banned users are blocked by device and network fingerprint. New accounts do not work.</span></div>'
+      +'<div class="g-row"><span class="gd"></span><span><b>Your location is private.</b> Nobody ever sees where you are live, only that your paths crossed, after the fact.</span></div>'
+      +'<button class="btn" onclick="closeOverlay(\'heartSheet\')" style="margin-top:8px">Got it</button></div>';
+    showOverlay('heartSheet');
+  }
+  function ringAv(p,cls){ return '<span class="ring-av">'+av(p,cls)+'</span>'; }
   function startToasts(){ clearInterval(toastTimer); setTimeout(showToast,2600); toastTimer=setInterval(showToast,22000); }
   function stopToasts(){ clearInterval(toastTimer); var el=document.getElementById('toast'); if(el) el.classList.remove('show'); }
   function burst(container){ if(!container)return; var colors=night?['#39ffd0','#2ec5ff','#ff5cae','#7a5cff']:['#ff8a4c','#f43f6e','#4be0b8','#3b82f6']; var c=document.createElement('div'); c.className='confetti'; for(var i=0;i<28;i++){ var d=document.createElement('i'); d.style.left=(50+(Math.random()*64-32))+'%'; d.style.background=colors[i%colors.length]; d.style.setProperty('--dx',(Math.random()*220-110)+'px'); d.style.setProperty('--dy',(120+Math.random()*170)+'px'); d.style.animationDelay=(Math.random()*0.15)+'s'; c.appendChild(d); } container.appendChild(c); setTimeout(function(){ c.remove(); },1700); }
 
   /* HOTSPOTS */
   var spots=[
-    {id:'grace',name:'Grace',count:140,go:'Worship night, all welcome',admin:'Sofia',ai:'S',ag:2,x:42,y:58,q:'Grace Church Phoenix AZ'},
-    {id:'northph',name:'North Phoenix',count:98,go:'Service and small groups',admin:'Diego',ai:'D',ag:1,x:22,y:26,q:'North Phoenix Baptist Church Phoenix AZ'},
-    {id:'collective',name:'The Collective',count:73,go:'Young adults night',admin:'Riley',ai:'R',ag:3,x:50,y:13,q:'The Collective Church Phoenix AZ'},
-    {id:'pool',name:'Rivers Pool',count:84,go:'Pool day, music til six',admin:'Maya',ai:'M',ag:0,x:66,y:32,q:'Rivers Pool GCU Phoenix AZ'},
-    {id:'house',name:'House Party',count:61,go:'Backyard set at nine',admin:'Layla',ai:'L',ag:0,x:74,y:80,q:'Phoenix AZ'},
-    {id:'movies',name:'Harkins Theater',count:38,go:'New release, nine pm show',admin:'Kai',ai:'K',ag:4,x:84,y:56,q:'Harkins Theatres Phoenix AZ'},
-    {id:'run',name:'Run Club',count:46,go:'Six pm loop',admin:'Avery',ai:'A',ag:3,x:14,y:50,q:'Run Club Phoenix AZ'},
-    {id:'mall',name:'The Mall',count:52,go:'Food court meetup',admin:'Nico',ai:'N',ag:4,x:86,y:36,q:'Arrowhead Towne Center Phoenix AZ'},
-    {id:'pickle',name:'Pickleball Courts',count:29,go:'Open courts, bring a paddle',admin:'Bella',ai:'B',ag:1,x:32,y:84,q:'Pickleball Courts Phoenix AZ'}
+    {id:'grace',name:'Grace',count:140,go:'Worship night, all welcome',admin:'Sofia',ai:'S',ag:2,lat:33.5090,lng:-112.1210,q:'Grace Church Phoenix AZ'},
+    {id:'northph',name:'North Phoenix',count:98,go:'Service and small groups',admin:'Diego',ai:'D',ag:1,lat:33.5320,lng:-112.1150,q:'North Phoenix Baptist Church Phoenix AZ'},
+    {id:'collective',name:'The Collective',count:73,go:'Young adults night',admin:'Riley',ai:'R',ag:3,lat:33.5230,lng:-112.1460,q:'The Collective Church Phoenix AZ'},
+    {id:'pool',name:'Rivers Pool',count:84,go:'Pool day, music til six',admin:'Maya',ai:'M',ag:0,lat:33.5172,lng:-112.1275,q:'Rivers Pool GCU Phoenix AZ'},
+    {id:'house',name:'House Party',count:61,go:'Backyard set at nine',admin:'Layla',ai:'L',ag:0,lat:33.5050,lng:-112.1400,q:'Phoenix AZ'},
+    {id:'movies',name:'Harkins Theater',count:38,go:'New release, nine pm show',admin:'Kai',ai:'K',ag:4,lat:33.5100,lng:-112.1000,q:'Harkins Theatres Phoenix AZ'},
+    {id:'run',name:'Run Club',count:46,go:'Six pm loop',admin:'Avery',ai:'A',ag:3,lat:33.5200,lng:-112.1120,q:'Run Club Phoenix AZ'},
+    {id:'mall',name:'The Mall',count:52,go:'Food court meetup',admin:'Nico',ai:'N',ag:4,lat:33.5390,lng:-112.1450,q:'Arrowhead Towne Center Phoenix AZ'},
+    {id:'pickle',name:'Pickleball Courts',count:29,go:'Open courts, bring a paddle',admin:'Bella',ai:'B',ag:1,lat:33.5000,lng:-112.1250,q:'Pickleball Courts Phoenix AZ'}
   ];
   var hereMine={}, hotTimer=null;
-  function bubSize(c){ return Math.max(34,Math.min(98, 28+c*0.55)); }
+  var lmap=null, spotMarkers={}, youMarker=null, userLoc=[33.5165,-112.1298]; /* GCU campus fallback until live location grants */
+  function pinSize(c){ return Math.max(30,Math.min(58, 24+c*0.22)); }
+  function spotIcon(s){ var d=pinSize(s.count); return L.divIcon({className:'', html:'<div class="spot-pin" style="width:'+d+'px;height:'+d+'px;font-size:'+Math.round(d*0.34)+'px">'+s.count+'</div>', iconSize:[d,d], iconAnchor:[d/2,d/2]}); }
+  function distMi(a,b){ var R=3958.8,dLa=(b[0]-a[0])*Math.PI/180,dLo=(b[1]-a[1])*Math.PI/180,la1=a[0]*Math.PI/180,la2=b[0]*Math.PI/180; var h=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(la1)*Math.cos(la2)*Math.sin(dLo/2)*Math.sin(dLo/2); return R*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h)); }
+  function fmtDist(s){ var m=distMi(userLoc,[s.lat,s.lng]); return m<0.1?'right here':(m<10?m.toFixed(1):Math.round(m))+' mi'; }
   function renderHotMap(){
-    var map=document.getElementById('hotMap'); if(!map)return;
-    var html=spots.map(function(s){ var d=bubSize(s.count);
-      return '<div class="hot-spot" style="left:'+s.x+'%;top:'+s.y+'%" onclick="openSpot(\''+s.id+'\')"><div class="bub" id="bub-'+s.id+'" style="width:'+d+'px;height:'+d+'px;font-size:'+Math.round(d*0.26)+'px">'+s.count+'</div></div>';
-    }).join('');
-    html+='<div class="closer-orb" id="closerOrb"><svg width="22" height="22" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="url(#wg)"/><circle cx="14" cy="14" r="8.5" stroke="url(#wg)" stroke-width="1.8" opacity="0.6"/></svg></div>';
-    map.innerHTML=html; moveCloser();
+    var el=document.getElementById('hotMap'); if(!el)return;
+    if(typeof L==='undefined'){ el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted2);font-size:12px">Map needs a connection</div>'; return; }
+    if(!lmap){
+      lmap=L.map('hotMap',{zoomControl:false,attributionControl:false}).setView(userLoc,13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(lmap);
+      youMarker=L.marker(userLoc,{icon:L.divIcon({className:'',html:'<div class="you-pin"></div>',iconSize:[22,22],iconAnchor:[11,11]}),zIndexOffset:1000}).addTo(lmap);
+      spots.forEach(function(s){ spotMarkers[s.id]=L.marker([s.lat,s.lng],{icon:spotIcon(s)}).addTo(lmap).on('click',function(){ openSpot(s.id); }); });
+      if(navigator.geolocation){ navigator.geolocation.getCurrentPosition(function(pos){ userLoc=[pos.coords.latitude,pos.coords.longitude]; if(youMarker) youMarker.setLatLng(userLoc); renderHotList(); },function(){},{ timeout:4000 }); }
+    }
+    setTimeout(function(){ if(lmap) lmap.invalidateSize(); },60);
   }
-  function moveCloser(){ var h=spots.slice().sort(function(a,b){return b.count-a.count;})[0]; var o=document.getElementById('closerOrb'); if(o){ o.style.left=h.x+'%'; o.style.top=h.y+'%'; } }
+  function refreshMarkers(){ if(!lmap)return; spots.forEach(function(s){ var m=spotMarkers[s.id]; if(m) m.setIcon(spotIcon(s)); }); }
   function startHot(){ renderHotMap(); renderHotList(); clearInterval(hotTimer); hotTimer=setInterval(tickHot,2600); }
   function tickHot(){
-    spots.forEach(function(s){ s.count=Math.max(12, s.count+Math.round((Math.random()*2-1)*9)); var b=document.getElementById('bub-'+s.id); if(b){ var d=bubSize(s.count); b.style.width=d+'px'; b.style.height=d+'px'; b.style.fontSize=Math.round(d*0.26)+'px'; b.textContent=s.count; } });
-    moveCloser(); renderHotList();
+    spots.forEach(function(s){ s.count=Math.max(12, s.count+Math.round((Math.random()*2-1)*9)); });
+    refreshMarkers(); renderHotList();
   }
   function renderHotList(){
     var el=document.getElementById('hot-list'); if(!el)return;
@@ -1296,14 +1436,16 @@
         +'<div class="hot-ico" style="background:'+G[s.ag]+'">'+ic('pin')+'</div>'
         +'<div class="hot-info"><div class="hot-name">'+s.name+'</div><div class="hot-go">'+s.go+'</div>'
         +'<div class="admin-chip"><div class="av aav" style="background:'+G[s.ag]+'">'+s.ai+'</div>Updated by '+s.admin+' <span class="owner">'+(owner?'YOU OWN':'OWNER')+'</span></div></div>'
-        +'<div class="hot-count"><b>'+s.count+'</b><span>here</span></div>'
-        +'<button class="imhere'+(hereMine[s.id]?' on':'')+'" onclick="event.stopPropagation();imHere(\''+s.id+'\')">'+(hereMine[s.id]?'Here':'I am here')+'</button></div>';
+        +'<div class="hot-count"><b>'+s.count+'</b><span>here</span><span class="hot-dist">'+fmtDist(s)+'</span></div></div>';
     }).join('');
   }
-  function imHere(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(s&&!hereMine[id]){ hereMine[id]=true; s.count+=1; questTick(0); addXp(15); earnMed('tonight'); } renderHotMap(); renderHotList(); }
-  function openSpot(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(!s)return; var q=encodeURIComponent(s.q||(s.name+' Phoenix AZ')); document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('pin')+'</div><h3>'+s.name+'</h3><p>'+s.count+' Closers here now. '+s.go+'. Updated by '+s.admin+', who owns this spot.</p><div class="map-btns"><a class="map-btn" href="https://maps.apple.com/?q='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Apple Maps</a><a class="map-btn" href="https://www.google.com/maps/search/?api=1&query='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Google Maps</a></div><button class="btn" onclick="closeOverlay(\'heartSheet\');imHere(\''+id+'\')">'+ic('pin')+' I am here too</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Close</div></div>'; showOverlay('heartSheet'); }
-  function addSpot(){ document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('plus')+'</div><h3>Add a spot</h3><p>Drop a spot, say what is going on, and you become its owner.</p><input id="spotName" placeholder="Spot name" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:10px;outline:none"><textarea id="spotGo" placeholder="What is going on and why" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;resize:none;height:64px;margin-bottom:14px;outline:none"></textarea><button class="btn" onclick="postSpot()">'+ic('plus')+' Post, become owner</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>'; showOverlay('heartSheet'); }
-  function postSpot(){ var n=escP(document.getElementById('spotName').value||'New Spot'); var g=escP(document.getElementById('spotGo').value||'Something is happening'); spots.unshift({id:'u'+(spots.length+1),name:n,count:8,go:g,admin:'You',ai:'A',ag:0,x:48,y:46,q:n+' Phoenix AZ'}); closeOverlay('heartSheet'); renderHotMap(); renderHotList(); }
+  function goingSpot(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(s&&!hereMine[id]){ hereMine[id]=true; questTick(0); addXp(15); earnMed('tonight'); toastNow('pin','You are going to '+s.name+'. We will show you who else is going.'); } renderHotList(); }
+  function openSpot(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(!s)return; var q=encodeURIComponent(s.q||(s.name+' Phoenix AZ'));
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('pin')+'</div><h3>'+s.name+'</h3><p>'+s.count+' Closers here right now, from live location. '+fmtDist(s)+' from you. '+s.go+'. Updated by '+s.admin+', who owns this spot.</p>'
+    +'<div class="map-btns"><a class="map-btn" href="https://maps.apple.com/?daddr='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Apple Maps</a><a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Google Maps</a></div>'
+    +'<button class="btn" onclick="closeOverlay(\'heartSheet\');goingSpot(\''+id+'\')">'+ic('check')+(hereMine[id]?' You are going':' I am going')+'</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Close</div></div>'; showOverlay('heartSheet'); }
+  function addSpot(){ document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('plus')+'</div><h3>Add a spot</h3><p>Drop a spot at your live location, say what is going on, and you become its owner.</p><input id="spotName" placeholder="Spot name" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:10px;outline:none"><textarea id="spotGo" placeholder="What is going on and why" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;resize:none;height:64px;margin-bottom:14px;outline:none"></textarea><button class="btn" onclick="postSpot()">'+ic('plus')+' Post, become owner</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>'; showOverlay('heartSheet'); }
+  function postSpot(){ var n=escP(document.getElementById('spotName').value||'New Spot'); var g=escP(document.getElementById('spotGo').value||'Something is happening'); var s={id:'u'+(spots.length+1),name:n,count:8,go:g,admin:'You',ai:'A',ag:0,lat:userLoc[0]+0.002,lng:userLoc[1]+0.002,q:n+' Phoenix AZ'}; spots.unshift(s); if(lmap){ spotMarkers[s.id]=L.marker([s.lat,s.lng],{icon:spotIcon(s)}).addTo(lmap).on('click',function(){ openSpot(s.id); }); } closeOverlay('heartSheet'); renderHotList(); }
 
   function go(tab){
     var idx=+tab.dataset.i;
