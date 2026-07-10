@@ -40,6 +40,33 @@ async function sendSms(to, body) {
   return { sent: r.ok, status: r.status }
 }
 
+// Emails each new signup to the DartyForLife inbox, tagged "Closer CVC" in the subject
+// so a Gmail filter can auto-label it. Dormant until RESEND_API_KEY is set.
+async function notify(rec) {
+  const key = process.env.RESEND_API_KEY
+  if (!key) return
+  const to = process.env.NOTIFY_EMAIL || 'dartyforlife@gmail.com'
+  const from = process.env.RESEND_FROM || 'Closer Waitlist <onboarding@resend.dev>'
+  const subject = `Closer CVC | new signup: ${rec.email}`
+  const html =
+    '<h2 style="font-family:sans-serif">New Closer waitlist signup</h2>' +
+    '<table style="font-family:sans-serif;font-size:14px;border-collapse:collapse">' +
+    `<tr><td style="padding:2px 10px 2px 0"><b>Email</b></td><td>${rec.email}</td></tr>` +
+    `<tr><td style="padding:2px 10px 2px 0"><b>Phone</b></td><td>${rec.phone}</td></tr>` +
+    `<tr><td style="padding:2px 10px 2px 0"><b>GCU</b></td><td>${rec.school === 'gcu' ? 'Yes, founding member' : 'No, general list'}</td></tr>` +
+    `<tr><td style="padding:2px 10px 2px 0"><b>Phone verified</b></td><td>${rec.verified ? 'Yes' : 'Not yet'}</td></tr>` +
+    `<tr><td style="padding:2px 10px 2px 0"><b>Source</b></td><td>${rec.cta || 'n/a'}</td></tr>` +
+    `<tr><td style="padding:2px 10px 2px 0"><b>When</b></td><td>${rec.ts}</td></tr>` +
+    '</table><p style="color:#888;font-family:sans-serif;font-size:12px">Category: Closer CVC</p>'
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from, to, subject, html }),
+    })
+  } catch (e) {}
+}
+
 async function readBody(req) {
   const ct = req.headers.get('content-type') || ''
   if (ct.includes('application/json')) return await req.json().catch(() => ({}))
@@ -89,7 +116,9 @@ export default async (req) => {
     }
 
     // No texting provider yet: capture now as phone-unverified so no contact is lost.
-    await store.setJSON(`lead:${Date.now()}:${e164(phone)}`, { ...rec, verified: false })
+    const lead = { ...rec, verified: false }
+    await store.setJSON(`lead:${Date.now()}:${e164(phone)}`, lead)
+    await notify(lead)
     return json({ ok: true, needCode: false, captured: true })
   }
 
@@ -112,15 +141,10 @@ export default async (req) => {
       await store.setJSON(`pending:${phone}`, { ...pend, attempts: (pend.attempts || 0) + 1 })
       return json({ ok: false, error: 'bad-code' }, 400)
     }
-    await store.setJSON(`lead:${Date.now()}:${phone}`, {
-      email: pend.email,
-      phone,
-      school: pend.school,
-      cta: pend.cta,
-      ts: pend.ts,
-      verified: true,
-    })
+    const vlead = { email: pend.email, phone, school: pend.school, cta: pend.cta, ts: pend.ts, verified: true }
+    await store.setJSON(`lead:${Date.now()}:${phone}`, vlead)
     await store.delete(`pending:${phone}`)
+    await notify(vlead)
     return json({ ok: true, verified: true })
   }
 
