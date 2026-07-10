@@ -67,6 +67,12 @@ async function notify(rec) {
   } catch (e) {}
 }
 
+function welcomeMsg(rec) {
+  return rec.school === 'gcu'
+    ? "You're on the Closer waitlist and locked in as a founding member. We'll text you the moment your invite is ready. Your circle is smaller than you think."
+    : "You're on the Closer general list. GCU students get in first, and we'll text you when your campus unlocks."
+}
+
 async function readBody(req) {
   const ct = req.headers.get('content-type') || ''
   if (ct.includes('application/json')) return await req.json().catch(() => ({}))
@@ -145,6 +151,7 @@ export default async (req) => {
     await store.setJSON(`lead:${Date.now()}:${phone}`, vlead)
     await store.delete(`pending:${phone}`)
     await notify(vlead)
+    await sendSms(phone, welcomeMsg(vlead)) // welcome text the moment they land on the list
     return json({ ok: true, verified: true })
   }
 
@@ -160,8 +167,8 @@ export default async (req) => {
     }
     leads.sort((a, b) => (a.ts < b.ts ? 1 : -1))
     if (action === 'export') {
-      const rows = [['email', 'phone', 'school', 'verified', 'cta', 'ts']]
-      leads.forEach((l) => rows.push([l.email, l.phone, l.school, l.verified, l.cta, l.ts]))
+      const rows = [['email', 'phone', 'school', 'verified', 'accepted', 'cta', 'ts']]
+      leads.forEach((l) => rows.push([l.email, l.phone, l.school, l.verified, l.accepted || false, l.cta, l.ts]))
       const csv = rows.map((r) => r.map((c) => `"${String(c == null ? '' : c).replace(/"/g, '""')}"`).join(',')).join('\n')
       return new Response(csv, { headers: { 'content-type': 'text/csv', 'content-disposition': 'attachment; filename=closer-waitlist.csv' } })
     }
@@ -178,6 +185,35 @@ export default async (req) => {
     const pend = await store.list({ prefix: 'pending:' })
     for (const b of pend.blobs) { await store.delete(b.key); n++ }
     return json({ ok: true, cleared: n })
+  }
+
+  // ADMIN: accept people and text them "you're in". POST {phone} for one, or {all:true} for everyone not yet accepted.
+  if (req.method === 'POST' && action === 'accept') {
+    const key = url.searchParams.get('key')
+    if (key !== (process.env.WAITLIST_ADMIN_KEY || 'set-a-key')) return json({ ok: false }, 401)
+    const d = await readBody(req)
+    const target = d.phone ? e164(String(d.phone)) : null
+    const all = !!d.all
+    if (!target && !all) return json({ ok: false, error: 'need-phone-or-all' }, 400)
+    const { blobs } = await store.list({ prefix: 'lead:' })
+    let accepted = 0
+    let texted = 0
+    for (const b of blobs) {
+      const v = await store.get(b.key, { type: 'json' })
+      if (!v) continue
+      const match = all ? !v.accepted : v.phone === target
+      if (!match) continue
+      v.accepted = true
+      v.acceptedAt = new Date().toISOString()
+      await store.setJSON(b.key, v)
+      accepted++
+      const sms = await sendSms(
+        v.phone,
+        "You're in. Closer just accepted you at GCU. Open the app and start crossing paths: https://closer-gcu.netlify.app"
+      )
+      if (sms.sent) texted++
+    }
+    return json({ ok: true, accepted, texted, sms: twilioReady() ? 'on' : 'off, add Twilio to text them' })
   }
 
   return json({ ok: false, error: 'unknown-action' }, 400)
