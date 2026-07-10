@@ -450,6 +450,33 @@
   .toast.surge{border-color:rgba(255,92,0,.6);box-shadow:0 0 26px rgba(255,92,0,.4),0 12px 30px rgba(0,0,0,.55)}
   body.night .toast.surge{border-color:rgba(57,255,200,.55);box-shadow:0 0 26px rgba(57,255,200,.3),0 12px 30px rgba(0,0,0,.55)}
 
+  /* PORTFOLIO PAYWALL + REWARDED AD */
+  .pitem.locked .pphoto{filter:blur(7px) saturate(.7)}
+  .pitem.locked{position:relative}
+  .pitem.locked .lock-ov{position:absolute;left:0;right:0;top:0;height:118px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:rgba(8,9,7,.35);z-index:2}
+  .pitem.locked .lock-ov .lc{width:36px;height:36px;border-radius:50%;background:rgba(8,9,7,.65);backdrop-filter:blur(4px);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--sand)}
+  .pitem.locked .lock-ov .lc .ic{width:16px;height:16px}
+  .pitem.locked .lock-ov .lt{font-size:10px;font-weight:700;font-family:'Space Grotesk';letter-spacing:.05em;color:var(--text);text-shadow:0 1px 4px rgba(0,0,0,.7)}
+  .unlock-card{grid-column:1 / -1;background:linear-gradient(135deg,rgba(232,177,90,.12),rgba(255,92,0,.07));border:1px solid rgba(232,177,90,.35);border-radius:18px;padding:18px;text-align:center}
+  .unlock-card .uc-ic{width:40px;height:40px;border-radius:50%;background:var(--grad);color:#160a03;display:inline-flex;align-items:center;justify-content:center;margin-bottom:9px}
+  .unlock-card .uc-ic .ic{width:19px;height:19px}
+  .unlock-card .uc-t{font-family:'Space Grotesk';font-weight:700;font-size:16px}
+  .unlock-card .uc-s{font-size:12px;color:var(--muted);margin:5px 0 13px;line-height:1.5}
+  .unlock-card .btn{margin-bottom:9px}
+  .unlock-card .btn.outline{background:transparent;border:1px solid var(--line);color:var(--text)}
+  .ad-wrap{background:var(--surface);border:1px solid var(--line);border-radius:24px;overflow:hidden;text-align:center}
+  .ad-video{position:relative;height:200px;background:linear-gradient(150deg,#0a3a5c,#1478b4 55%,#35c0e8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+  .ad-tag{position:absolute;top:10px;left:10px;font-size:9px;font-weight:700;font-family:'Space Grotesk';letter-spacing:.08em;background:rgba(0,0,0,.55);color:#fff;padding:3px 8px;border-radius:5px}
+  .ad-count{position:absolute;top:10px;right:10px;font-size:11px;font-weight:700;font-family:'Space Grotesk';background:rgba(0,0,0,.55);color:#fff;padding:4px 9px;border-radius:999px}
+  .ad-brand{font-family:'Space Grotesk';font-weight:700;font-size:26px;letter-spacing:.04em;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+  .ad-line{font-size:12.5px;color:rgba(255,255,255,.92);font-weight:600;letter-spacing:.03em}
+  .ad-cta{margin-top:8px;font-size:11px;font-weight:700;font-family:'Space Grotesk';background:#fff;color:#0a3a5c;padding:7px 14px;border-radius:999px;letter-spacing:.04em}
+  .ad-bar{height:4px;background:var(--surface2)}
+  .ad-bar .f{height:100%;width:0;background:var(--grad);transition:width 1s linear}
+  .ad-body{padding:18px 20px 22px}
+  .ad-body p{color:var(--muted);font-size:13px;margin-bottom:14px;line-height:1.5}
+  .ad-body .btn[disabled]{opacity:.45;cursor:default}
+
   /* touch + a11y */
   .swipe-acts .big-circ{padding:0}
   .deck-card{touch-action:pan-y}
@@ -659,6 +686,7 @@
         <div class="overlay cmodal" id="priorityModal"><div class="sheet-blur"></div><div class="inner" id="priorityInner"></div></div>
         <div class="overlay cmodal" id="heartSheet"><div class="sheet-blur"></div><div class="inner" id="heartInner"></div></div>
         <div class="overlay cmodal" id="revealModal"><div class="sheet-blur"></div><div class="inner" id="revealInner"></div></div>
+        <div class="overlay cmodal" id="adModal"><div class="sheet-blur"></div><div class="inner" id="adInner"></div></div>
 
         <div class="tabbar" id="tabbar" style="display:none">
           <div class="dial" id="dial"></div>
@@ -828,17 +856,79 @@
     toastNow('bolt','Path drop, '+n+' new people just landed','surge');
     burst(document.getElementById('v-paths'));
   }
+  /* PORTFOLIO PAYWALL: 10 free, the rest locked behind Closer+ or a rewarded ad */
+  var PORT_FREE=10, portfolioUnlocked=false, LOCKED_TOTAL=37;
   function renderPortfolio(q){
     q=(q||'').toLowerCase();
+    var freeIds=people.slice(0,PORT_FREE).map(function(p){return p.id;});
     var list=people.filter(function(p){return p.name.toLowerCase().indexOf(q)>=0;});
     var el=document.getElementById('portfolio-grid');
     if(!list.length){ el.innerHTML='<div class="empty">No one by that name in your portfolio yet.</div>'; return; }
-    el.innerHTML=list.map(function(p){
+    var html=list.map(function(p){
+      var open=portfolioUnlocked||freeIds.indexOf(p.id)>=0;
+      if(!open){
+        return '<div class="pitem locked" onclick="openUnlock()"><div class="pphoto" style="background:'+G[p.g]+'"><span class="pinit">'+p.init+'</span></div>'
+          +'<div class="lock-ov"><div class="lc">'+ic('lock')+'</div><div class="lt">LOCKED</div></div>'
+          +'<div class="pbody"><div class="pn">Hidden</div><div class="psub">Unlock to see</div>'
+          +'<div class="pmini"><button onclick="event.stopPropagation();openUnlock()">'+ic('lock')+' Unlock</button></div></div></div>';
+      }
       return '<div class="pitem" onclick="openDetail('+p.id+')"><div class="pphoto" style="background:'+G[p.g]+'"><span class="pinit">'+p.init+'</span>'
         +(p.matched?'<span class="badge-match">MATCHED</span>':'')+'</div>'
         +'<div class="pbody"><div class="pn">'+p.name+', '+p.age+'</div><div class="psub">'+p.when+', '+p.ft+' ft</div>'
         +'<div class="pmini"><button onclick="event.stopPropagation();openChat('+p.id+')">'+ic('chat')+' Message</button><button class="h" onclick="event.stopPropagation();openHeartSheet('+p.id+')">'+ic('heart')+'</button></div></div></div>';
     }).join('');
+    if(!portfolioUnlocked&&!q){
+      html+='<div class="unlock-card"><div class="uc-ic">'+ic('lock')+'</div>'
+        +'<div class="uc-t">'+LOCKED_TOTAL+' more people are locked</div>'
+        +'<div class="uc-s">Your first 10 crossings are free. Unlock everyone you have ever crossed paths with.</div>'
+        +'<button class="btn" onclick="watchAd()">'+ic('spark')+' Watch an ad, unlock 24 hours</button>'
+        +'<button class="btn outline" onclick="buyCloserPlus()">'+ic('star')+' Closer+, unlock forever</button></div>';
+    }
+    el.innerHTML=html;
+  }
+  function openUnlock(){
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('lock')+'</div>'
+      +'<h3>This crossing is locked</h3><p>Your first 10 crossings are free. Unlock your full portfolio, everyone you have ever crossed paths with.</p>'
+      +'<button class="btn" onclick="closeOverlay(\'heartSheet\');watchAd()" style="margin-bottom:9px">'+ic('spark')+' Watch an ad, unlock 24 hours</button>'
+      +'<button class="btn outline" style="background:transparent;border:1px solid var(--line);color:var(--text)" onclick="closeOverlay(\'heartSheet\');buyCloserPlus()">'+ic('star')+' Closer+, unlock forever</button>'
+      +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Not now</div></div>';
+    showOverlay('heartSheet');
+  }
+  /* Rewarded ad: house inventory first, our own events */
+  var adSecs=5, adTimer=null;
+  function watchAd(){
+    adSecs=5;
+    document.getElementById('adInner').innerHTML='<div class="ad-wrap">'
+      +'<div class="ad-video"><span class="ad-tag">AD</span><span class="ad-count" id="adCount">5</span>'
+      +'<div class="ad-brand">FOAM NATION</div><div class="ad-line">SUMMER SPLASH, JUL 25, RIVERS POOL</div>'
+      +'<div class="ad-cta">GET TICKETS</div></div>'
+      +'<div class="ad-bar"><div class="f" id="adBarF"></div></div>'
+      +'<div class="ad-body"><p id="adNote">Watch to the end to unlock your full portfolio for 24 hours.</p>'
+      +'<button class="btn" id="adClaim" disabled onclick="claimAd()">'+ic('lock')+' Reward in 5...</button></div></div>';
+    showOverlay('adModal');
+    clearInterval(adTimer);
+    setTimeout(function(){ var f=document.getElementById('adBarF'); if(f) f.style.width='100%'; f&&(f.style.transition='width 5s linear'); },50);
+    adTimer=setInterval(function(){
+      adSecs--;
+      var c=document.getElementById('adCount'), b=document.getElementById('adClaim');
+      if(c) c.textContent=Math.max(0,adSecs);
+      if(adSecs<=0){ clearInterval(adTimer); if(b){ b.disabled=false; b.innerHTML=ic('spark')+' Claim your reward'; } if(c) c.textContent='0'; }
+      else if(b){ b.innerHTML=ic('lock')+' Reward in '+adSecs+'...'; }
+    },1000);
+  }
+  function claimAd(){
+    closeOverlay('adModal');
+    portfolioUnlocked=true;
+    renderPortfolio(document.getElementById('searchBox').value);
+    toastNow('spark','Portfolio unlocked for 24 hours','surge');
+    burst(document.getElementById('v-paths'));
+  }
+  function buyCloserPlus(){
+    document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star">'+ic('star')+'</div>'
+      +'<h2>Closer+</h2><p>Full portfolio forever, extra priority matches, and no ads. In the demo, consider it yours.</p>'
+      +'<button class="btn" onclick="closeOverlay(\'priorityModal\');portfolioUnlocked=true;renderPortfolio(document.getElementById(\'searchBox\').value);toastNow(\'star\',\'Closer+ active, portfolio unlocked\')">Activate Closer+ (demo)</button>'
+      +'<div class="dismiss" onclick="closeOverlay(\'priorityModal\')">Maybe later</div></div>';
+    showOverlay('priorityModal');
   }
   function renderSpot(){
     var p1=byId(spot[0].id),p2=byId(spot[1].id),p3=byId(spot[2].id);
@@ -1152,8 +1242,8 @@
     startToasts(); startDrops();
   }
   function resetProto(){
-    ['detailSheet','chatView','matchModal','priorityModal','heartSheet','revealModal'].forEach(closeOverlay);
-    clearInterval(hotTimer); clearInterval(dropTimer); clearTimeout(toastHide); stopToasts(); hereMine={};
+    ['detailSheet','chatView','matchModal','priorityModal','heartSheet','revealModal','adModal'].forEach(closeOverlay);
+    clearInterval(hotTimer); clearInterval(dropTimer); clearInterval(adTimer); clearTimeout(toastHide); stopToasts(); hereMine={}; portfolioUnlocked=false;
     document.getElementById('tabbar').style.display='none';
     document.getElementById('login').style.display='flex';
     priorityLeft=10; revealsUsed=0; REVEAL_LIMIT=50; revealed={}; hereIdx=0; applyNight(false); updateCounter();
@@ -1176,7 +1266,7 @@
     card.addEventListener('click', function(e){ if(moved){ e.stopPropagation(); e.preventDefault(); moved=false; } }, true);
   })();
   /* escape closes any open overlay */
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ ['detailSheet','chatView','matchModal','priorityModal','heartSheet','revealModal'].forEach(function(id){ var el=document.getElementById(id); if(el&&el.classList.contains('show')) closeOverlay(id); }); } });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ ['detailSheet','chatView','matchModal','priorityModal','heartSheet','revealModal','adModal'].forEach(function(id){ var el=document.getElementById(id); if(el&&el.classList.contains('show')) closeOverlay(id); }); } });
 
   icHere();
   renderRecent(); renderPortfolio(''); renderSpot(); renderEvents(); renderHere(false); renderMessages();

@@ -221,9 +221,9 @@
           <h3>Live, proximity-aware</h3>
           <ul>
             <li>Next.js app on Vercel, preview URL per change</li>
-            <li>Real GCU accounts behind a .edu gate</li>
+            <li>Real GCU accounts behind a Microsoft sign-in gate</li>
             <li>Postgres you own, with geo-queries for "crossed paths"</li>
-            <li>Live matches and "you're both here now" nudges</li>
+            <li>Live hearts and "they're on campus now" nudges</li>
           </ul>
         </div>
       </div>
@@ -242,42 +242,42 @@
             <div class="st"><span class="title">Crossed paths</span><span class="live-pill"><i></i>ON CAMPUS</span></div>
             <div class="feed">
               <div class="pcard">
-                <div class="ph g1"><div class="meta"><div class="nm">Maya, 20</div><div class="cross">crossed paths 2:14 PM · Library Commons</div></div></div>
-                <div class="row"><span class="tagx">3rd time this week</span><span class="acts"><span class="btnc">✕</span><span class="btnc y">♥</span></span></div>
+                <div class="ph g1"><div class="meta"><div class="nm">Maya, 20</div><div class="cross">came within their space · 2:14 PM · ~20 ft</div></div></div>
+                <div class="row"><span class="tagx">3rd time this week</span><span class="acts"><span class="btnc"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="btnc y"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span></span></div>
               </div>
               <div class="pcard">
-                <div class="ph g3"><div class="meta"><div class="nm">Devon, 21</div><div class="cross">crossed paths 11:02 AM · Juniper Café</div></div></div>
-                <div class="row"><span class="tagx">same 8 AM lecture</span><span class="acts"><span class="btnc">✕</span><span class="btnc y">♥</span></span></div>
+                <div class="ph g3"><div class="meta"><div class="nm">Devon, 21</div><div class="cross">came within their space · 11:02 AM · ~15 ft</div></div></div>
+                <div class="row"><span class="tagx">5 times this week</span><span class="acts"><span class="btnc"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="btnc y"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span></span></div>
               </div>
             </div>
           </div></div>
-          <div class="scap">Discover · PostGIS finds who you physically passed</div>
+          <div class="scap">Paths · who you crossed, by time and distance, never by place</div>
         </div>
 
         <div class="phonewrap">
           <div class="phone"><div class="screen">
             <div class="match">
-              <div class="avpair"><div class="av g1"></div><div class="av g2"></div></div>
-              <span class="eyebrow">you keep crossing paths</span>
-              <h3>You and Maya matched.</h3>
-              <p class="mp">You've been in the same place 3 times this week. Say hi before your next class.</p>
-              <button class="wave">Send a wave</button>
+              <div class="avpair"><div class="av g1" style="filter:blur(9px)"></div></div>
+              <span class="eyebrow">someone you crossed paths with</span>
+              <h3>You got a heart.</h3>
+              <p class="mp">It arrives blurred. Open it to reveal who, and the note they left.</p>
+              <button class="wave">Reveal heart</button>
             </div>
           </div></div>
-          <div class="scap">Match · Supabase Realtime fires the moment it's mutual</div>
+          <div class="scap">Hearts · blurred until you open them · Supabase Realtime</div>
         </div>
 
         <div class="phonewrap">
           <div class="phone"><div class="screen">
             <div class="st"><span class="title">Maya</span><span class="live-pill"><i></i>HERE NOW</span></div>
-            <div class="presence"><span class="dot-live"></span><span class="txt">You're both in the Student Union right now.</span></div>
+            <div class="presence"><span class="dot-live"></span><span class="txt">Maya is on campus right now.</span></div>
             <div class="feed" style="gap:8px;justify-content:flex-end;flex:1">
-              <div class="bub them">wait, library table by the window? that was you 😄</div>
-              <div class="bub me">ha yes. coffee bar in 5?</div>
+              <div class="bub them">wait, we keep crossing paths. that was you earlier?</div>
+              <div class="bub me">ha, yeah. want to actually meet up?</div>
               <div class="bub them">omw</div>
             </div>
           </div></div>
-          <div class="scap">Meet · live presence turns a match into a real hello</div>
+          <div class="scap">Messages · unlocked by crossing paths, not by matching</div>
         </div>
 
       </div>
@@ -297,8 +297,8 @@
       </div>
 
       <div class="caps">
-        <div class="cap-c"><div class="n">01 · identity</div><h4>Real students only</h4><p>A GCU .edu email gate so every profile is a verified classmate, not a bot or a stranger three cities over.</p><span class="by">Supabase Auth</span></div>
-        <div class="cap-c"><div class="n">02 · the core</div><h4>The proximity engine</h4><p>Location pings become geo-points. PostGIS answers "who did I cross paths with, where, and how often." This is Closer's whole reason to exist.</p><span class="by">Postgres + PostGIS</span></div>
+        <div class="cap-c"><div class="n">01 · identity</div><h4>Real students only</h4><p>GCU Microsoft (Entra ID) sign-in, so every profile is a verified classmate, not a bot or a stranger three cities over.</p><span class="by">Supabase Auth · Entra</span></div>
+        <div class="cap-c"><div class="n">02 · the core</div><h4>The proximity engine</h4><p>Coarse layer: GPS + geofence pings become geo-points, and PostGIS answers "who did I cross paths with, and how often." Never where. The fine ~20 ft layer is Bluetooth LE / UWB in V2.</p><span class="by">PostGIS · BLE (v2)</span></div>
         <div class="cap-c"><div class="n">03 · live</div><h4>Matches and presence</h4><p>A mutual like fires instantly, and "you're both here now" appears while it still matters. No refresh.</p><span class="by">Supabase Realtime</span></div>
         <div class="cap-c"><div class="n">04 · safety</div><h4>Yours by default</h4><p>Row Level Security means a student only ever reads what they're allowed to. Photos live in private Storage buckets.</p><span class="by">RLS + Storage</span></div>
         <div class="cap-c"><div class="n">05 · ship speed</div><h4>Preview every change</h4><p>Every edit gets a live Vercel URL to test on a real phone before it's real for anyone else.</p><span class="by">Vercel</span></div>
@@ -314,7 +314,7 @@
       </div>
       <div class="steps">
         <div class="step"><span class="no">01</span><div><h4>Waitlist to Supabase</h4><p>Point the current signup form at a real signups table. Keep Netlify as a fallback until it's proven.</p></div><span class="state ready">ready to wire</span></div>
-        <div class="step"><span class="no">02</span><div><h4>Auth and profiles</h4><p>.edu gate, profile creation, photos in Storage. Closer becomes an account, not an email.</p></div><span class="state next">next</span></div>
+        <div class="step"><span class="no">02</span><div><h4>Auth and profiles</h4><p>GCU Microsoft sign-in, profile creation, photos in Storage. Closer becomes an account, not an email.</p></div><span class="state next">next</span></div>
         <div class="step"><span class="no">03</span><div><h4>The proximity engine</h4><p>Location ingestion and the PostGIS "crossed paths" query. The Discover feed goes real.</p></div><span class="state later">then</span></div>
         <div class="step"><span class="no">04</span><div><h4>Realtime match and meet</h4><p>Mutual-like events, presence, and chat over Supabase Realtime.</p></div><span class="state later">then</span></div>
         <div class="step"><span class="no">05</span><div><h4>Launch on Vercel</h4><p>Custom domain, edge hosting, and the n8n automations live. Ship to GCU.</p></div><span class="state later">then</span></div>

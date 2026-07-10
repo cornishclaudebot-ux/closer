@@ -57,7 +57,7 @@ create table if not exists public.encounters (
   first_at        timestamptz not null default now(),
   last_at         timestamptz not null default now(),
   encounter_count int  not null default 1,          -- distinct sessions (">30 min apart")
-  last_place      text,
+  last_place      text,             -- internal only; NEVER returned to clients (privacy rule)
   min_distance_m  real,
   created_at      timestamptz not null default now(),
   constraint encounters_pair_ordered check (user_a < user_b),
