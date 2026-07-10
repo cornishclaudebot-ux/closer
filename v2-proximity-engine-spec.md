@@ -22,6 +22,11 @@ Everything else (likes, chat) is standard. This is the part worth getting right.
 
 Three knobs, all in the SQL: **radius 50 m · window 5 min · new-session gap 30 min.**
 
+**Two layers.** This PostGIS engine is the *coarse* layer (GPS + geofence: "you were at the
+same place"). Raw GPS tops out around 16 ft, so the *fine* ~20 ft "crossed within arm's reach"
+signal is **Bluetooth LE / UWB**, added in V2. V1 ships on the coarse layer plus venue/event
+check-in.
+
 **MVP vs scale:** an `AFTER INSERT` trigger fires detection per ping (simple, instant, fine
 for hundreds of students). At scale, drop the trigger and run the same function over new
 pings from a **pg_cron batch every 1–2 min** so the write path stays fast.
@@ -32,6 +37,9 @@ pings from a **pg_cron batch every 1–2 min** so the write path stays fast.
 - **Nobody reads anyone's raw location.** `location_pings` RLS is `user_id = auth.uid()`.
   Detection runs `SECURITY DEFINER`, so the cross-user math happens server-side and only the
   derived encounter ("you crossed paths at the Library at 2:14") is ever exposed.
+- **Never name the place.** The feed shows *time + distance* only ("came within their space,
+  2:14 PM, ~20 ft"). `last_place` is computed server-side for internal use and is never
+  returned to a client, so no one's location history is exposed.
 - **On-campus only** — the client geofences to GCU before it reports at all.
 - Block/report tables, and an `is_discoverable` kill switch, are first-class.
 - Photos sit in a **private Storage bucket**; RLS gates every table.
@@ -39,10 +47,10 @@ pings from a **pg_cron batch every 1–2 min** so the write path stays fast.
 ## Next.js app (App Router on Vercel)
 ```
 app/
-  (auth)/login/page.tsx         # GCU .edu OTP sign-in
-  (app)/discover/page.tsx       # server component -> rpc('get_crossed_paths')
-  (app)/matches/page.tsx        # realtime list of matches
-  (app)/chat/[matchId]/page.tsx # realtime messages
+  (auth)/login/page.tsx          # GCU Microsoft (Entra) sign-in
+  (app)/paths/page.tsx           # server component -> rpc('get_crossed_paths')
+  (app)/hearts/page.tsx          # blurred incoming hearts, tap to reveal (realtime)
+  (app)/chat/[personId]/page.tsx # messages, unlocked by crossing paths (keyed to the encounter)
   (app)/profile/page.tsx        # edit profile, photos, discoverable toggle
   api/ping/route.ts             # POST a location ping (throttled, geofenced)
 lib/supabase/
@@ -52,8 +60,9 @@ hooks/
   useLiveMatches.ts             # subscribes to matches inserts
 ```
 
-**Auth / the .edu gate** — Supabase Auth email OTP, restricted to `@my.gcu.edu` via a
-*Before User Created* auth hook (reject other domains); set `gcu_verified` on confirm.
+**Auth / the GCU gate** — Supabase Auth with the **Microsoft Entra (Azure AD) provider**:
+students sign in with their GCU Microsoft account. Verify the gcu.edu / student subdomain
+server-side and set `gcu_verified`. Does not require GCU IT cooperation.
 
 **Report a ping** — `app/api/ping/route.ts`:
 ```ts
@@ -75,10 +84,11 @@ export async function POST(req: Request) {
 60 s, skip if outside the campus bounding box, `POST /api/ping`. Pause when `is_discoverable`
 is off or the tab is hidden.
 
-**Discover feed** — server component, one call, RLS-safe:
+**Paths feed** (your persistent Match Portfolio) — server component, one call, RLS-safe:
 ```ts
 const { data: crossings } = await supabase.rpc("get_crossed_paths");
-// -> [{ other_id, display_name, age, photos, encounter_count, last_at, last_place }]
+// -> [{ other_id, display_name, age, photos, encounter_count, last_at, min_distance_m }]
+// note: NO place field. Time + distance only, by design.
 ```
 
 **Live match** — `hooks/useLiveMatches.ts`:

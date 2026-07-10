@@ -86,14 +86,16 @@ create table if not exists public.matches (
   constraint matches_pair_unique  unique (user_a, user_b)
 );
 
+-- Messaging is unlocked by CROSSING PATHS, not by matching: a message belongs to the
+-- encounter (the pair you crossed). Hearts (likes/matches) are a separate, deliberate signal.
 create table if not exists public.messages (
-  id         bigint generated always as identity primary key,
-  match_id   bigint not null references public.matches(id) on delete cascade,
-  sender_id  uuid   not null references auth.users(id) on delete cascade,
-  body       text   not null check (char_length(body) between 1 and 2000),
-  created_at timestamptz not null default now()
+  id           bigint generated always as identity primary key,
+  encounter_id bigint not null references public.encounters(id) on delete cascade,
+  sender_id    uuid   not null references auth.users(id) on delete cascade,
+  body         text   not null check (char_length(body) between 1 and 2000),
+  created_at   timestamptz not null default now()
 );
-create index if not exists messages_match_idx on public.messages (match_id, created_at);
+create index if not exists messages_encounter_idx on public.messages (encounter_id, created_at);
 
 -- ============================================================ SAFETY
 create table if not exists public.blocks (
@@ -186,19 +188,20 @@ drop trigger if exists trg_closer_on_like on public.likes;
 create trigger trg_closer_on_like after insert on public.likes
   for each row execute function public.closer_on_like();
 
--- The Discover feed: who you crossed paths with, not yet liked, not blocked.
+-- PATHS feed = everyone you crossed paths with (the persistent "Match Portfolio").
+-- PRIVACY (Aiden's rule): returns time + distance ONLY, never the place. People persist
+-- here, so we do NOT drop those you've already hearted.
 create or replace function public.get_crossed_paths()
 returns table (other_id uuid, display_name text, age int, photos text[],
-               encounter_count int, last_at timestamptz, last_place text)
+               encounter_count int, last_at timestamptz, min_distance_m real)
 language sql stable security invoker set search_path = public as $$
   select pr.id, pr.display_name, pr.age, pr.photos,
-         e.encounter_count, e.last_at, e.last_place
+         e.encounter_count, e.last_at, e.min_distance_m
   from public.encounters e
   join public.profiles pr
     on pr.id = case when e.user_a = auth.uid() then e.user_b else e.user_a end
   where auth.uid() in (e.user_a, e.user_b)
     and pr.is_discoverable
-    and not exists (select 1 from public.likes l where l.liker = auth.uid() and l.likee = pr.id)
     and not exists (select 1 from public.blocks b
           where (b.blocker = auth.uid() and b.blocked = pr.id)
              or (b.blocker = pr.id and b.blocked = auth.uid()))
@@ -248,10 +251,14 @@ create policy matches_read on public.matches for select to authenticated
 drop policy if exists messages_read on public.messages;
 drop policy if exists messages_send on public.messages;
 create policy messages_read on public.messages for select to authenticated
-  using (exists (select 1 from public.matches m where m.id = match_id and auth.uid() in (m.user_a, m.user_b)));
+  using (exists (select 1 from public.encounters e where e.id = encounter_id and auth.uid() in (e.user_a, e.user_b)));
 create policy messages_send on public.messages for insert to authenticated
   with check (sender_id = auth.uid()
-    and exists (select 1 from public.matches m where m.id = match_id and auth.uid() in (m.user_a, m.user_b)));
+    and exists (select 1 from public.encounters e where e.id = encounter_id
+        and auth.uid() in (e.user_a, e.user_b)
+        and not exists (select 1 from public.blocks b
+            where (b.blocker = e.user_a and b.blocked = e.user_b)
+               or (b.blocker = e.user_b and b.blocked = e.user_a))));
 
 drop policy if exists blocks_own  on public.blocks;
 drop policy if exists reports_own on public.reports;

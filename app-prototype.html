@@ -477,6 +477,32 @@
   .ad-body p{color:var(--muted);font-size:13px;margin-bottom:14px;line-height:1.5}
   .ad-body .btn[disabled]{opacity:.45;cursor:default}
 
+  /* MEDALLIONS: collectible badges of honor */
+  .med-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px;margin-top:8px}
+  .med{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;background:none;border:none;color:inherit;padding:0}
+  .med .mc{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+  .med:hover .mc{transform:scale(1.08)}
+  .med .mc .ic{width:23px;height:23px}
+  .med.common .mc{background:var(--surface2);border:1px solid var(--line);color:var(--orange2)}
+  .med.rare .mc{background:rgba(232,177,90,.12);border:1.5px solid var(--sand);color:var(--sand)}
+  .med.legend .mc{background:var(--grad);color:#160a03;box-shadow:0 0 18px rgba(255,92,0,.45)}
+  body.night .med.legend .mc{box-shadow:0 0 18px rgba(46,197,255,.5)}
+  .med.locked .mc{background:var(--surface);border:1.5px dashed var(--line);color:var(--muted2);box-shadow:none}
+  .med .mn{font-size:9px;font-weight:600;color:var(--muted);text-align:center;line-height:1.25;text-transform:uppercase;letter-spacing:.03em;max-width:70px}
+  .med.locked .mn{color:var(--muted2)}
+  .med-earned{animation:medPop .6s cubic-bezier(.2,.9,.3,1.2)}
+  @keyframes medPop{0%{transform:scale(.5)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+  .med-count{font-size:11px;color:var(--muted2);font-weight:600}
+  .rar-tag{display:inline-block;font-size:9.5px;font-weight:700;font-family:'Space Grotesk';letter-spacing:.07em;padding:3px 9px;border-radius:6px;margin-bottom:11px}
+  .rar-tag.common{background:var(--surface2);border:1px solid var(--line);color:var(--muted)}
+  .rar-tag.rare{background:rgba(232,177,90,.14);color:var(--sand)}
+  .rar-tag.legend{background:var(--grad);color:#160a03}
+  .med-big{width:88px;height:88px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+  .med-big .ic{width:36px;height:36px}
+  .med-gate{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--orange2);background:rgba(255,92,0,.09);border:1px solid rgba(255,92,0,.22);padding:6px 12px;border-radius:999px;margin-bottom:12px}
+  .med-gate .ic{width:13px;height:13px}
+  .med-pct{font-size:11.5px;color:var(--muted2);margin-bottom:16px}
+
   /* touch + a11y */
   .swipe-acts .big-circ{padding:0}
   .deck-card{touch-action:pan-y}
@@ -630,6 +656,11 @@
             <div class="card">
               <div class="ct">Tonight's quests</div>
               <div id="questList"></div>
+            </div>
+
+            <div class="card">
+              <div class="ct">Medallion case <span class="med-count" id="medCount"></span></div>
+              <div class="med-grid" id="medGrid"></div>
             </div>
 
             <div class="pri-card">
@@ -1155,7 +1186,7 @@
     }
   }
   function toggleNight(){ var sw=document.getElementById('themeSweep'); if(sw){ sw.classList.remove('run'); void sw.offsetWidth; sw.classList.add('run'); } applyNight(!night); }
-  var toastMsgs=[['heart','Maya just entered your radius'],['bolt','SURGE, 87 Closers at Grace right now','surge'],['star','You moved up to number 5 on Spotlight'],['pin','12 Closers just arrived at Grace'],['users','Someone new just crossed your path'],['bolt','Rivers Pool is spiking, 52 and climbing','surge'],['heart','3 new hearts are waiting for you'],['flame','Go out tonight to keep your 6 night streak'],['pin','The hotspot is shifting toward Rivers Pool']];
+  var toastMsgs=[['heart','Maya just entered your radius'],['bolt','SURGE, 87 Closers at Grace right now','surge'],['star','You moved up to number 5 on Spotlight'],['moon','Quiet 3 days. Grace is packed tonight, go earn The Comeback','surge'],['pin','12 Closers just arrived at Grace'],['users','Someone new just crossed your path'],['bolt','Rivers Pool is spiking, 52 and climbing','surge'],['heart','3 new hearts are waiting for you'],['crown','Splash 25 medallion drops Jul 25 only, one night'],['flame','Go out tonight to keep your 6 night streak'],['pin','The hotspot is shifting toward Rivers Pool']];
   var toastTimer=null, toastI=0, toastHide=null;
   function toastNow(icn,txt,cls){ var el=document.getElementById('toast'); if(!el)return; el.innerHTML='<div class="tdot">'+ic(icn)+'</div><div class="ttxt">'+txt+'</div>'; el.className='toast'+(cls?' '+cls:''); void el.offsetWidth; el.classList.add('show'); clearTimeout(toastHide); toastHide=setTimeout(function(){ el.classList.remove('show'); },4200); }
   function showToast(){ var m=toastMsgs[toastI%toastMsgs.length]; toastI++; toastNow(m[0],m[1],m[2]); }
@@ -1176,6 +1207,49 @@
   }
   function questTick(i,amount){ var q=quests[i]; if(!q||q.cur>=q.max) return; q.cur=Math.min(q.max,q.cur+(amount||1)); renderQuests(); if(q.cur>=q.max){ addXp(q.xp); toastNow('spark','Quest complete, +'+q.xp+' XP'); } }
   function addXp(n){ xpPct=Math.min(100,xpPct+n/2); var f=document.getElementById('xpFill'); if(f) f.style.width=xpPct+'%'; }
+
+  /* MEDALLIONS: collectibles for going out. Rare ones are day-gated or event-exclusive. */
+  var meds=[
+    {id:'first',   n:'First Cross',   icn:'heart',  rar:'common', earned:true,  how:'Cross paths with your first person.', pct:'92% of GCU has this'},
+    {id:'butterfly',n:'Butterfly',    icn:'users',  rar:'common', earned:true,  how:'Cross paths with 25 different people.', pct:'41% of GCU has this'},
+    {id:'tonight', n:'Out Tonight',   icn:'spark',  rar:'common', earned:false, how:'Check in at any hotspot tonight.', pct:'Earn it right now, check in somewhere'},
+    {id:'comeback',n:'The Comeback',  icn:'replay', rar:'common', earned:false, how:'Go back out after 3 quiet days.', pct:'28% of GCU has this'},
+    {id:'owl',     n:'Night Owl',     icn:'moon',   rar:'rare',   earned:true,  how:'Cross paths with someone after midnight.', pct:'18% of GCU has this'},
+    {id:'fire',    n:'Week of Fire',  icn:'flame',  rar:'rare',   earned:false, how:'Hold a 7 night streak.', pct:'12% of GCU has this'},
+    {id:'sunday',  n:'Sunday Service',icn:'pin',    rar:'rare',   earned:false, how:'Check in at a church hotspot on a Sunday.', gate:'Sundays only', pct:'9% of GCU has this'},
+    {id:'friday',  n:'First Friday',  icn:'star',   rar:'rare',   earned:false, how:'Go out on the first Friday of the month.', gate:'First Fridays only', pct:'7% of GCU has this'},
+    {id:'dayone',  n:'Day One',       icn:'crown',  rar:'legend', earned:true,  how:'Joined Closer in the first semester.', gate:'Never available again', pct:'2% of GCU has this'},
+    {id:'splash',  n:'Splash 25',     icn:'bolt',   rar:'legend', earned:false, how:'Cross paths at Summer Splash, Jul 25, Rivers Pool. One night only.', gate:'Event exclusive, Jul 25', pct:'0% so far, be first'}
+  ];
+  function renderMeds(){
+    var g=document.getElementById('medGrid'); if(!g)return;
+    g.innerHTML=meds.map(function(m){
+      return '<button class="med '+(m.rar==='legend'?'legend':m.rar)+(m.earned?'':' locked')+'" onclick="openMed(\''+m.id+'\')"><span class="mc" id="mc-'+m.id+'">'+ic(m.earned?m.icn:'lock')+'</span><span class="mn">'+m.n+'</span></button>';
+    }).join('');
+    var e=meds.filter(function(m){return m.earned;}).length;
+    var c=document.getElementById('medCount'); if(c) c.textContent=e+' of '+meds.length+' collected';
+  }
+  function openMed(id){
+    var m=meds.filter(function(x){return x.id===id;})[0]; if(!m)return;
+    var rarLabel=m.rar==='legend'?'LEGENDARY':m.rar.toUpperCase();
+    var mcCls=m.rar==='legend'?'legend':m.rar;
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card">'
+      +'<div class="med '+mcCls+(m.earned?'':' locked')+'" style="display:block"><div class="med-big mc">'+ic(m.earned?m.icn:'lock')+'</div></div>'
+      +'<span class="rar-tag '+mcCls+'">'+rarLabel+'</span>'
+      +'<h3>'+m.n+'</h3><p>'+m.how+'</p>'
+      +(m.gate?'<div class="med-gate">'+ic('lock')+m.gate+'</div><br>':'')
+      +'<div class="med-pct">'+m.pct+'</div>'
+      +'<button class="btn" onclick="closeOverlay(\'heartSheet\')">'+(m.earned?'In your case':'Go earn it')+'</button></div>';
+    showOverlay('heartSheet');
+  }
+  function earnMed(id){
+    var m=meds.filter(function(x){return x.id===id;})[0];
+    if(!m||m.earned) return;
+    m.earned=true; renderMeds();
+    var mc=document.getElementById('mc-'+id); if(mc) mc.classList.add('med-earned');
+    toastNow(m.icn,'Medallion earned, '+m.n,'surge');
+    var v=document.querySelector('.view.active'); if(v) burst(v);
+  }
   function startToasts(){ clearInterval(toastTimer); setTimeout(showToast,2600); toastTimer=setInterval(showToast,22000); }
   function stopToasts(){ clearInterval(toastTimer); var el=document.getElementById('toast'); if(el) el.classList.remove('show'); }
   function burst(container){ if(!container)return; var colors=night?['#39ffd0','#2ec5ff','#ff5cae','#7a5cff']:['#ff7e33','#ff5c00','#e8b15a','#ff9d4d']; var c=document.createElement('div'); c.className='confetti'; for(var i=0;i<28;i++){ var d=document.createElement('i'); d.style.left=(50+(Math.random()*64-32))+'%'; d.style.background=colors[i%colors.length]; d.style.setProperty('--dx',(Math.random()*220-110)+'px'); d.style.setProperty('--dy',(120+Math.random()*170)+'px'); d.style.animationDelay=(Math.random()*0.15)+'s'; c.appendChild(d); } container.appendChild(c); setTimeout(function(){ c.remove(); },1700); }
@@ -1220,7 +1294,7 @@
         +'<button class="imhere'+(hereMine[s.id]?' on':'')+'" onclick="event.stopPropagation();imHere(\''+s.id+'\')">'+(hereMine[s.id]?'Here':'I am here')+'</button></div>';
     }).join('');
   }
-  function imHere(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(s&&!hereMine[id]){ hereMine[id]=true; s.count+=1; questTick(0); addXp(15); } renderHotMap(); renderHotList(); }
+  function imHere(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(s&&!hereMine[id]){ hereMine[id]=true; s.count+=1; questTick(0); addXp(15); earnMed('tonight'); } renderHotMap(); renderHotList(); }
   function openSpot(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(!s)return; var q=encodeURIComponent(s.q||(s.name+' Phoenix AZ')); document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('pin')+'</div><h3>'+s.name+'</h3><p>'+s.count+' Closers here now. '+s.go+'. Updated by '+s.admin+', who owns this spot.</p><div class="map-btns"><a class="map-btn" href="https://maps.apple.com/?q='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Apple Maps</a><a class="map-btn" href="https://www.google.com/maps/search/?api=1&query='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Google Maps</a></div><button class="btn" onclick="closeOverlay(\'heartSheet\');imHere(\''+id+'\')">'+ic('pin')+' I am here too</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Close</div></div>'; showOverlay('heartSheet'); }
   function addSpot(){ document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('plus')+'</div><h3>Add a spot</h3><p>Drop a spot, say what is going on, and you become its owner.</p><input id="spotName" placeholder="Spot name" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:10px;outline:none"><textarea id="spotGo" placeholder="What is going on and why" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;resize:none;height:64px;margin-bottom:14px;outline:none"></textarea><button class="btn" onclick="postSpot()">'+ic('plus')+' Post, become owner</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>'; showOverlay('heartSheet'); }
   function postSpot(){ var n=escP(document.getElementById('spotName').value||'New Spot'); var g=escP(document.getElementById('spotGo').value||'Something is happening'); spots.unshift({id:'u'+(spots.length+1),name:n,count:8,go:g,admin:'You',ai:'A',ag:0,x:48,y:46,q:n+' Phoenix AZ'}); closeOverlay('heartSheet'); renderHotMap(); renderHotList(); }
@@ -1237,7 +1311,7 @@
   function enterApp(){
     document.getElementById('login').style.display='none';
     document.getElementById('tabbar').style.display='flex';
-    renderRecent(); renderPortfolio(''); renderSpot(); renderEvents(); renderHere(false); renderMessages(); renderPosts(); renderQuests(); updateCounter();
+    renderRecent(); renderPortfolio(''); renderSpot(); renderEvents(); renderHere(false); renderMessages(); renderPosts(); renderQuests(); renderMeds(); updateCounter();
     var hr=new Date().getHours(); applyNight(hr>=18||hr<6);
     startToasts(); startDrops();
   }
@@ -1249,7 +1323,8 @@
     priorityLeft=10; revealsUsed=0; REVEAL_LIMIT=50; revealed={}; hereIdx=0; applyNight(false); updateCounter();
     recentIds=[1,2,3,4,5,6]; dropQueue=[12,10,7]; dropSecs=40; queuedExtra=0; people.forEach(function(p){ delete p.just; });
     quests[0].cur=0; quests[1].cur=3; quests[2].cur=0; xpPct=62; var xf=document.getElementById('xpFill'); if(xf) xf.style.width='62%';
-    renderQuests(); renderRecent();
+    meds.forEach(function(m){ m.earned=(m.id==='first'||m.id==='butterfly'||m.id==='owl'||m.id==='dayone'); });
+    renderQuests(); renderMeds(); renderRecent();
     go(document.getElementById('tab-paths'));
     pathTab('paths', document.querySelector('#pathsDongle button'));
   }
