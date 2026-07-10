@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Closer, Interactive Prototype</title>
+<meta name="description" content="Interactive concept prototype of Closer, the GCU-only dating app where matches happen when you actually cross paths.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Ccircle cx='14' cy='14' r='4' fill='%23ff5c00'/%3E%3Ccircle cx='14' cy='14' r='8.5' stroke='%23ff5c00' stroke-width='1.8' fill='none' opacity='0.55'/%3E%3Ccircle cx='14' cy='14' r='12.5' stroke='%23e8b15a' stroke-width='1.4' fill='none' opacity='0.35'/%3E%3C/svg%3E">
+<meta property="og:title" content="Closer, interactive app prototype">
+<meta property="og:description" content="Tap through the Closer concept: paths, hearts, hotspots, and events.">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -197,7 +202,7 @@
   .ev-stats{display:flex;gap:16px;margin-top:11px}
   .ev-stat{font-size:11.5px;color:var(--muted)}.ev-stat b{font-family:'Space Grotesk';color:var(--orange2);font-size:14px;margin-right:3px}
   .voter{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;flex-shrink:0;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:6px 4px;width:48px;align-self:center}
-  .varrow{background:none;border:none;color:var(--muted);width:36px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:9px;transition:.12s}
+  .varrow{background:none;border:none;color:var(--muted);width:40px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:9px;transition:.12s}
   .varrow .ic{width:21px;height:21px}
   .varrow:hover{background:var(--surface);color:var(--text)}
   .varrow.up.on{color:var(--cactus2)}
@@ -395,14 +400,74 @@
   .map-btns{display:flex;gap:9px;margin-bottom:14px}
   .map-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border-radius:12px;font-family:'Space Grotesk';font-weight:600;font-size:13px;text-decoration:none;border:1px solid var(--line);background:var(--surface2);color:var(--text)}
   .map-btn .ic{width:15px;height:15px}
-  .toast{position:absolute;top:60px;left:14px;right:14px;z-index:55;background:rgba(23,18,13,.93);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:11px;transform:translateY(-180%);transition:transform .45s cubic-bezier(.3,1.3,.4,1);box-shadow:0 12px 30px rgba(0,0,0,.55)}
-  .toast.show{transform:translateY(0)}
+  .toast{position:absolute;top:60px;left:14px;right:14px;z-index:55;background:rgba(23,18,13,.93);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:11px;transform:translateY(-180%);visibility:hidden;transition:transform .45s cubic-bezier(.3,1.3,.4,1),visibility .45s;box-shadow:0 12px 30px rgba(0,0,0,.55)}
+  .toast.show{transform:translateY(0);visibility:visible}
   body.night .toast{background:rgba(17,21,39,.94)}
   .toast .tdot{width:30px;height:30px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#160a03;flex-shrink:0}.toast .tdot .ic{width:16px;height:16px}
   .toast .ttxt{font-size:13px;font-weight:500;line-height:1.3}
   .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:6}
   .confetti i{position:absolute;top:32%;width:9px;height:9px;border-radius:2px;opacity:0;animation:conf 1.3s ease-out forwards}
   @keyframes conf{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(360deg)}}
+
+  /* GAMIFICATION: drops, streaks, quests, surges */
+  .drop-card{position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(255,92,0,.12),rgba(232,177,90,.06));border:1px solid rgba(255,92,0,.3);border-radius:20px;padding:15px 16px;margin-bottom:14px}
+  .drop-lab{font-size:10px;font-weight:700;font-family:'Space Grotesk';letter-spacing:.08em;color:var(--orange2);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+  .drop-lab .ic{width:13px;height:13px}
+  .drop-clock{font-family:'Space Grotesk';font-weight:700;font-size:27px;letter-spacing:.02em;margin-top:3px}
+  .drop-sub{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .drop-q{display:flex;align-items:center;margin-top:12px}
+  .drop-q .qa{width:40px;height:40px;border-radius:50%;border:2px solid var(--bg);margin-left:-10px;overflow:hidden;filter:blur(5px) saturate(.8);background:var(--surface2)}
+  .drop-q .qa:first-child{margin-left:0}
+  .drop-q .qa img{width:100%;height:100%;object-fit:cover}
+  .drop-q .qmore{margin-left:10px;font-size:12px;color:var(--muted);font-weight:600}
+  .pcard.just{border-color:rgba(255,92,0,.5);animation:dropIn .5s cubic-bezier(.2,.85,.25,1)}
+  @keyframes dropIn{0%{transform:scale(.86);opacity:0}60%{transform:scale(1.02)}100%{transform:scale(1);opacity:1}}
+  .just-tag{font-size:9px;background:var(--grad);color:#160a03;padding:2px 7px;border-radius:5px;font-weight:700;font-family:'Space Grotesk';letter-spacing:.04em;margin-left:7px;vertical-align:middle}
+  .streak-pill .ic{color:var(--orange)}
+  .streak-card{display:flex;gap:14px;align-items:center}
+  .flame-ring{width:56px;height:56px;border-radius:50%;background:var(--grad);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#160a03;flex-shrink:0}
+  .flame-ring .ic{width:19px;height:19px}
+  .flame-ring b{font-family:'Space Grotesk';font-size:15px;line-height:1.1}
+  .streak-meta{flex:1;min-width:0}
+  .streak-t{font-family:'Space Grotesk';font-weight:600;font-size:15px}
+  .streak-s{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.45}
+  .week{display:flex;gap:6px;margin-top:9px}
+  .week i{width:14px;height:14px;border-radius:50%;background:var(--surface2);border:1px solid var(--line)}
+  .week i.on{background:var(--grad);border:none}
+  .quest{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .quest:last-child{border-bottom:none;padding-bottom:2px}
+  .quest .qic{width:34px;height:34px;border-radius:50%;background:var(--surface2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--orange2);flex-shrink:0}
+  .quest .qic .ic{width:16px;height:16px}
+  .quest.done .qic{background:var(--grad);border:none;color:#160a03}
+  .qinfo{flex:1;min-width:0}
+  .qt{font-size:13.5px;font-weight:600}
+  .quest.done .qt{color:var(--muted);text-decoration:line-through}
+  .qbar{height:5px;background:var(--surface2);border-radius:999px;overflow:hidden;margin-top:6px}
+  .qbar .qf{height:100%;background:var(--grad);transition:width .4s}
+  .qxp{font-family:'Space Grotesk';font-weight:700;font-size:12px;color:var(--sand);flex-shrink:0}
+  .xp-track{height:6px;background:var(--surface2);border-radius:999px;overflow:hidden;margin-top:8px}
+  .xp-fill{height:100%;background:var(--grad);transition:width .5s}
+  .toast.surge{border-color:rgba(255,92,0,.6);box-shadow:0 0 26px rgba(255,92,0,.4),0 12px 30px rgba(0,0,0,.55)}
+  body.night .toast.surge{border-color:rgba(57,255,200,.55);box-shadow:0 0 26px rgba(57,255,200,.3),0 12px 30px rgba(0,0,0,.55)}
+
+  /* touch + a11y */
+  .swipe-acts .big-circ{padding:0}
+  .deck-card{touch-action:pan-y}
+  .switch{border:none;padding:0}
+  .theme-toggle{padding:6px;margin:-6px}
+  @media(prefers-reduced-motion:reduce){
+    .pod.one.glow .av,.here-chip .live,.hot-spot .bub,.hot-list-title span::before,.theme-sweep.run{animation:none!important}
+  }
+  /* real phones: drop the showcase chrome, run the app full screen */
+  @media(max-width:500px){
+    .page{padding:0;max-width:none}
+    .intro,.annotations,.replay{display:none}
+    .stage{gap:0}
+    .phone{width:100%;height:100vh;height:100dvh;border-radius:0;padding:0;box-shadow:none}
+    .screen{border-radius:0}
+    .notch{display:none}
+    .chat-input input,.search input{font-size:16px}
+  }
 </style>
 </head>
 <body>
@@ -414,7 +479,7 @@
   <div class="intro">
     <div class="logo"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="url(#wg)"/><circle cx="14" cy="14" r="8.5" stroke="url(#wg)" stroke-width="1.8" opacity="0.55"/><circle cx="14" cy="14" r="12.5" stroke="url(#wg)" stroke-width="1.4" opacity="0.25"/></svg><span class="grad-text">closer</span></div>
     <h1>The Closer prototype</h1>
-    <p>Tap the tabs (the dial slides), flip the toggles, swipe a card, reveal hearts that grow with how often you cross, level up, and invite friends for unlimited priority matches. Concept only, not real users.</p>
+    <p>Tap the tabs (the dial slides), flip the toggles, swipe a card, reveal hearts that grow with how often you cross, level up, and invite friends for unlimited priority matches. Concept only, not real users. <a href="index.html" style="color:var(--sand)">Join the waitlist</a></p>
     <div class="circleline">Your circle is smaller than you think, and bigger than you can imagine.</div>
   </div>
 
@@ -437,16 +502,16 @@
           <p>Match when you actually cross paths. GCU students only.</p>
           <button class="ms-btn" onclick="enterApp()"><span class="ms-grid"><span style="background:#F25022"></span><span style="background:#7FBA00"></span><span style="background:#00A4EF"></span><span style="background:#FFB900"></span></span>Continue with GCU email</button>
           <div class="verified-chip"><span id="lockIc"></span> Verified through Microsoft, @gcu.edu</div>
-          <div class="legal">You must be a verified GCU student, 18 or older. By continuing you agree to the Community Guidelines.</div>
+          <div class="legal">You must be a verified GCU student, 18 or older. By continuing you agree to the Community Guidelines.<br><br>This is a concept demo. <a href="index.html" style="color:var(--sand)">Join the real waitlist</a></div>
         </div>
 
-        <div class="statusbar"><span>9:41</span><span class="right"><button class="theme-toggle" id="themeBtn" onclick="toggleNight()"></button><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.7" y="4.5" width="3" height="6.5" rx="1"/><rect x="9.4" y="2" width="3" height="9" rx="1"/><rect x="14.1" y="0" width="3" height="11" rx="1"/></svg><span>100%</span><svg width="24" height="12" viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2.5" stroke="currentColor" opacity="0.5"/><rect x="3" y="3" width="16" height="6" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor" opacity="0.5"/></svg></span></div>
+        <div class="statusbar"><span>9:41</span><span class="right"><button class="theme-toggle" id="themeBtn" aria-label="Switch day and night theme" onclick="toggleNight()"></button><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.7" y="4.5" width="3" height="6.5" rx="1"/><rect x="9.4" y="2" width="3" height="9" rx="1"/><rect x="14.1" y="0" width="3" height="11" rx="1"/></svg><span>100%</span><svg width="24" height="12" viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2.5" stroke="currentColor" opacity="0.5"/><rect x="3" y="3" width="16" height="6" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor" opacity="0.5"/></svg></span></div>
 
         <!-- PATHS -->
         <div class="view active" id="v-paths">
           <div class="vhead">
             <div><h2 id="pathsTitle">Closer</h2><div class="sub" id="pathsSub">People you crossed paths with</div></div>
-            <div class="hicon"><span class="pri-pill" id="priPill"></span></div>
+            <div class="hicon"><span class="pri-pill streak-pill" id="streakPill" title="Night streak"></span><span class="pri-pill" id="priPill"></span></div>
           </div>
           <div class="vbody">
             <div class="dongle" id="pathsDongle">
@@ -463,7 +528,7 @@
               </div>
             </div>
             <div id="pane-spotlight" style="display:none">
-              <div class="spot-toggle"><div class="txt"><div class="t">You are in Spotlight</div><div class="s">Opt out anytime. Only people who opt in are ranked.</div></div><div class="switch" onclick="this.classList.toggle('off')"><div class="knob"></div></div></div>
+              <div class="spot-toggle"><div class="txt"><div class="t">You are in Spotlight</div><div class="s">Opt out anytime. Only people who opt in are ranked.</div></div><button class="switch" role="switch" aria-checked="true" aria-label="Spotlight opt-in" onclick="this.classList.toggle('off');this.setAttribute('aria-checked',this.classList.contains('off')?'false':'true')"><span class="knob"></span></button></div>
               <div id="spot-list"></div>
               <div class="spot-foot">Showing the top of 100. Showcase profiles chose to link their Instagram. Ranked by likes from people who crossed their path. Resets Monday.</div>
             </div>
@@ -479,9 +544,9 @@
               <div class="here-chip"><span class="live"></span>You are at <b>&nbsp;Riverside Bar</b>&nbsp;, 38 Closers here</div>
               <div class="deck"><div class="deck-peek"></div><div class="deck-card" id="hereCard"></div></div>
               <div class="swipe-acts">
-                <div class="big-circ pass" title="Pass" onclick="actHere('pass')" id="passBtn"></div>
-                <div class="big-circ like" title="Like" onclick="actHere('like')" id="likeBtn"></div>
-                <div class="big-circ star" title="Priority Match" onclick="actHere('star')" id="starBtn"></div>
+                <button class="big-circ pass" title="Pass" aria-label="Pass" onclick="actHere('pass')" id="passBtn"></button>
+                <button class="big-circ like" title="Like" aria-label="Like" onclick="actHere('like')" id="likeBtn"></button>
+                <button class="big-circ star" title="Priority Match" aria-label="Priority Match" onclick="actHere('star')" id="starBtn"></button>
               </div>
             </div>
             <div id="pane-hotspots" style="display:none">
@@ -526,7 +591,18 @@
 
             <div class="card lv-card">
               <div class="lv-ring"><div class="in"><span class="lv">7</span><span class="lvl">LVL</span></div></div>
-              <div class="lv-meta"><div class="rank">Regular</div><div class="nxt">13 crossings to Level 8</div><div class="note">Level up by going out and crossing paths with new people. The more spots you frequent, the faster you climb.</div></div>
+              <div class="lv-meta"><div class="rank">Regular</div><div class="nxt">13 crossings to Level 8</div><div class="xp-track"><div class="xp-fill" id="xpFill" style="width:62%"></div></div><div class="note">Level up by going out and crossing paths with new people. The more spots you frequent, the faster you climb.</div></div>
+            </div>
+
+            <div class="card streak-card">
+              <div class="flame-ring"><span id="flameIc"></span><b>6</b></div>
+              <div class="streak-meta"><div class="streak-t">6 night streak</div><div class="streak-s">Cross paths with someone new tonight to keep it alive. Longest: 11.</div>
+              <div class="week"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+            </div>
+
+            <div class="card">
+              <div class="ct">Tonight's quests</div>
+              <div id="questList"></div>
             </div>
 
             <div class="pri-card">
@@ -596,7 +672,7 @@
     </div>
 
     <div class="annotations">
-      <div class="anno"><div class="k"><span class="d"></span>Closer header</div><p>The Paths tab is titled CLOSER, your real-life circle of people you crossed paths with.</p></div>
+      <div class="anno"><div class="k"><span class="d"></span>Path drops</div><p>Crossings land in timed drops, not a live feed. The countdown builds the itch, and the only way to fill the next drop is to go out. First drop hits 40 seconds in.</p></div>
       <div class="anno"><div class="k"><span class="d"></span>Learns your type</div><p>Profile shows what Closer infers from your likes and suggests where to meet more people like them.</p></div>
       <div class="anno"><div class="k"><span class="d"></span>Instagram showcase</div><p>Feature up to six circular Instagram posts. Tap a showcase profile to see theirs.</p></div>
     </div>
@@ -632,8 +708,11 @@
       sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/>',
       moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/>',
       arrowup:'<path d="M12 19V6M6 12l6-6 6 6"/>',
-      arrowdown:'<path d="M12 5v13M6 12l6 6 6-6"/>'
+      arrowdown:'<path d="M12 5v13M6 12l6 6 6-6"/>',
+      flame:'<path d="M12 3c1 3-2 4.5-2 7a2 2 0 0 0 4 .3C15.6 8.6 18 10.5 18 14a6 6 0 0 1-12 0c0-3 1.8-4.6 3-6.5C10.2 5.6 11.4 4.4 12 3z"/>',
+      bolt:'<path d="M13 2L5 13h5l-1 9 8-11h-5z"/>'
     };
+    f.flame=1; f.bolt=1;
     var fill = f[n] ? 'fill="currentColor" stroke="none"' : 'fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"';
     return '<svg class="ic" viewBox="0 0 24 24" '+fill+'>'+p[n]+'</svg>';
   }
@@ -668,6 +747,8 @@
     document.getElementById('tab-prof').innerHTML=navIc('prof')+'Profile';
     document.getElementById('themeBtn').innerHTML=ic('moon');
     document.getElementById('addSpotBtn').innerHTML=ic('plus')+' Add a spot';
+    document.getElementById('flameIc').innerHTML=ic('flame');
+    document.getElementById('streakPill').innerHTML=ic('flame')+'<span>6</span>';
     renderPosts();
     updatePriPill();
   }
@@ -682,21 +763,21 @@
     {id:1,name:'Maya',age:20,init:'M',g:0,when:'a week ago',ft:20,times:4,likes:248,mins:12,venue:'Riverside Bar',bio:'Marketing major. Live music, iced lattes, and the best taco truck on campus.',ig:'maya.rose',matched:true,showcase:true,heart:null},
     {id:2,name:'Jordan',age:21,init:'J',g:1,when:'3 days ago',ft:11,times:2,likes:176,mins:22,venue:'Lopes Way',bio:'Business and intramural soccer. Competitive at everything, even mini golf.',ig:'jordan.b',matched:false,showcase:false,heart:'We always end up in the same room. Coffee?'},
     {id:3,name:'Sofia',age:19,init:'S',g:2,when:'yesterday',ft:9,times:7,likes:319,mins:2,venue:'Engineering Bldg',bio:'Bio pre-med. Coffee dependent. Will quiz you on anatomy.',ig:'sofiaa',matched:true,showcase:true,heart:null},
-    {id:4,name:'Avery',age:20,init:'A',g:3,when:'5 days ago',ft:16,times:3,likes:204,mins:34,venue:'Lopes Gym',bio:'Nursing. Gym at 6am, do not judge. Sunset hikes on weekends.',ig:'avery.k',matched:false,showcase:true,heart:'I always see you at the gym. Hi.'},
+    {id:4,name:'Avery',age:20,init:'A',g:3,when:'5 days ago',ft:16,times:3,likes:204,mins:34,venue:'Lopes Gym',bio:'Nursing. Gym at 6am, do not judge. Sunset hikes on weekends.',ig:'avery.k',matched:false,showcase:true,heart:'We are clearly on the same gym schedule. Hi.'},
     {id:5,name:'Kai',age:22,init:'K',g:4,when:'2 weeks ago',ft:13,times:1,likes:142,mins:7,venue:'Thunder Grounds',bio:'CS senior. Building an app, ironically. Ask me about cold brew.',ig:'kai.codes',matched:false,showcase:false,heart:'One crossing was enough to remember you.'},
     {id:6,name:'Elena',age:21,init:'E',g:0,when:'a week ago',ft:12,times:5,likes:266,mins:12,venue:'Riverside Bar',bio:'Comm major. Find me by the band. I make the best playlists you have heard.',ig:'elena.m',matched:true,showcase:true,heart:null},
     {id:7,name:'Bella',age:20,init:'B',g:1,when:'4 days ago',ft:18,times:2,likes:231,mins:18,venue:'Antelope Hall',bio:'Design. Thrifting, film cameras, and oat milk everything.',ig:'bella.jpg',matched:false,showcase:true,heart:'Saw you at The 44. You have great taste in music.'},
     {id:8,name:'Diego',age:22,init:'D',g:2,when:'a month ago',ft:15,times:6,likes:188,mins:9,venue:'House Party',bio:'Finance. Always at the Darty. Dog person, beach person, good vibes only.',ig:'diego',matched:false,showcase:false,heart:'We keep crossing paths. I think that is a sign.'},
     {id:9,name:'Riley',age:21,init:'R',g:3,when:'6 days ago',ft:14,times:3,likes:255,mins:15,venue:'Lopes Way',bio:'Psych. Dog mom to a corgi named Taco. Concert enthusiast.',ig:'riley.rae',matched:false,showcase:true,heart:'Your smile honestly caught me off guard.'},
-    {id:10,name:'Tessa',age:20,init:'T',g:4,when:'2 days ago',ft:10,times:5,likes:341,mins:4,venue:'Rivers Pool',bio:'Marketing. Spotlight number one this week. Down for any adventure.',ig:'tessa',matched:false,showcase:true,heart:'You keep showing up where I am. I like it.'},
+    {id:10,name:'Tessa',age:20,init:'T',g:4,when:'2 days ago',ft:10,times:5,likes:341,mins:4,venue:'Rivers Pool',bio:'Marketing. Spotlight number one this week. Down for any adventure.',ig:'tessa',matched:false,showcase:true,heart:'Five crossings in one week. The universe is not being subtle.'},
     {id:11,name:'Nico',age:22,init:'N',g:0,when:'3 weeks ago',ft:17,times:1,likes:167,mins:21,venue:'Engineering Bldg',bio:'Mechanical eng. Coffee and CAD. Will fix your bike for a smoothie.',ig:'nico.b',matched:false,showcase:false,heart:'New here, but you stood out.'},
     {id:12,name:'Layla',age:19,init:'L',g:1,when:'yesterday',ft:8,times:4,likes:213,mins:3,venue:'Thunder Grounds',bio:'Undeclared but undefeated. Probably at a show right now.',ig:'layla',matched:false,showcase:true,heart:'I never do this, but hi.'}
   ];
   var spot=[{id:10,rk:1,likes:341},{id:9,rk:2,likes:284},{id:11,rk:3,likes:267},{id:7,rk:4,likes:241},{id:4,rk:5,likes:228},{id:12,rk:6,likes:213},{id:3,rk:7,likes:199}];
   var events=[
-    {id:1,mo:'JUN',dy:'27',name:'Neon Desert Party',venue:'Riverside Bar',going:128,cross:34,score:61,v:0},
-    {id:2,mo:'JUL',dy:'03',name:'Lopes Night Market',venue:'Lopes Way',going:74,cross:22,score:55,v:0},
-    {id:3,mo:'JUL',dy:'11',name:'Sunset Rooftop Social',venue:'Thunder Grounds',going:95,cross:28,score:58,v:0},
+    {id:1,mo:'JUL',dy:'09',name:'Neon Desert Party',venue:'Riverside Bar',going:128,cross:34,score:61,v:0},
+    {id:2,mo:'JUL',dy:'12',name:'Lopes Night Market',venue:'Lopes Way',going:74,cross:22,score:55,v:0},
+    {id:3,mo:'JUL',dy:'18',name:'Sunset Rooftop Social',venue:'Thunder Grounds',going:95,cross:28,score:58,v:0},
     {id:4,mo:'JUL',dy:'25',name:'Summer Splash',venue:'Rivers Pool',going:312,cross:61,score:64,v:0}
   ];
   var hereOrder=[6,10,8,9,5,3]; var hereIdx=0;
@@ -706,17 +787,46 @@
   function byId(id){ for(var i=0;i<people.length;i++){ if(people[i].id===id) return people[i]; } }
   function av(p,cls){ if(p.photo){ return '<div class="av '+(cls||'')+'" style="background:'+G[p.g]+'"><img class="avimg" src="'+p.photo+'" alt="" onerror="this.remove();this.parentNode.textContent=\''+p.init+'\'"></div>'; } return '<div class="av '+(cls||'')+'" style="background:'+G[p.g]+'">'+p.init+'</div>'; }
 
+  /* PATH DROPS: crossings land in timed batches. The clock is the itch. */
+  var recentIds=[1,2,3,4,5,6];
+  var dropQueue=[12,10,7], dropSecs=40, dropTimer=null, queuedExtra=0;
+  function fmtClock(s){ var m=Math.floor(s/60), r=s%60; return (m<10?'0':'')+m+':'+(r<10?'0':'')+r; }
   function renderRecent(){
-    document.getElementById('seg-recent').innerHTML=people.slice(0,6).map(function(p){
-      return '<div class="pcard" onclick="openDetail('+p.id+')">'+av(p)
-        +'<div class="pinfo"><div class="pn">'+p.name+', '+p.age+'</div>'
-        +'<div class="pmeta">Came within their space, '+p.when+', within '+p.ft+' ft</div>'
+    var qn=dropQueue.length+queuedExtra;
+    var avs=(dropQueue.length?dropQueue:[2,4]).slice(0,3).map(function(id){ var p=byId(id);
+      return '<div class="qa" style="background:'+G[p.g]+'">'+(p.photo?'<img src="'+p.photo+'" alt="">':'')+'</div>'; }).join('');
+    var qHtml='<div class="drop-card"><div class="drop-lab">'+ic('bolt')+'Next path drop</div>'
+      +'<div class="drop-clock" id="dropClock">'+fmtClock(dropSecs)+'</div>'
+      +'<div class="drop-sub">Paths land in drops. Who you walked past stays hidden until the clock hits zero. The only way to fill the next one is to be out there.</div>'
+      +'<div class="drop-q">'+avs+'<span class="qmore">'+qn+' waiting</span></div></div>';
+    document.getElementById('seg-recent').innerHTML=qHtml+recentIds.map(function(id){ var p=byId(id);
+      return '<div class="pcard'+(p.just?' just':'')+'" onclick="openDetail('+p.id+')">'+av(p)
+        +'<div class="pinfo"><div class="pn">'+p.name+', '+p.age+(p.just?'<span class="just-tag">NEW DROP</span>':'')+'</div>'
+        +'<div class="pmeta">'+(p.just?'Path crossed, '+p.mins+' mins ago':'Came within their space, '+p.when)+', within '+p.ft+' ft</div>'
         +'<div class="prow"><div class="pacts">'
         +'<button class="circ" title="Message" onclick="event.stopPropagation();openChat('+p.id+')">'+ic('chat')+'</button>'
         +'<button class="circ heart" title="Send a heart" onclick="event.stopPropagation();openHeartSheet('+p.id+')">'+ic('heart')+'</button>'
         +'<button class="circ star" title="Priority Match" onclick="event.stopPropagation();sendPriority('+p.id+')">'+ic('star')+'</button>'
         +'</div></div></div></div>';
     }).join('');
+  }
+  function startDrops(){ clearInterval(dropTimer); dropTimer=setInterval(tickDrop,1000); }
+  function tickDrop(){
+    dropSecs--;
+    if(dropSecs<=0){ doDrop(); return; }
+    var el=document.getElementById('dropClock'); if(el) el.textContent=fmtClock(dropSecs);
+    if(dropSecs%25===0){ queuedExtra++; var qm=document.querySelector('#seg-recent .qmore'); if(qm) qm.textContent=(dropQueue.length+queuedExtra)+' waiting'; }
+  }
+  function doDrop(){
+    var n=dropQueue.length;
+    dropSecs=1800;
+    if(n===0){ queuedExtra=Math.max(2,queuedExtra); renderRecent(); return; }
+    dropQueue.forEach(function(id){ byId(id).just=true; recentIds.unshift(id); });
+    dropQueue=[]; queuedExtra=2;
+    renderRecent();
+    questTick(1,n);
+    toastNow('bolt','Path drop, '+n+' new people just landed','surge');
+    burst(document.getElementById('v-paths'));
   }
   function renderPortfolio(q){
     q=(q||'').toLowerCase();
@@ -774,9 +884,9 @@
         +'<div class="ev-body"><div class="ev-head"><div class="ev-date"><span class="mo">'+e.mo+'</span><span class="dy">'+e.dy+'</span></div>'
         +'<div><div class="ev-name">'+e.name+'</div><div class="ev-venue">'+ic('pin')+e.venue+'</div></div></div>'
         +'<div class="ev-stats"><span class="ev-stat"><b>~'+e.cross+'</b> could cross</span><span class="ev-stat"><b>'+e.going+'</b> going</span></div></div>'
-        +'<div class="voter"><button class="varrow up'+(e.v===1?' on':'')+'" onclick="voteEvent('+e.id+',1)">'+ic('arrowup')+'</button>'
+        +'<div class="voter"><button class="varrow up'+(e.v===1?' on':'')+'" aria-label="Upvote '+e.name+'" onclick="voteEvent('+e.id+',1)">'+ic('arrowup')+'</button>'
         +'<div class="vscore">'+e.score+'</div>'
-        +'<button class="varrow down'+(e.v===-1?' on':'')+'" onclick="voteEvent('+e.id+',-1)">'+ic('arrowdown')+'</button></div></div>';
+        +'<button class="varrow down'+(e.v===-1?' on':'')+'" aria-label="Downvote '+e.name+'" onclick="voteEvent('+e.id+',-1)">'+ic('arrowdown')+'</button></div></div>';
     }).join('');
     if(hid){ var el=document.getElementById('ev-'+hid); if(el) el.classList.add('bump'); }
   }
@@ -880,7 +990,7 @@
       +'<div class="ch-main" onclick="openDetail('+p.id+')">'+av(p,'sm')+'<div><div class="pn" style="font-size:16px">'+p.name+', '+p.age+'</div><div class="cross">'+ic('pin')+'Came within their space, '+p.times+'x</div></div></div>'
       +'<span class="chev" onclick="openDetail('+p.id+')">'+ic('chevron')+'</span></div>'
       +'<div class="chat-body" id="chatBody"><div class="day">You can message '+p.name+' because you crossed paths. No match needed. Tap the name to see the profile.</div>'
-      +'<div class="bub them">Hey! Did not we just cross paths?</div><div class="bub me">Ha, yeah we did. Small campus.</div>'+soc+'</div>'
+      +'<div class="bub them">Hey! We just crossed paths, right?</div><div class="bub me">Ha, yeah we did. Small campus.</div>'+soc+'</div>'
       +'<div class="chat-input"><input id="chatField" placeholder="Message '+p.name+'..." onkeydown="if(event.key===\'Enter\')sendMsg()"><button onclick="sendMsg()">'+ic('send')+'</button></div>';
     showOverlay('chatView');
   }
@@ -893,7 +1003,7 @@
       +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>';
     showOverlay('heartSheet');
   }
-  function confirmHeart(name){ document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star sent">'+ic('heart')+'</div><h3>Heart sent</h3><p>'+name+' will see a blurred heart in their Messages until they reveal you. You can already message them, since you crossed paths.</p><button class="btn" onclick="closeOverlay(\'heartSheet\')">Done</button></div>'; }
+  function confirmHeart(name){ questTick(2); document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star sent">'+ic('heart')+'</div><h3>Heart sent</h3><p>'+name+' will see a blurred heart in their Messages until they reveal you. You can already message them, since you crossed paths.</p><button class="btn" onclick="closeOverlay(\'heartSheet\')">Done</button></div>'; }
   function sendPriority(id){
     var p=byId(id);
     if(priorityLeft>0){
@@ -924,12 +1034,13 @@
       +'<button class="btn" onclick="closeOverlay(\'matchModal\');openChat('+id+')">'+ic('chat')+' Send a message</button><div class="dismiss" onclick="closeOverlay(\'matchModal\')">Keep swiping</div>';
     showOverlay('matchModal'); burst(document.getElementById('matchModal'));
   }
+  function escP(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
   function editBio(){
     var w=document.getElementById('bioWrap');
     var cur=document.getElementById('bioText').textContent;
-    w.innerHTML='<textarea class="bio-edit" id="bioField">'+cur+'</textarea><button class="bio-save" onclick="saveBio()">Save</button>';
+    w.innerHTML='<textarea class="bio-edit" id="bioField">'+escP(cur)+'</textarea><button class="bio-save" onclick="saveBio()">Save</button>';
   }
-  function saveBio(){ var v=document.getElementById('bioField').value; document.getElementById('bioWrap').innerHTML='<div class="bio-text" id="bioText">'+(v||'Add a bio.')+'</div>'; }
+  function saveBio(){ var v=document.getElementById('bioField').value; document.getElementById('bioWrap').innerHTML='<div class="bio-text" id="bioText">'+(v?escP(v):'Add a bio.')+'</div>'; }
   function renderPosts(){
     var me={g:0}; var posts=''; for(var i=0;i<6;i++) posts+=postCircle(me,i);
     posts+='<div class="ig-post add">'+ic('plus')+'</div>';
@@ -954,10 +1065,28 @@
     }
   }
   function toggleNight(){ var sw=document.getElementById('themeSweep'); if(sw){ sw.classList.remove('run'); void sw.offsetWidth; sw.classList.add('run'); } applyNight(!night); }
-  var toastMsgs=[['heart','Maya just entered your radius'],['star','You moved up to number 5 on Spotlight'],['pin','12 Closers just arrived at Grace'],['users','Someone new just crossed your path'],['spark','Run Club is heating up, 50 here now'],['heart','3 new hearts are waiting for you'],['pin','The hotspot is shifting toward Rivers Pool']];
-  var toastTimer=null, toastI=0;
-  function showToast(){ var el=document.getElementById('toast'); if(!el)return; var m=toastMsgs[toastI%toastMsgs.length]; toastI++; el.innerHTML='<div class="tdot">'+ic(m[0])+'</div><div class="ttxt">'+m[1]+'</div>'; el.classList.add('show'); setTimeout(function(){ el.classList.remove('show'); },4200); }
-  function startToasts(){ clearInterval(toastTimer); setTimeout(showToast,2600); toastTimer=setInterval(showToast,8000); }
+  var toastMsgs=[['heart','Maya just entered your radius'],['bolt','SURGE, 87 Closers at Grace right now','surge'],['star','You moved up to number 5 on Spotlight'],['pin','12 Closers just arrived at Grace'],['users','Someone new just crossed your path'],['bolt','Rivers Pool is spiking, 52 and climbing','surge'],['heart','3 new hearts are waiting for you'],['flame','Go out tonight to keep your 6 night streak'],['pin','The hotspot is shifting toward Rivers Pool']];
+  var toastTimer=null, toastI=0, toastHide=null;
+  function toastNow(icn,txt,cls){ var el=document.getElementById('toast'); if(!el)return; el.innerHTML='<div class="tdot">'+ic(icn)+'</div><div class="ttxt">'+txt+'</div>'; el.className='toast'+(cls?' '+cls:''); void el.offsetWidth; el.classList.add('show'); clearTimeout(toastHide); toastHide=setTimeout(function(){ el.classList.remove('show'); },4200); }
+  function showToast(){ var m=toastMsgs[toastI%toastMsgs.length]; toastI++; toastNow(m[0],m[1],m[2]); }
+
+  /* QUESTS + XP: rewards for going out, never for scrolling */
+  var quests=[
+    {t:'Check in at a hotspot',cur:0,max:1,xp:15,icn:'pin'},
+    {t:'Cross paths with 5 new people',cur:3,max:5,xp:50,icn:'users'},
+    {t:'Send one heart',cur:0,max:1,xp:20,icn:'heart'}
+  ];
+  var xpPct=62;
+  function renderQuests(){ var el=document.getElementById('questList'); if(!el)return;
+    el.innerHTML=quests.map(function(q){ var done=q.cur>=q.max;
+      return '<div class="quest'+(done?' done':'')+'"><div class="qic">'+ic(done?'check':q.icn)+'</div>'
+        +'<div class="qinfo"><div class="qt">'+q.t+'</div><div class="qbar"><div class="qf" style="width:'+Math.round(q.cur/q.max*100)+'%"></div></div></div>'
+        +'<div class="qxp">+'+q.xp+' XP</div></div>';
+    }).join('');
+  }
+  function questTick(i,amount){ var q=quests[i]; if(!q||q.cur>=q.max) return; q.cur=Math.min(q.max,q.cur+(amount||1)); renderQuests(); if(q.cur>=q.max){ addXp(q.xp); toastNow('spark','Quest complete, +'+q.xp+' XP'); } }
+  function addXp(n){ xpPct=Math.min(100,xpPct+n/2); var f=document.getElementById('xpFill'); if(f) f.style.width=xpPct+'%'; }
+  function startToasts(){ clearInterval(toastTimer); setTimeout(showToast,2600); toastTimer=setInterval(showToast,22000); }
   function stopToasts(){ clearInterval(toastTimer); var el=document.getElementById('toast'); if(el) el.classList.remove('show'); }
   function burst(container){ if(!container)return; var colors=night?['#39ffd0','#2ec5ff','#ff5cae','#7a5cff']:['#ff7e33','#ff5c00','#e8b15a','#ff9d4d']; var c=document.createElement('div'); c.className='confetti'; for(var i=0;i<28;i++){ var d=document.createElement('i'); d.style.left=(50+(Math.random()*64-32))+'%'; d.style.background=colors[i%colors.length]; d.style.setProperty('--dx',(Math.random()*220-110)+'px'); d.style.setProperty('--dy',(120+Math.random()*170)+'px'); d.style.animationDelay=(Math.random()*0.15)+'s'; c.appendChild(d); } container.appendChild(c); setTimeout(function(){ c.remove(); },1700); }
 
@@ -1001,10 +1130,10 @@
         +'<button class="imhere'+(hereMine[s.id]?' on':'')+'" onclick="event.stopPropagation();imHere(\''+s.id+'\')">'+(hereMine[s.id]?'Here':'I am here')+'</button></div>';
     }).join('');
   }
-  function imHere(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(s&&!hereMine[id]){ hereMine[id]=true; s.count+=1; } renderHotMap(); renderHotList(); }
+  function imHere(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(s&&!hereMine[id]){ hereMine[id]=true; s.count+=1; questTick(0); addXp(15); } renderHotMap(); renderHotList(); }
   function openSpot(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(!s)return; var q=encodeURIComponent(s.q||(s.name+' Phoenix AZ')); document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('pin')+'</div><h3>'+s.name+'</h3><p>'+s.count+' Closers here now. '+s.go+'. Updated by '+s.admin+', who owns this spot.</p><div class="map-btns"><a class="map-btn" href="https://maps.apple.com/?q='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Apple Maps</a><a class="map-btn" href="https://www.google.com/maps/search/?api=1&query='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Google Maps</a></div><button class="btn" onclick="closeOverlay(\'heartSheet\');imHere(\''+id+'\')">'+ic('pin')+' I am here too</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Close</div></div>'; showOverlay('heartSheet'); }
   function addSpot(){ document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('plus')+'</div><h3>Add a spot</h3><p>Drop a spot, say what is going on, and you become its owner.</p><input id="spotName" placeholder="Spot name" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:10px;outline:none"><textarea id="spotGo" placeholder="What is going on and why" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;resize:none;height:64px;margin-bottom:14px;outline:none"></textarea><button class="btn" onclick="postSpot()">'+ic('plus')+' Post, become owner</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>'; showOverlay('heartSheet'); }
-  function postSpot(){ var n=(document.getElementById('spotName').value||'New Spot'); var g=(document.getElementById('spotGo').value||'Something is happening'); spots.unshift({id:'u'+(spots.length+1),name:n,count:8,go:g,admin:'You',ai:'A',ag:0,x:48,y:46,q:n+' Phoenix AZ'}); closeOverlay('heartSheet'); renderHotMap(); renderHotList(); }
+  function postSpot(){ var n=escP(document.getElementById('spotName').value||'New Spot'); var g=escP(document.getElementById('spotGo').value||'Something is happening'); spots.unshift({id:'u'+(spots.length+1),name:n,count:8,go:g,admin:'You',ai:'A',ag:0,x:48,y:46,q:n+' Phoenix AZ'}); closeOverlay('heartSheet'); renderHotMap(); renderHotList(); }
 
   function go(tab){
     var idx=+tab.dataset.i;
@@ -1018,19 +1147,36 @@
   function enterApp(){
     document.getElementById('login').style.display='none';
     document.getElementById('tabbar').style.display='flex';
-    renderRecent(); renderPortfolio(''); renderSpot(); renderEvents(); renderHere(false); renderMessages(); renderPosts(); updateCounter();
+    renderRecent(); renderPortfolio(''); renderSpot(); renderEvents(); renderHere(false); renderMessages(); renderPosts(); renderQuests(); updateCounter();
     var hr=new Date().getHours(); applyNight(hr>=18||hr<6);
-    startToasts();
+    startToasts(); startDrops();
   }
   function resetProto(){
     ['detailSheet','chatView','matchModal','priorityModal','heartSheet','revealModal'].forEach(closeOverlay);
-    clearInterval(hotTimer); stopToasts(); hereMine={};
+    clearInterval(hotTimer); clearInterval(dropTimer); clearTimeout(toastHide); stopToasts(); hereMine={};
     document.getElementById('tabbar').style.display='none';
     document.getElementById('login').style.display='flex';
     priorityLeft=10; revealsUsed=0; REVEAL_LIMIT=50; revealed={}; hereIdx=0; applyNight(false); updateCounter();
+    recentIds=[1,2,3,4,5,6]; dropQueue=[12,10,7]; dropSecs=40; queuedExtra=0; people.forEach(function(p){ delete p.just; });
+    quests[0].cur=0; quests[1].cur=3; quests[2].cur=0; xpPct=62; var xf=document.getElementById('xpFill'); if(xf) xf.style.width='62%';
+    renderQuests(); renderRecent();
     go(document.getElementById('tab-paths'));
     pathTab('paths', document.querySelector('#pathsDongle button'));
   }
+
+  /* real swipe gestures on the Here deck: drag right = like, left = pass */
+  (function(){
+    var card=document.getElementById('hereCard'); if(!card||!window.PointerEvent) return;
+    var sx=0, sy=0, dx=0, dragging=false, moved=false;
+    card.addEventListener('pointerdown', function(e){ dragging=true; moved=false; sx=e.clientX; sy=e.clientY; dx=0; try{card.setPointerCapture(e.pointerId);}catch(err){} card.style.transition='none'; });
+    card.addEventListener('pointermove', function(e){ if(!dragging) return; dx=e.clientX-sx; var dy=e.clientY-sy; if(Math.abs(dx)>6||Math.abs(dy)>6) moved=true; if(Math.abs(dx)>Math.abs(dy)) card.style.transform='translateX('+dx+'px) rotate('+(dx/18)+'deg)'; });
+    function release(){ if(!dragging) return; dragging=false; card.style.transition=''; card.style.transform=''; if(dx>80){ actHere('like'); } else if(dx<-80){ actHere('pass'); } dx=0; }
+    card.addEventListener('pointerup', release);
+    card.addEventListener('pointercancel', release);
+    card.addEventListener('click', function(e){ if(moved){ e.stopPropagation(); e.preventDefault(); moved=false; } }, true);
+  })();
+  /* escape closes any open overlay */
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ ['detailSheet','chatView','matchModal','priorityModal','heartSheet','revealModal'].forEach(function(id){ var el=document.getElementById(id); if(el&&el.classList.contains('show')) closeOverlay(id); }); } });
 
   icHere();
   renderRecent(); renderPortfolio(''); renderSpot(); renderEvents(); renderHere(false); renderMessages();

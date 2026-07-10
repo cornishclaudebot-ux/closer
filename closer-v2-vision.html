@@ -1,0 +1,376 @@
+<style>
+  :root{
+    --bg:#080907; --surface:#14100b; --surface-2:#1f1812; --raise:#251b12;
+    --line:rgba(246,239,228,.10); --line-2:rgba(246,239,228,.16);
+    --text:#f6efe4; --muted:#a7977f; --dim:#6f6253;
+    --orange:#ff5c00; --orange-2:#ff7e33; --gold:#e8b15a;
+    --live:#2ec5ff;               /* reserved: proximity / "live now" only */
+    --font-display:'Space Grotesk','SF Pro Display','Segoe UI',system-ui,sans-serif;
+    --font-body:'Inter','SF Pro Text','Segoe UI',system-ui,sans-serif;
+    --font-mono:ui-monospace,'SF Mono',Menlo,monospace;
+    --wrap:1080px;
+  }
+  *{box-sizing:border-box}
+  .cv2{background:var(--bg);color:var(--text);font-family:var(--font-body);
+    line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+    background-image:radial-gradient(1200px 600px at 78% -8%, rgba(255,92,0,.12), transparent 60%),
+                     radial-gradient(900px 500px at 8% 4%, rgba(46,197,255,.06), transparent 55%);}
+  .cv2 ::selection{background:var(--orange);color:#160a03}
+  .wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+  .cv2 h1,.cv2 h2,.cv2 h3{font-family:var(--font-display);font-weight:700;
+    text-wrap:balance;letter-spacing:-.02em;margin:0}
+  .cv2 p{margin:0}
+  .eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--muted)}
+  .accent{color:var(--orange-2)}
+  a.link{color:var(--orange-2);text-decoration:none;border-bottom:1px solid var(--line-2)}
+
+  /* ---------- top strip ---------- */
+  .topbar{display:flex;align-items:center;justify-content:space-between;
+    padding:20px 24px;max-width:var(--wrap);margin:0 auto}
+  .brand{font-family:var(--font-display);font-weight:700;font-size:1.15rem;letter-spacing:-.02em}
+  .brand b{color:var(--orange)}
+  .tag-mini{font-family:var(--font-mono);font-size:.7rem;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+
+  /* ---------- hero ---------- */
+  .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;
+    padding:44px 0 64px}
+  .hero .kicker{display:inline-flex;gap:10px;align-items:center;margin-bottom:22px}
+  .dot-live{width:8px;height:8px;border-radius:50%;background:var(--live);
+    box-shadow:0 0 0 0 rgba(46,197,255,.55);animation:ping 2.4s ease-out infinite}
+  @keyframes ping{0%{box-shadow:0 0 0 0 rgba(46,197,255,.5)}70%{box-shadow:0 0 0 12px rgba(46,197,255,0)}100%{box-shadow:0 0 0 0 rgba(46,197,255,0)}}
+  .hero h1{font-size:clamp(2.5rem,6.2vw,4.6rem);line-height:.98}
+  .hero h1 .u{background:linear-gradient(120deg,var(--orange),var(--gold));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .sub{margin-top:22px;color:var(--muted);font-size:1.08rem;max-width:44ch}
+  .hero .stackline{margin-top:26px;display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--font-mono);font-size:.74rem;letter-spacing:.02em;
+    border:1px solid var(--line-2);border-radius:8px;padding:7px 11px;color:var(--text);background:rgba(255,255,255,.02)}
+  .chip.on{border-color:rgba(255,124,51,.5);color:var(--orange-2)}
+
+  .radar{position:relative;aspect-ratio:1;width:100%;max-width:360px;margin-left:auto;
+    border:1px solid var(--line);border-radius:22px;background:
+      radial-gradient(circle at 50% 50%, rgba(255,124,51,.10), transparent 70%),var(--surface);overflow:hidden}
+  .radar canvas{position:absolute;inset:0;width:100%;height:100%}
+  .radar .cap{position:absolute;left:14px;bottom:12px;font-family:var(--font-mono);
+    font-size:.66rem;color:var(--muted);letter-spacing:.02em}
+
+  /* ---------- section frame ---------- */
+  section{padding:56px 0;border-top:1px solid var(--line)}
+  .sec-head{max-width:60ch;margin-bottom:34px}
+  .sec-head h2{font-size:clamp(1.7rem,3.4vw,2.5rem);margin-top:12px}
+  .sec-head p{color:var(--muted);margin-top:12px}
+
+  /* ---------- shift v1/v2 ---------- */
+  .shift{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .card.v2{background:linear-gradient(180deg,rgba(255,92,0,.08),rgba(255,92,0,0)) ,var(--surface-2);
+    border-color:rgba(255,124,51,.28)}
+  .card .lab{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  .card.v2 .lab{color:var(--orange-2)}
+  .card h3{font-size:1.15rem;margin:10px 0 14px}
+  .card ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+  .card li{display:flex;gap:10px;color:var(--muted);font-size:.95rem}
+  .card li::before{content:"";flex:0 0 6px;height:6px;margin-top:9px;border-radius:50%;background:var(--dim)}
+  .card.v2 li::before{background:var(--orange)}
+  .card.v2 li{color:#e9dfce}
+
+  /* ---------- phones ---------- */
+  .phones{display:flex;gap:26px;overflow-x:auto;padding:6px 2px 18px;scroll-snap-type:x mandatory}
+  .phonewrap{scroll-snap-align:center;flex:0 0 auto;display:flex;flex-direction:column;gap:12px;width:264px}
+  .phone{width:264px;height:540px;border-radius:38px;background:#0c0a08;
+    border:1px solid var(--line-2);padding:12px;position:relative;
+    box-shadow:0 30px 60px -30px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,255,255,.02)}
+  .phone::before{content:"";position:absolute;top:12px;left:50%;transform:translateX(-50%);
+    width:96px;height:22px;background:#0c0a08;border-radius:0 0 14px 14px;z-index:3}
+  .screen{position:absolute;inset:12px;border-radius:28px;overflow:hidden;background:var(--bg);
+    display:flex;flex-direction:column}
+  .scap{font-family:var(--font-mono);font-size:.7rem;color:var(--muted);letter-spacing:.02em;text-align:center}
+  .st{display:flex;align-items:center;justify-content:space-between;padding:26px 16px 12px;
+    border-bottom:1px solid var(--line)}
+  .st .title{font-family:var(--font-display);font-weight:700;font-size:1.05rem}
+  .live-pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);
+    font-size:.6rem;color:var(--live);border:1px solid rgba(46,197,255,.35);border-radius:999px;padding:4px 8px}
+  .live-pill i{width:6px;height:6px;border-radius:50%;background:var(--live);display:inline-block}
+  .feed{padding:12px;display:flex;flex-direction:column;gap:11px;overflow:hidden}
+  .pcard{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+  .pcard .ph{height:104px;position:relative}
+  .g1{background:linear-gradient(135deg,#ff7e33,#ff2f7a)}
+  .g2{background:linear-gradient(135deg,#2ec5ff,#7a5cff)}
+  .g3{background:linear-gradient(135deg,#39ffd0,#2e8bff)}
+  .pcard .ph .meta{position:absolute;left:10px;bottom:8px;right:10px}
+  .pcard .ph .nm{font-family:var(--font-display);font-weight:700;font-size:1rem;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+  .cross{font-family:var(--font-mono);font-size:.62rem;color:#fff;opacity:.92;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+  .pcard .row{display:flex;gap:8px;padding:9px 10px 11px}
+  .pcard .tagx{font-family:var(--font-mono);font-size:.58rem;color:var(--gold);border:1px solid rgba(232,177,90,.3);border-radius:6px;padding:3px 6px}
+  .acts{display:flex;gap:8px;margin-left:auto}
+  .btnc{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line-2);font-size:.85rem;color:var(--muted)}
+  .btnc.y{border-color:var(--orange);color:var(--orange);background:rgba(255,92,0,.08)}
+
+  /* match screen */
+  .match{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:22px;background:
+      radial-gradient(circle at 50% 38%, rgba(255,92,0,.22), transparent 62%),var(--bg)}
+  .avpair{display:flex;align-items:center;margin:6px 0 18px}
+  .av{width:74px;height:74px;border-radius:50%;border:2px solid var(--bg)}
+  .av:nth-child(2){margin-left:-20px}
+  .match h3{font-size:1.5rem;margin:4px 0 8px}
+  .match .mp{color:var(--muted);font-size:.85rem;max-width:26ch}
+  .wave{margin-top:20px;font-family:var(--font-display);font-weight:700;font-size:.92rem;
+    background:linear-gradient(120deg,var(--orange),var(--orange-2));color:#160a03;
+    border:none;border-radius:12px;padding:12px 20px}
+  /* chat screen */
+  .presence{margin:12px;padding:10px 12px;border:1px solid rgba(46,197,255,.3);border-radius:12px;
+    background:rgba(46,197,255,.06);display:flex;gap:9px;align-items:center}
+  .presence .txt{font-size:.72rem;color:#cfeaf6}
+  .bub{max-width:74%;padding:9px 12px;border-radius:14px;font-size:.8rem;margin:0 12px}
+  .bub.them{align-self:flex-start;background:var(--surface-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+  .bub.me{align-self:flex-end;background:linear-gradient(120deg,var(--orange),var(--orange-2));color:#160a03;border-bottom-right-radius:4px}
+
+  /* ---------- architecture ---------- */
+  .flow{display:flex;align-items:stretch;gap:12px;overflow-x:auto;padding-bottom:8px}
+  .fnode{flex:1 0 190px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .fnode.h{border-color:rgba(255,124,51,.4);background:linear-gradient(180deg,rgba(255,92,0,.07),transparent),var(--surface-2)}
+  .fnode .k{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  .fnode .t{font-family:var(--font-display);font-weight:700;font-size:1.02rem;margin:8px 0 6px}
+  .fnode p{font-size:.82rem;color:var(--muted)}
+  .fnode .tech{margin-top:9px;font-family:var(--font-mono);font-size:.66rem;color:var(--orange-2)}
+  .caps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+  .cap-c{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .cap-c .n{font-family:var(--font-mono);font-size:.66rem;color:var(--dim);letter-spacing:.1em}
+  .cap-c h4{font-family:var(--font-display);font-size:1.02rem;margin:8px 0 8px;font-weight:700}
+  .cap-c p{font-size:.86rem;color:var(--muted)}
+  .cap-c .by{margin-top:11px;display:inline-block;font-family:var(--font-mono);font-size:.64rem;
+    color:var(--text);border:1px solid var(--line-2);border-radius:6px;padding:4px 8px}
+
+  /* ---------- build path ---------- */
+  .steps{display:flex;flex-direction:column;gap:2px}
+  .step{display:grid;grid-template-columns:40px 1fr auto;gap:16px;align-items:center;
+    padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+  .step .no{font-family:var(--font-display);font-weight:700;font-size:1.1rem;color:var(--dim);font-variant-numeric:tabular-nums}
+  .step h4{font-family:var(--font-display);font-size:1.02rem;font-weight:700}
+  .step p{font-size:.85rem;color:var(--muted);margin-top:3px}
+  .state{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;
+    padding:6px 10px;border-radius:999px;white-space:nowrap}
+  .state.ready{color:var(--live);border:1px solid rgba(46,197,255,.35)}
+  .state.next{color:var(--orange-2);border:1px solid rgba(255,124,51,.4);background:rgba(255,92,0,.06)}
+  .state.later{color:var(--dim);border:1px solid var(--line)}
+
+  .foot{padding:40px 0 60px;border-top:1px solid var(--line);color:var(--dim);
+    font-family:var(--font-mono);font-size:.72rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  @media (max-width:840px){
+    .hero{grid-template-columns:1fr;gap:30px}
+    .radar{margin:0 auto}
+    .shift{grid-template-columns:1fr}
+    .caps{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .dot-live,.live-pill i{animation:none}
+  }
+</style>
+
+<div class="cv2">
+  <div class="topbar">
+    <div class="brand"><b>Closer</b> · V2</div>
+    <div class="tag-mini">product vision · dynamic app</div>
+  </div>
+
+  <header class="wrap hero">
+    <div>
+      <div class="kicker"><span class="dot-live"></span><span class="eyebrow">GCU · live on campus</span></div>
+      <h1>Match when you <span class="u">actually<br>cross paths.</span></h1>
+      <p class="sub">V1 is a waitlist. V2 is the real thing: an app that knows when two people were in the same place at the same time, and turns that into a reason to say hi.</p>
+      <div class="stackline">
+        <span class="chip on">Next.js</span>
+        <span class="chip on">Vercel</span>
+        <span class="chip on">Supabase</span>
+        <span class="chip">PostGIS</span>
+        <span class="chip">Realtime</span>
+        <span class="chip">n8n</span>
+      </div>
+    </div>
+    <div class="radar" aria-hidden="true">
+      <canvas id="radarCanvas" width="360" height="360"></canvas>
+      <div class="cap">proximity engine · you + 3 nearby</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section>
+      <div class="sec-head">
+        <span class="eyebrow">the shift</span>
+        <h2>From a page that collects emails to an app that reads the room.</h2>
+        <p>Same brand, same promise. What changes is that V2 can actually see proximity, hold real accounts, and react live.</p>
+      </div>
+      <div class="shift">
+        <div class="card">
+          <div class="lab">V1 · today</div>
+          <h3>Static waitlist</h3>
+          <ul>
+            <li>One HTML page on Netlify</li>
+            <li>Emails land in Netlify Forms, siloed</li>
+            <li>No accounts, no data you can query</li>
+            <li>Nothing happens after someone signs up</li>
+          </ul>
+        </div>
+        <div class="card v2">
+          <div class="lab">V2 · the app</div>
+          <h3>Live, proximity-aware</h3>
+          <ul>
+            <li>Next.js app on Vercel, preview URL per change</li>
+            <li>Real GCU accounts behind a .edu gate</li>
+            <li>Postgres you own, with geo-queries for "crossed paths"</li>
+            <li>Live matches and "you're both here now" nudges</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <span class="eyebrow">the app</span>
+        <h2>Three screens that only work because the backend is live.</h2>
+        <p>Every screen below leans on something a static page can't do: geo-proximity, real identity, or realtime presence.</p>
+      </div>
+      <div class="phones">
+
+        <div class="phonewrap">
+          <div class="phone"><div class="screen">
+            <div class="st"><span class="title">Crossed paths</span><span class="live-pill"><i></i>ON CAMPUS</span></div>
+            <div class="feed">
+              <div class="pcard">
+                <div class="ph g1"><div class="meta"><div class="nm">Maya, 20</div><div class="cross">crossed paths 2:14 PM · Library Commons</div></div></div>
+                <div class="row"><span class="tagx">3rd time this week</span><span class="acts"><span class="btnc">✕</span><span class="btnc y">♥</span></span></div>
+              </div>
+              <div class="pcard">
+                <div class="ph g3"><div class="meta"><div class="nm">Devon, 21</div><div class="cross">crossed paths 11:02 AM · Juniper Café</div></div></div>
+                <div class="row"><span class="tagx">same 8 AM lecture</span><span class="acts"><span class="btnc">✕</span><span class="btnc y">♥</span></span></div>
+              </div>
+            </div>
+          </div></div>
+          <div class="scap">Discover · PostGIS finds who you physically passed</div>
+        </div>
+
+        <div class="phonewrap">
+          <div class="phone"><div class="screen">
+            <div class="match">
+              <div class="avpair"><div class="av g1"></div><div class="av g2"></div></div>
+              <span class="eyebrow">you keep crossing paths</span>
+              <h3>You and Maya matched.</h3>
+              <p class="mp">You've been in the same place 3 times this week. Say hi before your next class.</p>
+              <button class="wave">Send a wave</button>
+            </div>
+          </div></div>
+          <div class="scap">Match · Supabase Realtime fires the moment it's mutual</div>
+        </div>
+
+        <div class="phonewrap">
+          <div class="phone"><div class="screen">
+            <div class="st"><span class="title">Maya</span><span class="live-pill"><i></i>HERE NOW</span></div>
+            <div class="presence"><span class="dot-live"></span><span class="txt">You're both in the Student Union right now.</span></div>
+            <div class="feed" style="gap:8px;justify-content:flex-end;flex:1">
+              <div class="bub them">wait, library table by the window? that was you 😄</div>
+              <div class="bub me">ha yes. coffee bar in 5?</div>
+              <div class="bub them">omw</div>
+            </div>
+          </div></div>
+          <div class="scap">Meet · live presence turns a match into a real hello</div>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <span class="eyebrow">how it works</span>
+        <h2>The stack, and why each piece is there.</h2>
+        <p>Next.js on Vercel is the app. Supabase is everything stateful. n8n is the async glue. No piece is there for fashion.</p>
+      </div>
+      <div class="flow">
+        <div class="fnode"><div class="k">who</div><div class="t">GCU student</div><p>Opens Closer on their phone, shares location while on campus.</p><div class="tech">browser · PWA</div></div>
+        <div class="fnode h"><div class="k">the app</div><div class="t">Next.js on Vercel</div><p>UI, server actions, and API routes. Ships on every push with its own preview URL.</p><div class="tech">next.js · vercel edge</div></div>
+        <div class="fnode h"><div class="k">the backend</div><div class="t">Supabase</div><p>Auth, Postgres + PostGIS, Realtime, and Storage. One service, row-level secured.</p><div class="tech">postgres · postgis · realtime</div></div>
+        <div class="fnode"><div class="k">the glue</div><div class="t">n8n</div><p>Polls new signups and events, routes them to the CRM, safety review, and digests.</p><div class="tech">self-hosted · scheduled</div></div>
+      </div>
+
+      <div class="caps">
+        <div class="cap-c"><div class="n">01 · identity</div><h4>Real students only</h4><p>A GCU .edu email gate so every profile is a verified classmate, not a bot or a stranger three cities over.</p><span class="by">Supabase Auth</span></div>
+        <div class="cap-c"><div class="n">02 · the core</div><h4>The proximity engine</h4><p>Location pings become geo-points. PostGIS answers "who did I cross paths with, where, and how often." This is Closer's whole reason to exist.</p><span class="by">Postgres + PostGIS</span></div>
+        <div class="cap-c"><div class="n">03 · live</div><h4>Matches and presence</h4><p>A mutual like fires instantly, and "you're both here now" appears while it still matters. No refresh.</p><span class="by">Supabase Realtime</span></div>
+        <div class="cap-c"><div class="n">04 · safety</div><h4>Yours by default</h4><p>Row Level Security means a student only ever reads what they're allowed to. Photos live in private Storage buckets.</p><span class="by">RLS + Storage</span></div>
+        <div class="cap-c"><div class="n">05 · ship speed</div><h4>Preview every change</h4><p>Every edit gets a live Vercel URL to test on a real phone before it's real for anyone else.</p><span class="by">Vercel</span></div>
+        <div class="cap-c"><div class="n">06 · off-app work</div><h4>Runs without you</h4><p>New signups route to the CRM, flagged reports reach you, and a weekly "who you missed" digest goes out. All in n8n.</p><span class="by">n8n</span></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <span class="eyebrow">build path</span>
+        <h2>Five steps from waitlist to launch.</h2>
+        <p>Ordered so something real ships at each step. Status reflects what's wired today.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="no">01</span><div><h4>Waitlist to Supabase</h4><p>Point the current signup form at a real signups table. Keep Netlify as a fallback until it's proven.</p></div><span class="state ready">ready to wire</span></div>
+        <div class="step"><span class="no">02</span><div><h4>Auth and profiles</h4><p>.edu gate, profile creation, photos in Storage. Closer becomes an account, not an email.</p></div><span class="state next">next</span></div>
+        <div class="step"><span class="no">03</span><div><h4>The proximity engine</h4><p>Location ingestion and the PostGIS "crossed paths" query. The Discover feed goes real.</p></div><span class="state later">then</span></div>
+        <div class="step"><span class="no">04</span><div><h4>Realtime match and meet</h4><p>Mutual-like events, presence, and chat over Supabase Realtime.</p></div><span class="state later">then</span></div>
+        <div class="step"><span class="no">05</span><div><h4>Launch on Vercel</h4><p>Custom domain, edge hosting, and the n8n automations live. Ship to GCU.</p></div><span class="state later">then</span></div>
+      </div>
+    </section>
+
+    <div class="foot">
+      <span>Closer V2 · proximity-first · GCU</span>
+      <span>Next.js + Vercel + Supabase + n8n</span>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  var c = document.getElementById('radarCanvas');
+  if(!c || !c.getContext) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ctx = c.getContext('2d');
+  var W = c.width, H = c.height, cx = W/2, cy = H/2, R = Math.min(W,H)/2 - 8;
+  // three "nearby" people at fixed angles/radii
+  var people = [{a:-0.6,r:0.55},{a:2.2,r:0.78},{a:3.7,r:0.4}];
+  function ring(rad, alpha){ ctx.beginPath(); ctx.arc(cx,cy,rad,0,Math.PI*2);
+    ctx.strokeStyle='rgba(255,124,51,'+alpha+')'; ctx.lineWidth=1; ctx.stroke(); }
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    // static rings
+    for(var i=1;i<=3;i++) ring(R*i/3, 0.10);
+    // pulsing outward ring
+    var pr = (t/2600 % 1);
+    ring(R*pr, 0.35*(1-pr));
+    // sweep
+    if(!reduce){
+      var ang = t/1400 % (Math.PI*2);
+      var grad = ctx.createLinearGradient(cx,cy, cx+Math.cos(ang)*R, cy+Math.sin(ang)*R);
+      grad.addColorStop(0,'rgba(255,124,51,.28)'); grad.addColorStop(1,'rgba(255,124,51,0)');
+      ctx.beginPath(); ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,R,ang,ang+0.5); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+    }
+    // you
+    ctx.beginPath(); ctx.arc(cx,cy,5,0,Math.PI*2); ctx.fillStyle='#f6efe4'; ctx.fill();
+    // nearby people (cyan = live proximity)
+    people.forEach(function(p,idx){
+      var pulse = reduce?0:Math.sin(t/600 + idx)*3;
+      var px = cx + Math.cos(p.a)*R*p.r, py = cy + Math.sin(p.a)*R*p.r;
+      ctx.beginPath(); ctx.arc(px,py,4+ (idx===0?1:0),0,Math.PI*2);
+      ctx.fillStyle = idx===0 ? '#ff7e33' : '#2ec5ff'; ctx.fill();
+      ctx.beginPath(); ctx.arc(px,py,7+pulse,0,Math.PI*2);
+      ctx.strokeStyle='rgba(46,197,255,.35)'; ctx.lineWidth=1; ctx.stroke();
+      if(idx===0){ // line to the one you keep crossing
+        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(px,py);
+        ctx.strokeStyle='rgba(255,124,51,.4)'; ctx.setLineDash([3,4]); ctx.stroke(); ctx.setLineDash([]);
+      }
+    });
+    if(!reduce) requestAnimationFrame(draw);
+  }
+  if(reduce){ draw(1200); } else { requestAnimationFrame(draw); }
+})();
+</script>
