@@ -17,7 +17,7 @@
 <style>
   :root{
     --bg:#e7f3fe;--bg2:#dcecfb;--surface:#ffffff;--surface2:#e3effc;--line:rgba(23,60,110,0.13);
-    --text:#142038;--muted:#5f7291;--muted2:#93a5c0;
+    --text:#142038;--muted:#46587a;--muted2:#566a8c;
     --orange:#ff5c56;--orange2:#f43f6e;--sand:#f59e0b;--cactus:#12b981;--cactus2:#0ea371;
     --grad:linear-gradient(135deg,#ff9d45 0%,#ff5c56 45%,#f43f6e 100%);
     --ongrad:#ffffff;
@@ -1059,7 +1059,7 @@
   }
   function buyCloserPlus(){
     document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star">'+ic('star')+'</div>'
-      +'<h2>Closer+</h2><p>Full portfolio forever, extra priority matches, and no ads. In the demo, consider it yours.</p>'
+      +'<h2>Closer+</h2><div class="pri-count" style="font-size:15px">$4.99/mo<span style="color:var(--muted);font-weight:400;font-family:Inter"> · cancel anytime</span></div><p>Your full portfolio forever, unlimited priority matches, and zero ads. Founding members lock this rate for life.</p>'
       +'<button class="btn" onclick="closeOverlay(\'priorityModal\');portfolioUnlocked=true;renderPortfolio(document.getElementById(\'searchBox\').value);toastNow(\'star\',\'Closer+ active, portfolio unlocked\')">Activate Closer+ (demo)</button>'
       +'<div class="dismiss" onclick="closeOverlay(\'priorityModal\')">Maybe later</div></div>';
     showOverlay('priorityModal');
