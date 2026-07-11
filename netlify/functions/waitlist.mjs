@@ -151,7 +151,7 @@ export default async (req) => {
     await store.setJSON(`lead:${Date.now()}:${phone}`, vlead)
     await store.delete(`pending:${phone}`)
     await notify(vlead)
-    await sendSms(phone, welcomeMsg(vlead)) // welcome text the moment they land on the list
+    // No immediate welcome text: the drip sends the processing/position and acceptance texts on a delay.
     return json({ ok: true, verified: true })
   }
 
@@ -184,6 +184,8 @@ export default async (req) => {
     for (const b of leads.blobs) { await store.delete(b.key); n++ }
     const pend = await store.list({ prefix: 'pending:' })
     for (const b of pend.blobs) { await store.delete(b.key); n++ }
+    const cnt = await store.list({ prefix: 'accepted_count:' })
+    for (const b of cnt.blobs) { await store.delete(b.key) }
     return json({ ok: true, cleared: n })
   }
 
@@ -214,6 +216,60 @@ export default async (req) => {
       if (sms.sent) texted++
     }
     return json({ ok: true, accepted, texted, sms: twilioReady() ? 'on' : 'off, add Twilio to text them' })
+  }
+
+  // CRON + ADMIN: one drip pass. Texts a processing/position update at PROCESSING_DELAY_MIN,
+  // then accepts eligible leads (oldest first) at ACCEPT_DELAY_MIN, capped at DAILY_ACCEPT_CAP per day.
+  if (action === 'drip') {
+    const key = url.searchParams.get('key')
+    if (key !== (process.env.WAITLIST_ADMIN_KEY || 'set-a-key')) return json({ ok: false }, 401)
+    const fast = url.searchParams.get('fast') // test override: treat delays as 0
+    const PROC_MIN = fast ? 0 : Number(process.env.PROCESSING_DELAY_MIN || 60)
+    const ACC_MIN = fast ? 0 : Number(process.env.ACCEPT_DELAY_MIN || 120)
+    const CAP = Number(url.searchParams.get('cap') || process.env.DAILY_ACCEPT_CAP || 100)
+    const now = Date.now()
+    const today = new Date().toISOString().slice(0, 10)
+    const countKey = `accepted_count:${today}`
+    const cObj = await store.get(countKey, { type: 'json', consistency: 'strong' })
+    let acceptedToday = (cObj && cObj.n) || 0
+
+    const { blobs } = await store.list({ prefix: 'lead:' })
+    const leads = []
+    for (const b of blobs) {
+      const v = await store.get(b.key, { type: 'json' })
+      if (v) leads.push({ k: b.key, d: v })
+    }
+    leads.sort((a, b) => (a.d.ts < b.d.ts ? -1 : 1)) // FIFO, oldest signup first
+    const pending = leads.filter((x) => !x.d.accepted)
+
+    let processed = 0
+    for (let i = 0; i < pending.length; i++) {
+      const { k, d } = pending[i]
+      const ageMin = (now - Date.parse(d.ts)) / 60000
+      if (!d.procTexted && ageMin >= PROC_MIN) {
+        d.procTexted = true
+        await store.setJSON(k, d)
+        await sendSms(d.phone, `Closer is reviewing your account. You are about number ${i + 1} in line at GCU. We'll text you the moment you're in.`)
+        processed++
+      }
+    }
+
+    let accepted = 0
+    for (const { k, d } of pending) {
+      if (acceptedToday >= CAP) break
+      if (d.accepted) continue
+      const ageMin = (now - Date.parse(d.ts)) / 60000
+      if (ageMin >= ACC_MIN) {
+        d.accepted = true
+        d.acceptedAt = new Date().toISOString()
+        await store.setJSON(k, d)
+        await sendSms(d.phone, "You're in. Closer just accepted you at GCU. Open the app and start crossing paths: https://closer-gcu.netlify.app")
+        acceptedToday++
+        accepted++
+      }
+    }
+    await store.setJSON(countKey, { n: acceptedToday })
+    return json({ ok: true, processed, accepted, acceptedToday, cap: CAP, sms: twilioReady() ? 'on' : 'off' })
   }
 
   return json({ ok: false, error: 'unknown-action' }, 400)
