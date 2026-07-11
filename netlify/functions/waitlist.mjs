@@ -7,8 +7,13 @@ import { getStore } from '@netlify/blobs'
 // GET  ?action=list&key=... (admin)                        -> returns all captured leads as JSON.
 // GET  ?action=export&key=... (admin)                      -> returns all leads as CSV.
 
+const CORS = {
+  'access-control-allow-origin': '*',
+  'access-control-allow-methods': 'GET,POST,OPTIONS',
+  'access-control-allow-headers': 'content-type',
+}
 const json = (obj, status = 200) =>
-  new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json' } })
+  new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json', ...CORS } })
 
 const isGcu = (e) => /@(my\.)?gcu\.edu$/i.test(String(e || '').trim())
 const validEmail = (e) => /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(String(e || '').trim())
@@ -81,6 +86,7 @@ async function readBody(req) {
 }
 
 export default async (req) => {
+  if (req.method === 'OPTIONS') return new Response('', { status: 204, headers: CORS })
   const url = new URL(req.url)
   const action = url.searchParams.get('action')
 

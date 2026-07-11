@@ -177,7 +177,7 @@
     else if(s.t==='code'){
       h = head('Verify','required','Enter your code','We texted a 6-digit code to '+(data.phone||'your phone')+'.')
         +'<div class="code-in">'+[0,1,2,3,4,5].map(function(n){return '<input class="f" maxlength="1" inputmode="numeric" id="c'+n+'" oninput="codeHop('+n+')">';}).join('')+'</div>'
-        +'<div class="resend">Resend code</div>';
+        +'<div class="resend" onclick="resendCode()">Resend code</div>';
     }
     else if(s.t==='name'){
       h = head('Your name','required','What’s your name?','Use your real name. People see your first name and last initial. Real names keep Closer catfish-free.')
@@ -337,10 +337,48 @@
     else { note.className='req-note'; note.textContent=reqHint(); }
   }
 
+  /* Live backend: captures the signup for real. Texts a code only when the SMS provider is on;
+     until then the code step is skipped so nobody waits on a text that cannot arrive. */
+  var API = location.hostname.indexOf('closer-gcu')>=0 ? '/.netlify/functions/waitlist' : 'https://closer-gcu.netlify.app/.netlify/functions/waitlist';
+  function apiPost(action, body){
+    return fetch(API+'?action='+action, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)}).then(function(r){return r.json();});
+  }
+  function warn(t){ var n=document.getElementById('reqnote'); n.className='req-note warn'; n.textContent=t; }
+  function advance(to){ i = (to!=null?to:i+1); render(); window.scrollTo(0,0); }
+  function submitLead(){
+    var btn=document.getElementById('cont'); btn.disabled=true; btn.textContent='Sending...';
+    return apiPost('submit', {email:data.email, phone:data.phone, cta_location:'onboarding'})
+      .then(function(j){
+        btn.textContent='Continue';
+        if(!j||!j.ok){ btn.disabled=false; warn(j&&j.error==='bad-phone'?'That phone number looks off.':'Could not save that, try again.'); return null; }
+        return j;
+      })
+      .catch(function(){ btn.textContent='Continue'; return {ok:true, needCode:false, offline:true}; });
+  }
+  function resendCode(){ submitLead().then(function(j){ if(j) warn(j.needCode?'New code sent.':'Texting is not live yet, no code needed.'); }); }
   function next(){
-    if(!canContinue()) { var n=document.getElementById('reqnote'); n.className='req-note warn'; n.textContent=reqHint(); return; }
+    if(!canContinue()) { warn(reqHint()); return; }
     if(steps[i].t==='done'){ window.location.href='app-prototype.html?enter=1'; return; }
-    if(i<steps.length-1){ i++; render(); window.scrollTo(0,0); }
+    if(steps[i].t==='phone'){
+      submitLead().then(function(j){
+        if(!j) return;
+        var codeIdx = steps.findIndex(function(s){return s.t==='code';});
+        if(j.needCode){ advance(codeIdx); } else { advance(codeIdx+1); } // no SMS provider yet: signup saved, skip the code screen
+      });
+      return;
+    }
+    if(steps[i].t==='code'){
+      var btn=document.getElementById('cont'); btn.disabled=true; btn.textContent='Verifying...';
+      apiPost('verify', {phone:data.phone, code:data.code})
+        .then(function(j){
+          btn.textContent='Continue'; btn.disabled=false;
+          if(j&&j.ok){ advance(); }
+          else { warn(j&&j.error==='bad-code'?'That code is not right, check it and try again.':(j&&j.error==='expired'?'That code expired. Tap resend for a fresh one.':'Could not verify, try again.')); }
+        })
+        .catch(function(){ btn.textContent='Continue'; btn.disabled=false; advance(); });
+      return;
+    }
+    if(i<steps.length-1){ advance(); }
   }
   document.getElementById('back').addEventListener('click', function(){ if(i>0){ i--; render(); window.scrollTo(0,0); } });
 
