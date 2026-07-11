@@ -118,7 +118,7 @@
   .pphoto .pinit{font-family:'Anton';font-weight:700;font-size:34px;color:rgba(22,10,3,.85)}
   .plocmini{position:absolute;bottom:8px;right:8px;display:inline-flex;align-items:center;gap:3px;font-size:10px;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);padding:4px 8px;border-radius:999px;font-weight:600;color:#fff}
   .plocmini .ic{width:11px;height:11px}
-  .badge-match{position:absolute;top:8px;left:8px;font-size:9px;background:var(--cactus2);color:#06301f;padding:3px 7px;border-radius:6px;font-weight:700;font-family:'Anton';letter-spacing:.04em}
+  .badge-match{position:absolute;top:8px;left:8px;font-size:9px;background:linear-gradient(135deg,#f43f6e,#a855f7);color:#fff;padding:3px 8px;border-radius:999px;font-weight:700;font-family:'Anton';letter-spacing:.04em}
   .pbody{padding:11px 12px 13px}
   .pbody .pn{font-size:15px}
   .psub{font-size:11px;color:var(--muted2);margin-top:3px;text-transform:uppercase;letter-spacing:.03em}
@@ -218,6 +218,7 @@
   .posh-note .d{width:6px;height:6px;border-radius:50%;background:var(--cactus2)}
 
   /* MESSAGES */
+  #v-messages .vbody{padding-left:20px;padding-right:20px}
   .hearts-strip{margin-bottom:4px}
   .hs-title{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:7px}
   .hs-title .n{background:var(--grad);color:var(--ongrad);border-radius:999px;padding:1px 8px;font-size:10px;font-family:'Anton';font-weight:700}
@@ -309,7 +310,7 @@
   .d-photo-grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 42%,var(--bg))}
   .d-showcase{position:absolute;top:18px;left:18px;display:flex;align-items:center;gap:5px;font-size:10px;background:var(--grad);color:#fff;padding:5px 11px;border-radius:999px;font-weight:700;font-family:'Anton';letter-spacing:.05em;z-index:2}.d-showcase .ic{width:12px;height:12px}
   .d-name{position:absolute;bottom:14px;left:20px;z-index:2;font-family:'Anton';font-weight:700;font-size:28px;color:var(--text)}
-  .mini-badge{font-size:10px;background:var(--cactus2);color:#06301f;padding:2px 7px;border-radius:6px;font-family:'Anton';font-weight:700;letter-spacing:.04em;vertical-align:middle}
+  .mini-badge{font-size:10px;background:linear-gradient(135deg,#f43f6e,#a855f7);color:#fff;padding:2px 8px;border-radius:999px;font-family:'Anton';font-weight:700;letter-spacing:.04em;vertical-align:middle}
   .d-body{padding:16px 20px 30px;overflow-y:auto;flex:1}.d-body::-webkit-scrollbar{width:0}
   .d-cross{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
   .d-loc{display:inline-flex;align-items:center;gap:4px;color:var(--orange2);background:rgba(255,92,0,.1);padding:4px 10px;border-radius:999px}.d-loc .ic{width:12px;height:12px}
@@ -995,6 +996,8 @@
     {id:4,mo:'JUL',dy:'25',name:'Summer Splash',venue:'Rivers Pool',going:312,cross:61,score:64,v:0}
   ];
   var hereOrder=[6,10,8,9,5,3]; var hereIdx=0;
+  /* hearts stay warm: sunset and purple-red only, no blue bubbles in Messages */
+  var HEARTG=['linear-gradient(135deg,#ff8a4c,#f43f6e)','linear-gradient(135deg,#f43f6e,#a855f7)','linear-gradient(135deg,#ffb14c,#ff5c7a)','linear-gradient(135deg,#ff5c56,#d946ef)'];
   var PH={1:['women',44],2:['men',32],3:['women',68],4:['women',12],5:['men',75],6:['women',65],7:['women',90],8:['men',41],9:['women',33],10:['women',21],11:['men',55],12:['women',9]};
   people.forEach(function(p){ var g=PH[p.id]; if(g) p.photo='https://randomuser.me/api/portraits/'+g[0]+'/'+g[1]+'.jpg'; });
   /* rolling 7-day portfolio: how many days ago each crossing happened */
@@ -1192,7 +1195,7 @@
     document.getElementById('hearts-row').innerHTML=hearts.map(function(p){
       var rv=revealed[p.id];
       var sz=48+Math.min(p.times,6)*7;
-      return '<div class="hbubble" onclick="revealHeart('+p.id+')"><div class="ring" style="width:'+sz+'px;height:'+sz+'px"><div class="av'+(rv?'':' blur')+'" style="background:'+G[p.g]+';font-size:'+Math.round(sz*0.32)+'px">'+(rv?p.init:'?')+'</div><div class="heart-dot">'+ic('heart')+'</div></div><div class="lbl">'+(rv?p.name:p.times+'x')+'</div></div>';
+      return '<div class="hbubble" onclick="revealHeart('+p.id+')"><div class="ring" style="width:'+sz+'px;height:'+sz+'px"><div class="av'+(rv?'':' blur')+'" style="background:'+HEARTG[p.g%HEARTG.length]+';font-size:'+Math.round(sz*0.32)+'px">'+(rv?p.init:'?')+'</div><div class="heart-dot">'+ic('heart')+'</div></div><div class="lbl">'+(rv?p.name:p.times+'x')+'</div></div>';
     }).join('');
     renderConv();
   }
@@ -1201,7 +1204,7 @@
     if(!list.length){ document.getElementById('conv-list').innerHTML='<div class="empty">Chats open when you match. Reveal a heart above, or send one of your own.</div>'; return; }
     document.getElementById('conv-list').innerHTML=list.map(function(p,idx){
       var prev=p.heart&&revealed[p.id]?'<span style="color:var(--orange2)">'+p.heart+'</span>':'You matched. Say something.';
-      return '<div class="conv" onclick="openChat('+p.id+')">'+av(p,'sm')+'<div class="ci"><div class="cn">'+p.name+', '+p.age+' <span class="mini-badge">MATCHED</span></div><div class="cp">'+prev+'</div></div><div class="ct">'+p.times+'x</div></div>';
+      return '<div class="conv" onclick="openChat('+p.id+')">'+av(p,'sm')+'<div class="ci"><div class="cn">'+p.name+', '+p.age+'</div><div class="cp">'+prev+'</div></div><div class="ct">'+p.times+'x</div></div>';
     }).join('');
   }
   function revealHeart(id){
@@ -1626,14 +1629,15 @@
   }
   function addEvent(){
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('plus')+'</div><h3>Add an event</h3><p>Drop the location and the date. No names, the place is the event. We check every pin against a real map location before it goes live.</p>'
-      +'<input id="evLoc" placeholder="Location (e.g. Rivers Pool)" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:10px;outline:none">'
+      +'<input id="evLoc" placeholder="Location, two words max (e.g. Rivers Pool)" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:10px;outline:none">'
       +'<input id="evDate" type="date" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:14px;outline:none">'
       +'<button class="btn" onclick="postEvent()">'+ic('plus')+' Submit for location check</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>';
     showOverlay('heartSheet');
   }
   function postEvent(){
-    var loc=escP(document.getElementById('evLoc').value||''); var d=document.getElementById('evDate').value;
+    var loc=escP(document.getElementById('evLoc').value||'').trim(); var d=document.getElementById('evDate').value;
     if(!loc||!d){ toastNow('pin','Add the location and the date first.'); return; }
+    if(loc.split(/\s+/).length>2){ toastNow('pin','Keep the location to two words max.'); return; }
     var MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
     var dt=new Date(d+'T12:00:00');
     events.push({id:events.length+1,mo:MO[dt.getMonth()],dy:String(dt.getDate()),name:'',venue:loc,going:1,cross:2,score:1,v:0});
