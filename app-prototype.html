@@ -606,14 +606,13 @@
   #hotMap.leaflet-container{background:var(--surface2);border-radius:20px;font-family:'Inter',sans-serif}
   /* Blue duotone map: invert the dark basemap by day so streets read dark blue on light blue */
   /* blue duotone: a color wash over the whole map, streets keep their contrast and go blue */
-  #hotMap .leaflet-tile{filter:invert(1) sepia(1) saturate(2.8) hue-rotate(-25deg) contrast(1.12)}
+  
+  #hotMap .leaflet-tile{mix-blend-mode:normal} /* Leaflet 1.9 plus-lighter washed our duotone blue */
   body.night #hotMap .leaflet-tile{filter:none}
-  #hotMap.leaflet-container{background:#fdeedd}
-  #hotMap.leaflet-container::after{content:"";position:absolute;inset:0;z-index:450;pointer-events:none;border-radius:20px;background:linear-gradient(135deg,rgba(255,157,69,.30),rgba(255,92,86,.14) 55%,rgba(244,63,110,.26));mix-blend-mode:multiply}
+  #hotMap.leaflet-container{background:#d9eafc}
+  
   body.night #hotMap.leaflet-container::after{display:none}
   #hotMap{position:relative}
-  #hotMap::after{content:"";position:absolute;inset:0;z-index:500;pointer-events:none;background:#2f6fd0;mix-blend-mode:color}
-  #hotMap::before{content:"";position:absolute;inset:0;z-index:501;pointer-events:none;background:rgba(38,95,190,.16);mix-blend-mode:multiply}
   body.night #hotMap::after,body.night #hotMap::before{display:none}
   .leaflet-container .leaflet-control-attribution{background:rgba(255,255,255,.6);font-size:8px;color:#7a8aa5}
   body.night .leaflet-container .leaflet-control-attribution{background:rgba(10,14,30,.6);color:#5e6e96}
@@ -645,6 +644,11 @@
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute"><defs>
+  <filter id="mapduo" color-interpolation-filters="sRGB">
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer><feFuncR type="linear" slope="8" intercept="-0.2"/><feFuncG type="linear" slope="8" intercept="-0.2"/><feFuncB type="linear" slope="8" intercept="-0.2"/></feComponentTransfer>
+    <feComponentTransfer><feFuncR type="discrete" tableValues="0.85 1 1 0.95 0.13"/><feFuncG type="discrete" tableValues="0.91 0.50 0.50 0.38 0.16"/><feFuncB type="discrete" tableValues="0.98 0.22 0.22 0.12 0.26"/></feComponentTransfer>
+  </filter>
   <linearGradient id="wg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9d45"/><stop offset="0.45" stop-color="#ff5c56"/><stop offset="1" stop-color="#f43f6e"/></linearGradient>
 </defs></svg>
 
@@ -1575,7 +1579,23 @@
       lmap=L.map('hotMap',{zoomControl:false,attributionControl:true}).setView(userLoc,13);
       lmap.attributionControl.setPrefix('');
       /* Apple-Maps-style cartography: CARTO Positron by day, Dark Matter after sunset, retina tiles */
-      tileLight=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'});
+      /* Day map: recolor dark tiles pixel-by-pixel. Ground light blue, roads brand orange, labels ink. */
+      var DuoLayer=L.TileLayer.extend({ createTile:function(coords,done){
+        var c=document.createElement('canvas'); c.width=c.height=256;
+        var out=new Image(); out.className='leaflet-tile'; out.width=out.height=256;
+        var img=new Image(); img.crossOrigin='anonymous';
+        img.onload=function(){ var x=c.getContext('2d'); x.drawImage(img,0,0,256,256);
+          try{ var im=x.getImageData(0,0,256,256), d=im.data;
+            for(var i=0;i<d.length;i+=4){ var l=d[i];
+              if(l<11){ d[i]=217;d[i+1]=232;d[i+2]=250; }
+              else if(l<140){ d[i]=255;d[i+1]=112;d[i+2]=51; }
+              else { d[i]=23;d[i+1]=26;d[i+2]=46; } }
+            x.putImageData(im,0,0); }catch(e){}
+          out.src=c.toDataURL(); done(null,out); };
+        img.onerror=function(){ done(null,out); };
+        img.src='https://'+String.fromCharCode(97+Math.abs(coords.x+coords.y)%3)+'.basemaps.cartocdn.com/dark_all/'+coords.z+'/'+coords.x+'/'+coords.y+'.png';
+        return out; } });
+      tileLight=new DuoLayer('',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'});
       tileDark=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'});
       (night?tileDark:tileLight).addTo(lmap);
       youMarker=L.marker(userLoc,{icon:L.divIcon({className:'',html:'<div class="you-pin"></div>',iconSize:[22,22],iconAnchor:[11,11]}),zIndexOffset:1000}).addTo(lmap).on('click',function(){ openSuggest(); });
