@@ -421,6 +421,14 @@
   @keyframes conf{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(360deg)}}
   /* daily-loop economy: drops, locked recents, hotspot-gated Here Now, colored chats */
   .drop-clock{font-size:23px}
+  .drop-card.tappable{cursor:pointer}
+  .drop-chev{margin-left:auto;display:inline-flex;transition:transform .3s;color:var(--muted2)}
+  .drop-chev .ic{width:15px;height:15px}
+  .drop-card.open .drop-chev{transform:rotate(90deg)}
+  .drop-count{font-size:13px;font-weight:600;color:var(--text);margin-top:4px}
+  .drop-x{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s cubic-bezier(.5,0,.15,1),opacity .3s}
+  .drop-card.open .drop-x{max-height:300px;opacity:1}
+  .drop-card .drop-sub{margin-top:10px}
   .drop-actions{display:flex;flex-direction:column;gap:8px;margin-top:14px}
   .dbtn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--surface2);border:1px solid var(--line);color:var(--text);font-family:'Anton';font-weight:400;font-size:13px;letter-spacing:.02em;padding:12px;border-radius:12px;cursor:pointer}
   .dbtn .ic{width:16px;height:16px;color:var(--orange2)}
@@ -980,7 +988,8 @@
 
   /* PATH DROPS: the people you crossed TODAY unlock at the next drop (12h). Cut the wait by going out, or unlock now. */
   var DROP_START=42300; // 11h 45m in seconds
-  var dropSecs=DROP_START, recentsUnlocked=false, dropTimer=null, adForRecents=false;
+  var dropSecs=DROP_START, recentsUnlocked=false, dropTimer=null, adForRecents=false, dropOpen=false;
+  function toggleDrop(){ dropOpen=!dropOpen; var c=document.querySelector('#seg-recent .drop-card'); if(c) c.classList.toggle('open', dropOpen); }
   var justCrossed=[1,2,3,4,5,6,7,8,9,10];
   function fmtBig(s){ var h=Math.floor(s/3600), m=Math.floor((s%3600)/60), r=s%60; return h+':'+(m<10?'0':'')+m+':'+(r<10?'0':'')+r; }
   function recentCardOpen(p){
@@ -1004,12 +1013,13 @@
         + justCrossed.map(function(id){ return recentCardOpen(byId(id)); }).join('');
       return;
     }
-    el.innerHTML='<div class="drop-card"><div class="drop-lab">'+ic('bolt')+'Next path drop</div>'
+    el.innerHTML='<div class="drop-card tappable'+(dropOpen?' open':'')+'" onclick="toggleDrop()"><div class="drop-lab">'+ic('bolt')+'Next path drop<span class="drop-chev">'+ic('chevron')+'</span></div>'
       +'<div class="drop-clock" id="dropClock">'+fmtBig(dropSecs)+'</div>'
-      +'<div class="drop-sub">The '+justCrossed.length+' people you crossed today stay hidden until the drop. Get out to a hotspot to cut the wait, every hotspot you hit takes an hour off. Or unlock them now.</div>'
-      +'<div class="drop-actions"><button class="dbtn" onclick="unlockRecentsAd()">'+ic('spark')+' Watch a video, unlock 10</button>'
-      +'<button class="dbtn" onclick="unlockRecentsAd()">'+ic('pin')+' Unlock the next 30 min</button>'
-      +'<button class="dbtn plus" onclick="buyCloserPlus()">'+ic('star')+' Closer+, unlock now</button></div></div>'
+      +'<div class="drop-count">'+justCrossed.length+' people crossed you today</div>'
+      +'<div class="drop-x"><div class="drop-sub">Hidden until the drop. Every hotspot you hit takes an hour off the clock, or unlock them now.</div>'
+      +'<div class="drop-actions"><button class="dbtn" onclick="event.stopPropagation();unlockRecentsAd()">'+ic('spark')+' Watch a video, unlock 10</button>'
+      +'<button class="dbtn" onclick="event.stopPropagation();unlockRecentsAd()">'+ic('pin')+' Unlock the next 30 min</button>'
+      +'<button class="dbtn plus" onclick="event.stopPropagation();buyCloserPlus()">'+ic('star')+' Closer+, unlock now</button></div></div></div>'
       + justCrossed.slice(0,3).map(function(id){ return lockedRecentCard(byId(id)); }).join('')
       + '<div class="more-locked" onclick="unlockRecentsPrompt()">'+ic('lock')+' '+justCrossed.length+' waiting behind the drop</div>';
   }
