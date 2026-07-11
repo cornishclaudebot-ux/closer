@@ -439,6 +439,8 @@
   .blurav{filter:blur(8px);transform:scale(1.25);border-radius:50%;width:100%;height:100%;object-fit:cover}
   .lockchip{margin-left:auto;width:34px;height:34px;border-radius:50%;background:var(--surface2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted2);flex-shrink:0}.lockchip .ic{width:16px;height:16px}
   .more-locked{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted2);font-size:12.5px;font-weight:600;padding:12px;cursor:pointer}.more-locked .ic{width:14px;height:14px}
+  .reup{margin-left:auto;font-size:11px;font-weight:700;color:#e25822;text-decoration:underline;cursor:pointer}
+  .drop-open.timed{gap:7px}
   .drop-open{display:flex;align-items:center;gap:8px;font-family:'Anton';font-size:14px;color:var(--cactus);margin-bottom:12px}.drop-open .ic{width:16px;height:16px;color:var(--orange)}
   .here-lock{text-align:center;padding:26px 18px}
   .here-lock .hl-ic{position:relative;width:74px;height:74px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--orange2);margin:6px auto 48px}.here-lock .hl-ic svg{width:34px;height:34px;position:relative;z-index:1}
@@ -1023,6 +1025,7 @@
   /* PATH DROPS: the people you crossed TODAY unlock at the next drop (12h). Cut the wait by going out, or unlock now. */
   var DROP_START=42300; // 11h 45m in seconds
   var dropSecs=DROP_START, recentsUnlocked=false, dropTimer=null, adForRecents=false, dropOpen=false;
+  var unlockUntil=0, relockTimer=null, timedUnlock=false; var UNLOCK_MS=60*60*1000;
   function toggleDrop(){ dropOpen=!dropOpen; var c=document.querySelector('#seg-recent .drop-card'); if(c) c.classList.toggle('open', dropOpen); }
   var justCrossed=[1,2,3,4,5,6,7,8,9,10];
   function fmtBig(s){ var h=Math.floor(s/3600), m=Math.floor((s%3600)/60), r=s%60; return h+':'+(m<10?'0':'')+m+':'+(r<10?'0':'')+r; }
@@ -1044,8 +1047,10 @@
     var el=document.getElementById('seg-recent'); if(!el)return;
     var vis=justCrossed.filter(function(id){ return !blocked[id]; });
     if(recentsUnlocked){
-      el.innerHTML='<div class="drop-open">'+ic('bolt')+' Drop open. Everyone who crossed you today.</div>'
-        + vis.map(function(id){ return recentCardOpen(byId(id)); }).join('');
+      var banner = timedUnlock
+        ? '<div class="drop-open timed">'+ic('spark')+' Unlocked, <b id="unlockLeft">'+fmtBig(Math.max(0,Math.round((unlockUntil-Date.now())/1000)))+'</b> left <span class="reup" onclick="unlockRecentsAd()">Watch again to extend</span></div>'
+        : '<div class="drop-open">'+ic('bolt')+' Drop open. Everyone who crossed you today.</div>';
+      el.innerHTML=banner + vis.map(function(id){ return recentCardOpen(byId(id)); }).join('');
       return;
     }
     el.innerHTML='<div class="drop-card tappable'+(dropOpen?' open':'')+'" onclick="toggleDrop()"><div class="drop-lab">'+ic('bolt')+'Next path drop<span class="drop-chev">'+ic('chevron')+'</span></div>'
@@ -1063,6 +1068,8 @@
   function cutDrop(hrs){ if(recentsUnlocked)return; dropSecs=Math.max(0,dropSecs-hrs*3600); if(dropSecs<=0){ openDrop(); } else { var el=document.getElementById('dropClock'); if(el) el.textContent=fmtBig(dropSecs); } }
   function openDrop(){ recentsUnlocked=true; renderRecent(); toastNow('bolt','Your path drop is open','surge'); var v=document.querySelector('.view.active'); if(v) burst(v); }
   function unlockRecentsAd(){ adForRecents=true; watchAd(); }
+  function openForAnHour(){ recentsUnlocked=true; portfolioUnlocked=true; timedUnlock=true; unlockUntil=Date.now()+UNLOCK_MS; clearInterval(relockTimer); relockTimer=setInterval(tickUnlock,1000); renderRecent(); renderPortfolio(''); }
+  function tickUnlock(){ var left=Math.round((unlockUntil-Date.now())/1000); if(left<=0){ clearInterval(relockTimer); recentsUnlocked=false; portfolioUnlocked=false; timedUnlock=false; renderRecent(); renderPortfolio(''); toastNow('lock','Your hour is up. Watch another video to see who crossed you','surge'); return; } var el=document.getElementById('unlockLeft'); if(el) el.textContent=fmtBig(left); }
   function unlockRecentsPrompt(){
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('bolt')+'</div><h3>Skip the wait?</h3><p>See the people you crossed today right now, or hold out for the drop. Every hotspot you visit also takes an hour off the clock.</p>'
       +'<button class="btn" onclick="closeOverlay(\'heartSheet\');unlockRecentsAd()">'+ic('spark')+' Watch a video, unlock now</button>'
@@ -1094,7 +1101,7 @@
   function openUnlock(){
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('lock')+'</div>'
       +'<h3>This crossing is locked</h3><p>Your first 10 crossings are free. Unlock your full portfolio, everyone you have ever crossed paths with.</p>'
-      +'<button class="btn" onclick="closeOverlay(\'heartSheet\');watchAd()" style="margin-bottom:9px">'+ic('spark')+' Watch an ad, unlock 24 hours</button>'
+      +'<button class="btn" onclick="closeOverlay(\'heartSheet\');watchAd()" style="margin-bottom:9px">'+ic('spark')+' Watch an ad, unlock 1 hour</button>'
       +'<button class="btn outline" style="background:transparent;border:1px solid var(--line);color:var(--text)" onclick="closeOverlay(\'heartSheet\');buyCloserPlus()">'+ic('star')+' Closer+, unlock forever</button>'
       +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Not now</div></div>';
     showOverlay('heartSheet');
@@ -1108,7 +1115,7 @@
       +'<div class="ad-brand">FOAM NATION</div><div class="ad-line">SUMMER SPLASH, JUL 25, RIVERS POOL</div>'
       +'<div class="ad-cta">GET TICKETS</div></div>'
       +'<div class="ad-bar"><div class="f" id="adBarF"></div></div>'
-      +'<div class="ad-body"><p id="adNote">Watch to the end to unlock your full portfolio for 24 hours.</p>'
+      +'<div class="ad-body"><p id="adNote">Watch to the end to unlock everyone who crossed you, for 1 hour.</p>'
       +'<button class="btn" id="adClaim" disabled onclick="claimAd()">'+ic('lock')+' Reward in 5...</button></div></div>';
     showOverlay('adModal');
     clearInterval(adTimer);
@@ -1123,10 +1130,9 @@
   }
   function claimAd(){
     closeOverlay('adModal');
-    if(adForRecents){ adForRecents=false; recentsUnlocked=true; renderRecent(); toastNow('spark','Unlocked, here is who crossed you today','surge'); burst(document.getElementById('v-paths')); return; }
-    portfolioUnlocked=true;
-    renderPortfolio('');
-    toastNow('spark','Unlocked for 24 hours','surge');
+    adForRecents=false;
+    openForAnHour();
+    toastNow('spark','Unlocked for 1 hour','surge');
     burst(document.getElementById('v-paths'));
   }
   function buyCloserPlus(){
@@ -1700,7 +1706,7 @@
   }
   function resetProto(){
     ['detailSheet','chatView','matchModal','priorityModal','heartSheet','revealModal','adModal'].forEach(closeOverlay);
-    clearInterval(hotTimer); clearInterval(dropTimer); clearInterval(adTimer); clearTimeout(toastHide); stopToasts(); hereMine={}; portfolioUnlocked=false; isPlus=false; recentsUnlocked=false; dropSecs=DROP_START; atHotspot=false; adForRecents=false; blocked={}; myIncognito=false;
+    clearInterval(hotTimer); clearInterval(dropTimer); clearInterval(adTimer); clearInterval(relockTimer); timedUnlock=false; unlockUntil=0; clearTimeout(toastHide); stopToasts(); hereMine={}; portfolioUnlocked=false; isPlus=false; recentsUnlocked=false; dropSecs=DROP_START; atHotspot=false; adForRecents=false; blocked={}; myIncognito=false;
     document.getElementById('tabbar').style.display='none';
     document.getElementById('login').style.display='flex';
     priorityLeft=10; revealsUsed=0; REVEAL_LIMIT=50; revealed={}; hereIdx=0; applyNight(false); updateCounter();
