@@ -219,6 +219,7 @@
 
   /* MESSAGES */
   #v-messages .vbody{padding-left:20px;padding-right:20px}
+  #v-messages .vbody{padding-left:20px;padding-right:20px}
   .hearts-strip{margin-bottom:4px}
   .hs-title{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:7px}
   .hs-title .n{background:var(--grad);color:var(--ongrad);border-radius:999px;padding:1px 8px;font-size:10px;font-family:'Anton';font-weight:700}
@@ -439,7 +440,7 @@
   .more-locked{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted2);font-size:12.5px;font-weight:600;padding:12px;cursor:pointer}.more-locked .ic{width:14px;height:14px}
   .drop-open{display:flex;align-items:center;gap:8px;font-family:'Anton';font-size:14px;color:var(--cactus);margin-bottom:12px}.drop-open .ic{width:16px;height:16px;color:var(--orange)}
   .here-lock{text-align:center;padding:26px 18px}
-  .here-lock .hl-ic{position:relative;width:74px;height:74px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--orange2);margin:0 auto 18px}.here-lock .hl-ic svg{width:34px;height:34px;position:relative;z-index:1}
+  .here-lock .hl-ic{position:relative;width:74px;height:74px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--orange2);margin:6px auto 48px}.here-lock .hl-ic svg{width:34px;height:34px;position:relative;z-index:1}
   .here-lock .hl-ic::before,.here-lock .hl-ic::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,92,86,.55);animation:hlpulse 2.6s ease-out infinite}
   .here-lock .hl-ic::after{animation-delay:1.3s}
   @keyframes hlpulse{0%{transform:scale(.72);opacity:.9}100%{transform:scale(2.05);opacity:0}}
@@ -586,15 +587,15 @@
   .g-row b{color:var(--text)}
 
   /* EVENTS: sea palette (teal to blue) */
-  #pane-events .ev-card{background:linear-gradient(135deg,rgba(75,224,184,.10),rgba(59,130,246,.10));border-color:rgba(59,130,246,.22)}
+  #pane-events .ev-card{background:linear-gradient(135deg,rgba(255,157,69,.12),rgba(244,63,110,.09));border-color:rgba(244,63,110,.24)}
   #pane-events .ev-rank{color:#fff}
   .ev-flag{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--muted2);cursor:pointer;padding:4px}.ev-flag .ic{width:14px;height:14px}
-  #pane-events .vscore{color:#2f7de1}
-  #pane-events .varrow.up.on{background:rgba(75,224,184,.2);color:#0a9e77;border-color:rgba(18,185,129,.45)}
-  #pane-events .varrow.down.on{background:rgba(59,130,246,.14);color:#2f7de1;border-color:rgba(59,130,246,.4)}
-  #pane-events .for-you{background:linear-gradient(135deg,rgba(75,224,184,.16),rgba(59,130,246,.14));border-color:rgba(59,130,246,.3)}
-  #pane-events .ev-stat b{color:#2f7de1}
-  body.night #pane-events .vscore,body.night #pane-events .ev-stat b{color:#6ab8ff}
+  #pane-events .vscore{color:#ff5c56}
+  #pane-events .varrow.up.on{background:rgba(255,157,69,.24);color:#e25822;border-color:rgba(255,92,86,.5)}
+  #pane-events .varrow.down.on{background:rgba(23,26,46,.07);color:var(--muted);border-color:var(--line)}
+  #pane-events .for-you{background:linear-gradient(135deg,rgba(255,157,69,.18),rgba(244,63,110,.13));border-color:rgba(244,63,110,.28)}
+  #pane-events .ev-stat b{color:#ff5c56}
+  body.night #pane-events .vscore,body.night #pane-events .ev-stat b{color:var(--orange2)}
   .loc-ok{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;font-family:'Anton';letter-spacing:.04em;color:#0a7d5f;background:rgba(18,185,129,.14);border:1px solid rgba(18,185,129,.35);padding:3px 8px;border-radius:999px;margin-top:5px}
   .loc-ok .ic{width:11px;height:11px}
   body.night .loc-ok{color:#7dffc4}
@@ -605,9 +606,11 @@
   #hotMap.leaflet-container{background:var(--surface2);border-radius:20px;font-family:'Inter',sans-serif}
   /* Blue duotone map: invert the dark basemap by day so streets read dark blue on light blue */
   /* blue duotone: a color wash over the whole map, streets keep their contrast and go blue */
-  #hotMap .leaflet-tile{filter:contrast(1.28) saturate(1.1)}
+  #hotMap .leaflet-tile{filter:invert(1) saturate(0) contrast(1.6) brightness(.94)}
   body.night #hotMap .leaflet-tile{filter:none}
-  #hotMap.leaflet-container{background:#d3e7fb}
+  #hotMap.leaflet-container{background:#fdeedd}
+  #hotMap.leaflet-container::after{content:"";position:absolute;inset:0;z-index:450;pointer-events:none;border-radius:20px;background:linear-gradient(135deg,#ff9d45,#ff5c56 55%,#f43f6e);mix-blend-mode:color;opacity:.95}
+  body.night #hotMap.leaflet-container::after{display:none}
   #hotMap{position:relative}
   #hotMap::after{content:"";position:absolute;inset:0;z-index:500;pointer-events:none;background:#2f6fd0;mix-blend-mode:color}
   #hotMap::before{content:"";position:absolute;inset:0;z-index:501;pointer-events:none;background:rgba(38,95,190,.16);mix-blend-mode:multiply}
@@ -1573,7 +1576,7 @@
       lmap=L.map('hotMap',{zoomControl:false,attributionControl:true}).setView(userLoc,13);
       lmap.attributionControl.setPrefix('');
       /* Apple-Maps-style cartography: CARTO Positron by day, Dark Matter after sunset, retina tiles */
-      tileLight=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'});
+      tileLight=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'});
       tileDark=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'});
       (night?tileDark:tileLight).addTo(lmap);
       youMarker=L.marker(userLoc,{icon:L.divIcon({className:'',html:'<div class="you-pin"></div>',iconSize:[22,22],iconAnchor:[11,11]}),zIndexOffset:1000}).addTo(lmap).on('click',function(){ openSuggest(); });
