@@ -16,6 +16,19 @@ const json = (obj, status = 200) =>
   new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json', ...CORS } })
 
 const isGcu = (e) => /@(my\.)?gcu\.edu$/i.test(String(e || '').trim())
+// Every accredited US university email domain (2,393), for campus-by-campus expansion.
+import UNI from './uni-domains.json' with { type: 'json' }
+function schoolFor(email) {
+  const dom = String(email || '').toLowerCase().split('@')[1] || ''
+  if (/(^|\.)gcu\.edu$/.test(dom)) return { slug: 'gcu', name: 'Grand Canyon University' }
+  // match the domain or any registered parent (students often use sub-domains like my.asu.edu)
+  const parts = dom.split('.')
+  for (let i = 0; i < parts.length - 1; i++) {
+    const cand = parts.slice(i).join('.')
+    if (UNI[cand]) return { slug: cand.replace(/\.edu$/, '').replace(/\W+/g, '-'), name: UNI[cand] }
+  }
+  return null
+}
 const validEmail = (e) => /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(String(e || '').trim())
 const digits = (p) => String(p || '').replace(/\D/g, '')
 const e164 = (p) => {
@@ -106,11 +119,13 @@ export default async (req) => {
     if (!validEmail(email)) return json({ ok: false, error: 'bad-email' }, 400)
     if (digits(phone).length < 10) return json({ ok: false, error: 'bad-phone' }, 400)
 
-    const gcu = isGcu(email)
+    const uni = schoolFor(email)
+    if (!uni) return json({ ok: false, error: 'not-university' }, 400) // real school emails only
     const rec = {
       email,
       phone: e164(phone),
-      school: gcu ? 'gcu' : 'other',
+      school: uni.slug,
+      schoolName: uni.name,
       cta: String(d.cta_location || ''),
       ts: new Date().toISOString(),
     }

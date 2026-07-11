@@ -23,7 +23,7 @@
   .bar{flex:1;height:6px;background:var(--surface2);border-radius:999px;overflow:hidden}
   .bar .fill{height:100%;width:0;background:var(--grad);border-radius:999px;transition:width .4s cubic-bezier(.5,0,.15,1)}
   .stepno{font-size:12px;color:var(--muted2);font-weight:600;flex-shrink:0;font-family:'Space Grotesk'}
-  .skip-demo{background:none;border:1px solid var(--line);border-radius:999px;color:var(--muted2);font-size:12px;font-weight:600;padding:6px 12px;cursor:pointer;flex-shrink:0}
+  .skip-demo{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;color:var(--text);font-size:12px;font-weight:700;padding:6px 13px;cursor:pointer;flex-shrink:0;box-shadow:0 2px 10px rgba(23,26,46,.08)}
   .ob-body{flex:1;padding:18px 0 12px;animation:fade .3s ease}
   @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .kick{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#f43f6e;margin-bottom:12px;display:flex;align-items:center;gap:7px}
@@ -100,7 +100,7 @@
     <div class="bar"><div class="fill" id="bar"></div></div>
     <div class="stepno" id="stepno"></div>
     <!-- TEMP: demo-only skip, remove before launch -->
-    <button class="skip-demo" onclick="window.location.href='app-prototype.html?enter=1'">Skip &#8250;</button>
+    <button class="skip-demo" aria-label="Skip onboarding" title="Temporary, remove before launch" onclick="window.location.href='app-prototype.html?enter=1'"><svg width="17" height="17" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="url(#wg)"/><circle cx="14" cy="14" r="8.5" stroke="url(#wg)" stroke-width="1.8" opacity="0.6"/><circle cx="14" cy="14" r="12.5" stroke="url(#wg)" stroke-width="1.4" opacity="0.3"/></svg>Skip</button>
   </div>
   <div class="ob-body" id="body"></div>
   <div class="ob-foot">
@@ -353,7 +353,7 @@
     return apiPost('submit', {email:data.email, phone:data.phone, cta_location:'onboarding'})
       .then(function(j){
         btn.textContent='Continue';
-        if(!j||!j.ok){ btn.disabled=false; warn(j&&j.error==='bad-phone'?'That phone number looks off.':'Could not save that, try again.'); return null; }
+        if(!j||!j.ok){ btn.disabled=false; warn(j&&j.error==='not-university'?'That does not look like a real school email. Use your university address.':(j&&j.error==='bad-phone'?'That phone number looks off.':'Could not save that, try again.')); return null; }
         return j;
       })
       .catch(function(){ btn.textContent='Continue'; return {ok:true, needCode:false, offline:true}; });
