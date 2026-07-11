@@ -435,7 +435,7 @@
   .dbtn .ic{width:16px;height:16px;color:var(--orange2)}
   .dbtn.plus{background:var(--grad);border:none;color:var(--ongrad)}.dbtn.plus .ic{color:var(--ongrad)}
   .pcard.locked-rec{cursor:pointer}.pcard.locked-rec .pn{color:var(--muted)}
-  .blurav{filter:blur(8px)}
+  .blurav{filter:blur(8px);transform:scale(1.25);border-radius:50%;width:100%;height:100%;object-fit:cover}
   .lockchip{margin-left:auto;width:34px;height:34px;border-radius:50%;background:var(--surface2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted2);flex-shrink:0}.lockchip .ic{width:16px;height:16px}
   .more-locked{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted2);font-size:12.5px;font-weight:600;padding:12px;cursor:pointer}.more-locked .ic{width:14px;height:14px}
   .drop-open{display:flex;align-items:center;gap:8px;font-family:'Anton';font-size:14px;color:var(--cactus);margin-bottom:12px}.drop-open .ic{width:16px;height:16px;color:var(--orange)}
@@ -606,10 +606,10 @@
   #hotMap.leaflet-container{background:var(--surface2);border-radius:20px;font-family:'Inter',sans-serif}
   /* Blue duotone map: invert the dark basemap by day so streets read dark blue on light blue */
   /* blue duotone: a color wash over the whole map, streets keep their contrast and go blue */
-  #hotMap .leaflet-tile{filter:invert(1) saturate(0) contrast(1.6) brightness(.94)}
+  #hotMap .leaflet-tile{filter:invert(1) sepia(1) saturate(2.8) hue-rotate(-25deg) contrast(1.12)}
   body.night #hotMap .leaflet-tile{filter:none}
   #hotMap.leaflet-container{background:#fdeedd}
-  #hotMap.leaflet-container::after{content:"";position:absolute;inset:0;z-index:450;pointer-events:none;border-radius:20px;background:linear-gradient(135deg,#ff9d45,#ff5c56 55%,#f43f6e);mix-blend-mode:color;opacity:.95}
+  #hotMap.leaflet-container::after{content:"";position:absolute;inset:0;z-index:450;pointer-events:none;border-radius:20px;background:linear-gradient(135deg,rgba(255,157,69,.30),rgba(255,92,86,.14) 55%,rgba(244,63,110,.26));mix-blend-mode:multiply}
   body.night #hotMap.leaflet-container::after{display:none}
   #hotMap{position:relative}
   #hotMap::after{content:"";position:absolute;inset:0;z-index:500;pointer-events:none;background:#2f6fd0;mix-blend-mode:color}
@@ -697,8 +697,7 @@
               <div class="seg"><button class="on" onclick="seg('recent',this)">Recent</button><button onclick="seg('portfolio',this)">Portfolio</button></div>
               <div id="seg-recent"></div>
               <div id="seg-portfolio" style="display:none">
-                <div class="search"><span id="searchIc"></span><input id="searchBox" placeholder="Search your match portfolio..." oninput="renderPortfolio(this.value)"></div>
-                <div class="port-grid" id="portfolio-grid"></div>
+                  <div class="port-grid" id="portfolio-grid"></div>
               </div>
             </div>
             <div id="pane-spotlight" style="display:none">
@@ -936,7 +935,7 @@
   }
   function icHere(){
     document.getElementById('lockIc').innerHTML=ic('lock');
-    document.getElementById('searchIc').innerHTML=ic('search');
+    
     document.getElementById('priStarIc').innerHTML=ic('star');
     document.getElementById('replayIc').innerHTML=ic('replay');
     document.getElementById('passBtn').innerHTML=ic('x');
@@ -1120,14 +1119,14 @@
     closeOverlay('adModal');
     if(adForRecents){ adForRecents=false; recentsUnlocked=true; renderRecent(); toastNow('spark','Unlocked, here is who crossed you today','surge'); burst(document.getElementById('v-paths')); return; }
     portfolioUnlocked=true;
-    renderPortfolio(document.getElementById('searchBox').value);
+    renderPortfolio('');
     toastNow('spark','Unlocked for 24 hours','surge');
     burst(document.getElementById('v-paths'));
   }
   function buyCloserPlus(){
     document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star">'+ic('star')+'</div>'
       +'<h2>Closer+</h2><div class="pri-count" style="font-size:15px">$4.99/mo<span style="color:var(--muted);font-weight:400;font-family:Inter"> · cancel anytime</span></div><p>Your full portfolio forever, unlimited priority matches, and zero ads. Founding members lock this rate for life.</p>'
-      +'<button class="btn" onclick="closeOverlay(\'priorityModal\');portfolioUnlocked=true;isPlus=true;recentsUnlocked=true;renderPortfolio(document.getElementById(\'searchBox\').value);renderRecent();updateCounter();toastNow(\'star\',\'Closer+ active. Drops open instantly, priority unlimited.\')">Activate Closer+ (demo)</button>'
+      +'<button class="btn" onclick="closeOverlay(\'priorityModal\');portfolioUnlocked=true;isPlus=true;recentsUnlocked=true;renderPortfolio(\'\');renderRecent();updateCounter();toastNow(\'star\',\'Closer+ active. Drops open instantly, priority unlimited.\')">Activate Closer+ (demo)</button>'
       +'<div class="dismiss" onclick="closeOverlay(\'priorityModal\')">Maybe later</div></div>';
     showOverlay('priorityModal');
   }
@@ -1173,14 +1172,14 @@
   function renderEvents(hid){
     var sorted=events.slice().sort(function(a,b){return b.score-a.score;});
     document.getElementById('events-list').innerHTML=sorted.map(function(e,i){
-      return '<div class="ev-card" id="ev-'+e.id+'"><div class="ev-rank">'+(i+1)+'</div>'
+      return '<div class="ev-card" id="ev-'+e.id+'" onpointerdown="evHoldStart('+e.id+')" onpointerup="evHoldEnd()" onpointerleave="evHoldEnd()" oncontextmenu="event.preventDefault()"><div class="ev-rank">'+(i+1)+'</div>'
         +'<div class="ev-body"><div class="ev-head"><div class="ev-date"><span class="mo">'+e.mo+'</span><span class="dy">'+e.dy+'</span></div>'
         +'<div><div class="ev-name">'+e.venue+'</div><div class="loc-ok">'+ic('check')+'LOCATION VERIFIED</div></div></div>'
         +'<div class="ev-stats"><span class="ev-stat"><b>~'+e.cross+'</b> could cross</span><span class="ev-stat"><b>'+e.going+'</b> going</span></div></div>'
         +'<div class="voter"><button class="varrow up'+(e.v===1?' on':'')+'" aria-label="Upvote the event at '+e.venue+'" onclick="voteEvent('+e.id+',1)">'+ic('arrowup')+'</button>'
         +'<div class="vscore">'+e.score+'</div>'
         +'<button class="varrow down'+(e.v===-1?' on':'')+'" aria-label="Downvote the event at '+e.venue+'" onclick="voteEvent('+e.id+',-1)">'+ic('arrowdown')+'</button></div>'
-        +'<button class="ev-flag" aria-label="Report this event" onclick="event.stopPropagation();reportEvent('+e.id+')">'+ic('flag')+'</button></div>';
+        +'</div>';
     }).join('');
     if(hid){ var el=document.getElementById('ev-'+hid); if(el) el.classList.add('bump'); }
   }
@@ -1235,7 +1234,7 @@
   }
   function matchBack(id){
     var p=byId(id); p.matched=true;
-    closeOverlay('heartSheet'); renderMessages(); renderPortfolio(document.getElementById('searchBox').value);
+    closeOverlay('heartSheet'); renderMessages(); renderPortfolio('');
     showMatchP(id);
   }
   function passHeart(id){
@@ -1254,7 +1253,7 @@
     document.querySelectorAll('#pane-paths .seg button').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on');
     document.getElementById('seg-recent').style.display=(name==='recent'?'block':'none');
     document.getElementById('seg-portfolio').style.display=(name==='portfolio'?'block':'none');
-    if(name==='portfolio') renderPortfolio(document.getElementById('searchBox').value);
+    if(name==='portfolio') renderPortfolio('');
   }
   function pathTab(name, btn){
     var d=document.getElementById('pathsDongle');
@@ -1384,7 +1383,7 @@
     var b=document.getElementById('themeBtn'); if(b) b.innerHTML=ic(on?'sun':'moon');
     if(lmap&&tileLight&&tileDark){ if(on){ lmap.removeLayer(tileLight); tileDark.addTo(lmap); } else { lmap.removeLayer(tileDark); tileLight.addTo(lmap); } }
     if(document.getElementById('tabbar').style.display!=='none'){
-      renderRecent(); renderPortfolio(document.getElementById('searchBox').value); renderSpot(); renderHere(false); renderMessages(); renderPosts();
+      renderRecent(); renderPortfolio(''); renderSpot(); renderHere(false); renderMessages(); renderPosts();
       if(document.getElementById('pane-hotspots').style.display!=='none') renderHotMap();
       var pa=document.getElementById('profAv'); if(pa) pa.style.background=G[0];
     }
@@ -1506,7 +1505,7 @@
     var p=byId(id);
     blocked[id]=true;
     closeOverlay('detailSheet'); closeOverlay('chatView');
-    renderRecent(); renderPortfolio((document.getElementById('searchBox')||{}).value||''); renderMessages(); renderSpot();
+    renderRecent(); renderPortfolio(''); renderMessages(); renderSpot();
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('shield')+'</div>'
       +'<h3>Report submitted</h3><p>The review runs on your evidence and decides if the rules were broken. '
       +(severe?'Anything illegal, or involving a minor, means the account is banned immediately.':'Confirmed violations earn a strike, three strikes and the account is gone. Anything illegal skips straight to a ban.')
@@ -1622,6 +1621,10 @@
     showOverlay('heartSheet');
   }
   /* Events: anyone can add one, location-only. Flag anything that does not belong. */
+  /* hold an event card ~600ms to report it */
+  var evHoldT=null;
+  function evHoldStart(id){ clearTimeout(evHoldT); evHoldT=setTimeout(function(){ reportEvent(id); }, 600); }
+  function evHoldEnd(){ clearTimeout(evHoldT); }
   function reportEvent(id){
     var reasons=['Inappropriate or unsafe','Wrong or fake location','Not a real event','Spam'];
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('flag')+'</div>'
