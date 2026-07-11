@@ -384,7 +384,8 @@
   .dongle.three.p1 .dongle-pill{transform:translateX(100%)}
   .dongle.three.p2 .dongle-pill{transform:translateX(200%)}
   .hot-intro{font-size:12px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.5}
-  .hot-map{position:relative;z-index:1;isolation:isolate;height:280px;background:radial-gradient(circle at 50% 45%,var(--surface2),var(--bg));border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-bottom:16px}
+  .hot-intro-foot{margin:14px 0 4px;color:var(--muted2)}
+  .hot-map{position:relative;z-index:1;isolation:isolate;height:375px;background:radial-gradient(circle at 50% 45%,var(--surface2),var(--bg));border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-bottom:16px}
   .hot-spot{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;z-index:2}
   .hot-spot .bub{border-radius:50%;background:var(--grad);opacity:.92;display:flex;align-items:center;justify-content:center;color:var(--ongrad);font-family:'Anton';font-weight:700;transition:width .8s ease,height .8s ease,font-size .8s ease;animation:hotpulse 2.6s ease-in-out infinite}
   @keyframes hotpulse{0%,100%{box-shadow:0 0 0 0 rgba(255,150,60,.35)}50%{box-shadow:0 0 0 12px rgba(255,150,60,0)}}
@@ -602,7 +603,7 @@
   .loc-note{text-align:center;font-size:11px;color:var(--muted2);margin-top:10px;line-height:1.5;padding:0 10px}
 
   /* REAL MAP */
-  #hotMap{height:300px}
+  #hotMap{height:375px}
   #hotMap.leaflet-container{background:var(--surface2);border-radius:20px;font-family:'Inter',sans-serif}
   /* Blue duotone map: invert the dark basemap by day so streets read dark blue on light blue */
   /* blue duotone: a color wash over the whole map, streets keep their contrast and go blue */
@@ -736,10 +737,11 @@
               </div>
             </div>
             <div id="pane-hotspots" style="display:none">
-              <div class="hot-intro">Hotspots appear on their own wherever <b>50 or more Closers gather within about 500 feet</b>, nobody can add one by hand. We name each spot by cross-referencing maps and what students actually call it. Cool circles are quiet, red-orange is packed. Tap one for distance and directions.</div>
               <div class="hot-map" id="hotMap"></div>
-              <div class="hot-list-title">Today's hotspots <span>updated live</span></div>
+              <div class="hot-list-title">Today's hotspots near you <span>updated live</span></div>
               <div id="hot-list"></div>
+              <div class="hot-intro hot-intro-foot">Hotspots appear on their own wherever <b>50 or more Closers gather within about 500 feet</b>, nobody can add one by hand. We name each spot by cross-referencing maps and what students actually call it. Cool circles are quiet, red-orange is packed. Tap one for distance and directions.</div>
+
             </div>
             <div id="pane-events" style="display:none">
               <div class="for-you"><div class="fyt" id="fyIc">Recommended for you</div><div class="fyn">Sunset Rooftop Social</div><div class="fyd">Based on who you like, you will vibe with this crowd. A lot of marketing and design students go.</div></div>
