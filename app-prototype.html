@@ -141,7 +141,9 @@
   .pod.one.glow .av{animation:glow 2s ease-in-out infinite}
   @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(232,177,90,.5)}50%{box-shadow:0 0 26px 6px rgba(232,177,90,.55)}}
   .pod.two .av,.pod.three .av{width:56px;height:56px;font-size:20px;border-color:rgba(246,239,228,.25)}
-  .pod .crown{color:var(--sand)}.pod .crown .ic{width:22px;height:22px}
+  .win-ring{position:relative;display:inline-flex;padding:3px;background:var(--grad);border-radius:50%}
+  .win-ring .av{border:3px solid var(--bg)!important}
+  .win-num{position:absolute;bottom:-3px;right:-3px;width:24px;height:24px;border-radius:50%;background:var(--grad);color:#fff;font-family:'Anton';font-size:12px;display:flex;align-items:center;justify-content:center;border:2.5px solid var(--bg)}
   .pod .rk{font-family:'Anton';font-weight:700;font-size:13px}.pod .nm{font-size:12.5px;font-weight:600}
   .pod .lk{font-size:11px;color:var(--orange2);display:flex;align-items:center;gap:3px}.pod .lk .ic{width:11px;height:11px}
   .rank-row{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-bottom:9px;cursor:pointer}
@@ -150,7 +152,7 @@
   .rank-row .rinfo{flex:1;min-width:0}.rank-row .nm{font-weight:600;font-size:14px}
   .rank-row .ig{font-size:11px;color:var(--sand);margin-top:2px;display:inline-flex;align-items:center;gap:4px}
   .rank-row .lk{font-size:13px;color:var(--orange2);font-weight:600;display:flex;align-items:center;gap:4px}.rank-row .lk .ic{width:13px;height:13px}
-  .showcase-tag{font-size:9px;background:rgba(232,177,90,.16);color:var(--sand);padding:2px 6px;border-radius:5px;font-weight:700;font-family:'Anton';letter-spacing:.04em;margin-left:6px;vertical-align:middle}
+  .showcase-tag{font-size:9px;background:var(--grad);color:#fff;padding:2px 7px;border-radius:999px;font-weight:700;font-family:'Anton';letter-spacing:.04em;margin-left:6px;vertical-align:middle}
   .spot-foot{text-align:center;font-size:11.5px;color:var(--muted2);margin-top:14px;padding:0 10px;line-height:1.5}
 
   /* HERE deck */
@@ -192,10 +194,10 @@
   .for-you .fyn{font-family:'Anton';font-weight:600;font-size:16px}
   .for-you .fyd{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
   .ev-intro{font-size:12px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.5}
-  .ev-card{display:flex;align-items:stretch;gap:11px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 14px 14px 0;margin-bottom:12px;overflow:hidden}
+  .ev-card{display:flex;align-items:stretch;gap:11px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px;position:relative}
   .ev-card.bump{animation:evbump .55s ease}
   @keyframes evbump{0%{transform:scale(1)}30%{transform:scale(1.025);border-color:var(--orange)}100%{transform:scale(1);border-color:var(--line)}}
-  .ev-rank{font-family:'Anton';font-weight:700;font-size:17px;color:#fff;width:38px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#2f5db8;border-right:2px solid #1d4487;border-radius:18px 40% 40% 18px / 18px 50% 50% 18px;margin:-14px 0}
+  .ev-rank{font-family:'Anton';font-weight:700;font-size:15px;color:#fff;width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--grad);border-radius:50%;align-self:center}
   .ev-body{flex:1;min-width:0}
   .ev-head{display:flex;gap:12px;align-items:center}
   .ev-date{width:50px;height:50px;border-radius:13px;background:var(--surface2);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
@@ -305,7 +307,7 @@
   .d-photo{height:280px;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .d-init{font-family:'Anton';font-weight:700;font-size:80px;color:rgba(22,10,3,.82)}
   .d-photo-grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 42%,var(--bg))}
-  .d-showcase{position:absolute;top:18px;left:18px;display:flex;align-items:center;gap:5px;font-size:10px;background:var(--sand);color:#3a2c00;padding:5px 10px;border-radius:7px;font-weight:700;font-family:'Anton';letter-spacing:.05em;z-index:2}.d-showcase .ic{width:12px;height:12px}
+  .d-showcase{position:absolute;top:18px;left:18px;display:flex;align-items:center;gap:5px;font-size:10px;background:var(--grad);color:#fff;padding:5px 11px;border-radius:999px;font-weight:700;font-family:'Anton';letter-spacing:.05em;z-index:2}.d-showcase .ic{width:12px;height:12px}
   .d-name{position:absolute;bottom:14px;left:20px;z-index:2;font-family:'Anton';font-weight:700;font-size:28px;color:var(--text)}
   .mini-badge{font-size:10px;background:var(--cactus2);color:#06301f;padding:2px 7px;border-radius:6px;font-family:'Anton';font-weight:700;letter-spacing:.04em;vertical-align:middle}
   .d-body{padding:16px 20px 30px;overflow-y:auto;flex:1}.d-body::-webkit-scrollbar{width:0}
@@ -322,7 +324,7 @@
   .ig-showcase-label{font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin:4px 0 10px}
   .locked-soc{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:16px;font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5}.locked-soc .ic{width:20px;height:20px;flex-shrink:0;color:var(--muted2)}
   .d-acts{display:flex;gap:9px}
-  .d-btn{flex:1;border:1px solid var(--line);background:var(--surface2);color:var(--text);font-family:'Anton';font-weight:600;font-size:13px;padding:14px 8px;border-radius:13px;display:flex;align-items:center;justify-content:center;gap:6px}.d-btn .ic{width:16px;height:16px}
+  .d-btn{flex:1;border:1.5px solid rgba(255,92,86,.35);background:rgba(255,92,86,.08);color:var(--text);font-family:'Anton';font-weight:600;font-size:13px;padding:14px 8px;border-radius:13px;display:flex;align-items:center;justify-content:center;gap:6px}.d-btn .ic{width:16px;height:16px;color:var(--orange)}
   .d-btn.msg{flex:1.3}.d-btn.heart{background:var(--grad);border:none;color:#fff}.d-btn.star{color:var(--sand);border-color:rgba(232,177,90,.4)}
   #chatView{flex-direction:column;background:var(--bg)}
   .chat-head{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line);flex-shrink:0}
@@ -380,7 +382,7 @@
   .dongle.three.p1 .dongle-pill{transform:translateX(100%)}
   .dongle.three.p2 .dongle-pill{transform:translateX(200%)}
   .hot-intro{font-size:12px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.5}
-  .hot-map{position:relative;height:280px;background:radial-gradient(circle at 50% 45%,var(--surface2),var(--bg));border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-bottom:16px}
+  .hot-map{position:relative;z-index:1;isolation:isolate;height:280px;background:radial-gradient(circle at 50% 45%,var(--surface2),var(--bg));border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-bottom:16px}
   .hot-spot{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;z-index:2}
   .hot-spot .bub{border-radius:50%;background:var(--grad);opacity:.92;display:flex;align-items:center;justify-content:center;color:var(--ongrad);font-family:'Anton';font-weight:700;transition:width .8s ease,height .8s ease,font-size .8s ease;animation:hotpulse 2.6s ease-in-out infinite}
   @keyframes hotpulse{0%,100%{box-shadow:0 0 0 0 rgba(255,150,60,.35)}50%{box-shadow:0 0 0 12px rgba(255,150,60,0)}}
@@ -392,11 +394,8 @@
   .hot-list-title{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
   .hot-list-title span{color:var(--cactus2);font-size:10px;display:flex;align-items:center;gap:5px}
   .hot-list-title span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cactus2);animation:blink 1.4s infinite}
-  .hot-row{display:flex;align-items:stretch;gap:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0;margin-bottom:10px;overflow:hidden}
-  .hot-rank{font-family:'Anton';font-size:17px;color:#fff;width:38px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#2f5db8;border-right:2px solid #1d4487;border-radius:14px 40% 40% 14px / 14px 50% 50% 14px;margin-right:12px}
-  body.night .hot-rank{background:#1d2f5e;border-right-color:#2ec5ff}
-  .hot-row .hot-info{padding:12px 0}
-  .hot-row .hot-count{padding:12px 12px 12px 0}
+  .hot-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+  .hot-rank{font-family:'Anton';font-size:15px;color:#fff;width:34px;height:34px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--grad);border-radius:50%}
   .hot-info{flex:1;min-width:0}.hot-name{font-family:'Anton';font-weight:600;font-size:15px}
   .hot-go{font-size:12px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .admin-chip{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-size:10.5px;color:var(--muted2)}
@@ -559,7 +558,7 @@
   /* HINGE-STYLE ABOUT CHIPS */
   .chips-note{font-size:11px;color:var(--muted2);margin:13px 0 9px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
   .chip-grid{display:flex;flex-wrap:wrap;gap:8px}
-  .chip-btn{border:1px solid var(--line);background:var(--surface2);color:var(--text);font-size:12.5px;font-weight:500;padding:8px 14px;border-radius:999px;transition:transform .1s}
+  .chip-btn{border:1px solid rgba(59,130,246,.3);background:#d2e5fb;color:var(--text);font-size:12.5px;font-weight:500;padding:8px 14px;border-radius:999px;transition:transform .1s}
   .chip-btn:active{transform:scale(.95)}
   .chip-btn.on{background:var(--grad);border-color:transparent;color:var(--ongrad);font-weight:600}
 
@@ -574,7 +573,7 @@
   /* EVENTS: sea palette (teal to blue) */
   #pane-events .ev-card{background:linear-gradient(135deg,rgba(75,224,184,.10),rgba(59,130,246,.10));border-color:rgba(59,130,246,.22)}
   #pane-events .ev-rank{color:#fff}
-  body.night .ev-rank{background:#1d2f5e;border-right-color:#2ec5ff}
+  .ev-flag{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--muted2);cursor:pointer;padding:4px}.ev-flag .ic{width:14px;height:14px}
   #pane-events .vscore{color:#2f7de1}
   #pane-events .varrow.up.on{background:rgba(75,224,184,.2);color:#0a9e77;border-color:rgba(18,185,129,.45)}
   #pane-events .varrow.down.on{background:rgba(59,130,246,.14);color:#2f7de1;border-color:rgba(59,130,246,.4)}
@@ -725,8 +724,8 @@
             <div id="pane-events" style="display:none">
               <div class="for-you"><div class="fyt" id="fyIc">Recommended for you</div><div class="fyn">Sunset Rooftop Social</div><div class="fyd">Based on who you like, you will vibe with this crowd. A lot of marketing and design students go.</div></div>
               <div id="events-list"></div>
-              <div class="loc-note">Every event is a pin on a real, checked map location. No event names, just where and when to be there.</div>
-              <div class="posh-note"><span class="d"></span>Synced with Posh</div>
+              <button class="add-spot" id="addEventBtn" onclick="addEvent()"></button>
+              <div class="loc-note">Anyone can add an event, but only as a pin on a real, checked map location. No event names. See something that does not belong? Tap the flag.</div>
             </div>
           </div>
         </div>
@@ -947,6 +946,7 @@
     document.getElementById('tab-prof').innerHTML=navIc('prof');
     document.getElementById('themeBtn').innerHTML=ic('moon');
     document.getElementById('addSpotBtn').innerHTML=ic('plus')+' Add a spot';
+    var ae=document.getElementById('addEventBtn'); if(ae) ae.innerHTML=ic('plus')+' Add an event';
     document.getElementById('flameIc').innerHTML=ic('flame');
     document.getElementById('streakPill').innerHTML=ic('flame')+'<span>6</span>';
     renderPosts();
@@ -1109,12 +1109,11 @@
     var p1=byId(spot[0].id),p2=byId(spot[1].id),p3=byId(spot[2].id);
     var html='<div class="podium">'
       +'<div class="pod two" onclick="openDetail('+p2.id+')">'+av(p2)+'<div class="rk grad-text">#2</div><div class="nm">'+p2.name+'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+spot[1].likes+'">0</span></div></div>'
-      +'<div class="pod one glow" onclick="openDetail('+p1.id+')"><div class="crown">'+ic('crown')+'</div>'+av(p1)+'<div class="rk grad-text">#1</div><div class="nm">'+p1.name+'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+spot[0].likes+'">0</span></div></div>'
+      +'<div class="pod one glow" onclick="openDetail('+p1.id+')"><span class="win-ring">'+av(p1)+'<span class="win-num">1</span></span><div class="rk grad-text">#1</div><div class="nm">'+p1.name+'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+spot[0].likes+'">0</span></div></div>'
       +'<div class="pod three" onclick="openDetail('+p3.id+')">'+av(p3)+'<div class="rk grad-text">#3</div><div class="nm">'+p3.name+'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+spot[2].likes+'">0</span></div></div></div>';
     html+=spot.slice(3).map(function(s){ var p=byId(s.id);
       return '<div class="rank-row" onclick="openDetail('+p.id+')"><span class="pos">'+s.rk+'</span>'+av(p)
         +'<div class="rinfo"><div class="nm">'+p.name+(p.showcase?' <span class="showcase-tag">SHOWCASE</span>':'')+'</div>'
-        +(p.showcase?'<a class="ig" href="https://instagram.com/'+p.ig+'" target="_blank" onclick="event.stopPropagation()"><span style="font-weight:700;font-family:Anton">@</span>'+p.ig+'</a>':'')
         +'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+s.likes+'">0</span></div></div>';
     }).join('');
     document.getElementById('spot-list').innerHTML=html;
@@ -1151,7 +1150,8 @@
         +'<div class="ev-stats"><span class="ev-stat"><b>~'+e.cross+'</b> could cross</span><span class="ev-stat"><b>'+e.going+'</b> going</span></div></div>'
         +'<div class="voter"><button class="varrow up'+(e.v===1?' on':'')+'" aria-label="Upvote the event at '+e.venue+'" onclick="voteEvent('+e.id+',1)">'+ic('arrowup')+'</button>'
         +'<div class="vscore">'+e.score+'</div>'
-        +'<button class="varrow down'+(e.v===-1?' on':'')+'" aria-label="Downvote the event at '+e.venue+'" onclick="voteEvent('+e.id+',-1)">'+ic('arrowdown')+'</button></div></div>';
+        +'<button class="varrow down'+(e.v===-1?' on':'')+'" aria-label="Downvote the event at '+e.venue+'" onclick="voteEvent('+e.id+',-1)">'+ic('arrowdown')+'</button></div>'
+        +'<button class="ev-flag" aria-label="Report this event" onclick="event.stopPropagation();reportEvent('+e.id+')">'+ic('flag')+'</button></div>';
     }).join('');
     if(hid){ var el=document.getElementById('ev-'+hid); if(el) el.classList.add('bump'); }
   }
@@ -1258,11 +1258,9 @@
     var posts=''; for(var i=0;i<6;i++) posts+=postCircle(p,i);
     return '<div class="ig-showcase-label">Instagram showcase</div><div class="ig-posts">'+posts+'</div>';
   }
+  /* The bottom-left Instagram button is the one way to their IG; no duplicate handle link here. */
   function socialRow(p){
-    return '<div class="socials"><div class="soc-title">Connect, unlocked</div>'
-      +'<a class="soc" href="https://instagram.com/'+p.ig+'" target="_blank" onclick="event.stopPropagation()"><span class="soc-c">IG</span> Instagram, @'+p.ig+'</a>'
-      + (p.showcase?igShowcase(p):'')
-      +'</div>';
+    return p.showcase ? '<div class="socials">'+igShowcase(p)+'</div>' : '';
   }
   function openDetail(id){
     var p=byId(id);
@@ -1524,7 +1522,7 @@
       tileLight=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'});
       tileDark=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'});
       (night?tileDark:tileLight).addTo(lmap);
-      youMarker=L.marker(userLoc,{icon:L.divIcon({className:'',html:'<div class="you-pin"></div>',iconSize:[22,22],iconAnchor:[11,11]}),zIndexOffset:1000}).addTo(lmap);
+      youMarker=L.marker(userLoc,{icon:L.divIcon({className:'',html:'<div class="you-pin"></div>',iconSize:[22,22],iconAnchor:[11,11]}),zIndexOffset:1000}).addTo(lmap).on('click',function(){ openSuggest(); });
       spots.forEach(function(s){ spotMarkers[s.id]=L.marker([s.lat,s.lng],{icon:spotIcon(s)}).addTo(lmap).on('click',function(){ openSpot(s.id); }); });
       if(navigator.geolocation){ navigator.geolocation.getCurrentPosition(function(pos){ userLoc=[pos.coords.latitude,pos.coords.longitude]; if(youMarker) youMarker.setLatLng(userLoc); renderHotList(); },function(){},{ timeout:4000 }); }
     }
@@ -1555,6 +1553,40 @@
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('pin')+'</div><h3>'+s.name+'</h3><p>'+s.count+' Closers here right now, from live location. '+fmtDist(s)+' from you. '+s.go+'.'+(isHot?' This is a hotspot, so Here Now turns on when you arrive.':' Not a hotspot yet, it needs '+HOTSPOT_MIN+' Closers.')+'</p>'
     +'<div class="map-btns"><a class="map-btn" href="https://maps.apple.com/?daddr='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Apple Maps</a><a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Google Maps</a></div>'
     +'<button class="btn" onclick="closeOverlay(\'heartSheet\');goingSpot(\''+id+'\')">'+ic('check')+(hereMine[id]?' You are going':' I am going')+'</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Close</div></div>'; showOverlay('heartSheet'); }
+  /* Tap YOUR dot: where should you go right now? Top spots by heat, then straight into directions. */
+  function openSuggest(){
+    var top=spots.slice().sort(function(a,b){return b.count-a.count;}).slice(0,3);
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('pin')+'</div>'
+      +'<h3>Where to next?</h3><p>The hottest spots near you right now. Pick one and get moving.</p>'
+      +top.map(function(s){ return '<button class="rep-reason" onclick="closeOverlay(\'heartSheet\');openSpot(\''+s.id+'\')"><span class="hot-rank" style="width:30px;height:30px;font-size:13px">'+s.count+'</span><span style="flex:1;text-align:left"><b>'+s.name+'</b><br><span style="font-size:11.5px;color:var(--muted)">'+fmtDist(s)+' away, '+s.go+'</span></span>'+ic('chevron')+'</button>'; }).join('')
+      +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Close</div></div>';
+    showOverlay('heartSheet');
+  }
+  /* Events: anyone can add one, location-only. Flag anything that does not belong. */
+  function reportEvent(id){
+    var reasons=['Inappropriate or unsafe','Wrong or fake location','Not a real event','Spam'];
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('flag')+'</div>'
+      +'<h3>Report this event</h3><p>Reports are anonymous. Flagged events are pulled while we check the pin.</p>'
+      +reasons.map(function(r){return '<button class="rep-reason" onclick="submitReport()">'+ic('flag')+r+'</button>';}).join('')
+      +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>';
+    showOverlay('heartSheet');
+  }
+  function addEvent(){
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('plus')+'</div><h3>Add an event</h3><p>Drop the location and the date. No names, the place is the event. We check every pin against a real map location before it goes live.</p>'
+      +'<input id="evLoc" placeholder="Location (e.g. Rivers Pool)" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:10px;outline:none">'
+      +'<input id="evDate" type="date" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:14px;outline:none">'
+      +'<button class="btn" onclick="postEvent()">'+ic('plus')+' Submit for location check</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>';
+    showOverlay('heartSheet');
+  }
+  function postEvent(){
+    var loc=escP(document.getElementById('evLoc').value||''); var d=document.getElementById('evDate').value;
+    if(!loc||!d){ toastNow('pin','Add the location and the date first.'); return; }
+    var MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    var dt=new Date(d+'T12:00:00');
+    events.push({id:events.length+1,mo:MO[dt.getMonth()],dy:String(dt.getDate()),name:'',venue:loc,going:1,cross:2,score:1,v:0});
+    closeOverlay('heartSheet'); renderEvents();
+    toastNow('check','Pin checks out. Your event is live at '+loc+'.','surge');
+  }
   function addSpot(){ document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('plus')+'</div><h3>Add a spot</h3><p>Drop a spot at your live location, say what is going on, and you become its owner.</p><input id="spotName" placeholder="Spot name" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:10px;outline:none"><textarea id="spotGo" placeholder="What is going on and why" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;resize:none;height:64px;margin-bottom:14px;outline:none"></textarea><button class="btn" onclick="postSpot()">'+ic('plus')+' Post, become owner</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>'; showOverlay('heartSheet'); }
   function postSpot(){ var n=escP(document.getElementById('spotName').value||'New Spot'); var g=escP(document.getElementById('spotGo').value||'Something is happening'); var s={id:'u'+(spots.length+1),name:n,count:8,go:g,admin:'You',ai:'A',ag:0,lat:userLoc[0]+0.002,lng:userLoc[1]+0.002,q:n+' Phoenix AZ'}; spots.unshift(s); if(lmap){ spotMarkers[s.id]=L.marker([s.lat,s.lng],{icon:spotIcon(s)}).addTo(lmap).on('click',function(){ openSpot(s.id); }); } closeOverlay('heartSheet'); renderHotList(); }
 
