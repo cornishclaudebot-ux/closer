@@ -628,8 +628,8 @@
           <div class="mark"><svg width="64" height="64" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="url(#wg)"/><circle cx="14" cy="14" r="8.5" stroke="url(#wg)" stroke-width="1.6" opacity="0.6"/><circle cx="14" cy="14" r="12.5" stroke="url(#wg)" stroke-width="1.3" opacity="0.3"/></svg></div>
           <h2 class="grad-text">closer</h2>
           <p>Match with GCU and ASU students you physically cross paths with, within about 20 feet. Real students only.</p>
-          <button class="ms-btn" onclick="enterApp()"><span class="ms-grid"><span style="background:#F25022"></span><span style="background:#7FBA00"></span><span style="background:#00A4EF"></span><span style="background:#FFB900"></span></span>Continue with ASU email</button>
-          <button class="ms-btn" onclick="enterApp()" style="margin-top:12px"><span class="ms-grid"><span style="background:#F25022"></span><span style="background:#7FBA00"></span><span style="background:#00A4EF"></span><span style="background:#FFB900"></span></span>Continue with GCU email</button>
+          <button class="ms-btn" onclick="location.href='onboarding.html'"><span class="ms-grid"><span style="background:#F25022"></span><span style="background:#7FBA00"></span><span style="background:#00A4EF"></span><span style="background:#FFB900"></span></span>Continue with ASU email</button>
+          <button class="ms-btn" onclick="location.href='onboarding.html'" style="margin-top:12px"><span class="ms-grid"><span style="background:#F25022"></span><span style="background:#7FBA00"></span><span style="background:#00A4EF"></span><span style="background:#FFB900"></span></span>Continue with GCU email</button>
           <div class="verified-chip"><span id="lockIc"></span> Verified through your school, @asu.edu or @gcu.edu</div>
           <div class="legal">GCU and ASU students, 18 and over. We verify your school affiliation through Microsoft, and you confirm you are 18 or older to continue. By continuing you agree to the <a href="#" style="color:var(--orange)" onclick="event.preventDefault();openGuidelines()">Community Guidelines</a>.<br><br>This is a concept demo. <a href="index.html" style="color:var(--sand)">Join the real waitlist</a></div>
         </div>
@@ -1549,6 +1549,7 @@
 
   icHere();
   renderRecent(); renderPortfolio(''); renderSpot(); renderEvents(); renderHere(false); renderMessages();
+  if(location.search.indexOf('enter=1')>=0) enterApp(); // arriving from onboarding, skip the login screen
 </script>
 </body>
 </html>

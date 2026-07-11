@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Closer, Create your account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e7f3fe;--surface:#ffffff;--surface2:#e3effc;--line:rgba(23,60,110,.13);
+    --text:#142038;--muted:#46587a;--muted2:#7a8aa5;
+    --grad:linear-gradient(135deg,#ff9d45 0%,#ff5c56 48%,#f43f6e 100%);--sea:linear-gradient(135deg,#4be0b8,#3b82f6);
+    --ongrad:#fff;--ok:#0a9e77;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:radial-gradient(circle at 50% -10%,#cfe8ff,#e7f3fe 55%);color:var(--text);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .ob{max-width:460px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:0 20px}
+  .ob-top{padding:22px 0 6px;display:flex;align-items:center;gap:14px}
+  .back{background:none;border:none;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;width:26px;flex-shrink:0;opacity:1;transition:opacity .2s}
+  .back.hide{opacity:0;pointer-events:none}
+  .bar{flex:1;height:6px;background:var(--surface2);border-radius:999px;overflow:hidden}
+  .bar .fill{height:100%;width:0;background:var(--grad);border-radius:999px;transition:width .4s cubic-bezier(.5,0,.15,1)}
+  .stepno{font-size:12px;color:var(--muted2);font-weight:600;flex-shrink:0;font-family:'Space Grotesk'}
+  .ob-body{flex:1;padding:18px 0 12px;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kick{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#f43f6e;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+  .req-tag{background:rgba(244,63,110,.1);color:#f43f6e;font-size:9px;padding:2px 7px;border-radius:5px;letter-spacing:.05em}
+  .opt-tag{background:var(--surface2);color:var(--muted2);font-size:9px;padding:2px 7px;border-radius:5px;letter-spacing:.05em}
+  h1{font-family:'Anton';font-weight:400;font-size:clamp(26px,7vw,34px);line-height:1.04;letter-spacing:.01em;margin-bottom:10px}
+  .sub{color:var(--muted);font-size:15px;line-height:1.55;margin-bottom:22px}
+  .why{display:flex;gap:9px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:16px}
+  .why svg{width:16px;height:16px;flex-shrink:0;margin-top:1px;color:#3b82f6}
+  input.f,select.f,textarea.f{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:13px;padding:15px 16px;color:var(--text);font-family:'Inter';font-size:16px;outline:none;transition:border-color .15s}
+  input.f:focus,select.f:focus,textarea.f:focus{border-color:#ff5c56}
+  input.f::placeholder{color:var(--muted2)}
+  textarea.f{resize:none;height:110px}
+  .row{display:flex;gap:10px}
+  .campus{margin-top:14px;display:none;align-items:center;gap:10px;background:var(--surface);border:1px solid rgba(59,130,246,.3);border-radius:12px;padding:12px 14px;font-size:14px}
+  .campus.show{display:flex}
+  .campus .cdot{width:34px;height:34px;border-radius:9px;background:var(--sea);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:12px;flex-shrink:0}
+  .campus b{font-family:'Space Grotesk'}
+  .campus.soon{border-color:var(--line)}.campus.soon .cdot{background:var(--surface2);color:var(--muted)}
+  .code-in{display:flex;gap:8px;justify-content:space-between}
+  .code-in input{width:100%;text-align:center;font-size:24px;font-family:'Space Grotesk';font-weight:700;padding:14px 0}
+  .resend{font-size:13px;color:#3b82f6;margin-top:14px;cursor:pointer}
+  .age-out{text-align:center;font-family:'Space Grotesk';font-weight:700;font-size:15px;margin-top:14px;color:var(--muted)}
+  .age-out.bad{color:#e0245e}.age-out.ok{color:var(--ok)}
+  .photos{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+  .pslot{aspect-ratio:3/4;border-radius:14px;border:2px dashed var(--line);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;color:var(--muted2);transition:border-color .15s}
+  .pslot.main{border-style:solid}
+  .pslot.filled{border:none;color:#fff}
+  .pslot .plus{font-size:26px;font-weight:300}
+  .pslot .mainlbl{position:absolute;bottom:6px;left:6px;font-size:8px;font-weight:700;font-family:'Space Grotesk';background:rgba(0,0,0,.35);padding:2px 6px;border-radius:5px;letter-spacing:.04em}
+  .pslot .x{position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.4);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .selfie{display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 0}
+  .selfie .ring{width:150px;height:150px;border-radius:50%;background:var(--surface);border:3px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted2);margin-bottom:18px;transition:.25s}
+  .selfie .ring.done{border:3px solid var(--ok);background:rgba(10,158,119,.08);color:var(--ok)}
+  .selfie .ring svg{width:52px;height:52px}
+  .choices{display:flex;flex-direction:column;gap:10px}
+  .choice{display:flex;align-items:center;gap:12px;background:var(--surface);border:1.5px solid var(--line);border-radius:13px;padding:15px 16px;font-size:15.5px;font-weight:500;cursor:pointer;transition:.15s}
+  .choice .rd{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex-shrink:0}
+  .choice.on{border-color:#ff5c56;background:linear-gradient(135deg,rgba(255,157,69,.08),rgba(244,63,110,.05))}
+  .choice.on .rd{border-color:#ff5c56;background:var(--grad);box-shadow:inset 0 0 0 3px #fff}
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{border:1.5px solid var(--line);background:var(--surface);color:var(--text);font-size:14px;font-weight:500;padding:10px 16px;border-radius:999px;cursor:pointer;transition:.12s}
+  .chip:active{transform:scale(.95)}
+  .chip.on{background:var(--grad);border-color:transparent;color:#fff;font-weight:600}
+  .prompt-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
+  .prompt-card select{margin-bottom:8px}
+  .perm{text-align:center;padding:10px 0}
+  .perm .picon{width:88px;height:88px;border-radius:26px;background:var(--grad);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:#fff}
+  .perm .picon.sea{background:var(--sea)}
+  .perm .picon svg{width:42px;height:42px}
+  .enable{background:var(--grad);color:var(--ongrad);border:none;font-family:'Space Grotesk';font-weight:600;font-size:15px;padding:15px;border-radius:14px;width:100%;cursor:pointer;margin-top:6px}
+  .enable.done{background:rgba(10,158,119,.12);color:var(--ok);border:1px solid rgba(10,158,119,.3)}
+  .consent-item{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1.5px solid var(--line);border-radius:13px;padding:14px 15px;margin-bottom:10px;cursor:pointer;font-size:14px;line-height:1.45}
+  .consent-item .ck{width:24px;height:24px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;transition:.15s}
+  .consent-item.on{border-color:#0a9e77}
+  .consent-item.on .ck{background:#0a9e77;border-color:#0a9e77}
+  .consent-item a{color:#3b82f6}
+  .done-wrap{text-align:center;padding:30px 0}
+  .done-wrap .dmark{width:96px;height:96px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;color:#fff;box-shadow:0 14px 44px rgba(244,63,110,.35)}
+  .done-wrap .dmark svg{width:46px;height:46px}
+  .ob-foot{padding:12px 0 26px;position:sticky;bottom:0;background:linear-gradient(180deg,transparent,var(--bg) 30%)}
+  .req-note{font-size:12px;color:var(--muted2);text-align:center;margin-bottom:10px;min-height:16px}
+  .req-note.warn{color:#e0245e}
+  .cont{width:100%;background:var(--grad);color:var(--ongrad);border:none;font-family:'Space Grotesk';font-weight:600;font-size:16px;padding:16px;border-radius:14px;cursor:pointer;transition:opacity .2s,transform .1s}
+  .cont:active{transform:scale(.99)}
+  .cont:disabled{opacity:.4;cursor:default}
+  .logo{display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk';font-weight:700;font-size:19px}
+</style>
+</head>
+<body>
+<div class="ob">
+  <div class="ob-top">
+    <button class="back hide" id="back" aria-label="Back">&#8249;</button>
+    <div class="bar"><div class="fill" id="bar"></div></div>
+    <div class="stepno" id="stepno"></div>
+  </div>
+  <div class="ob-body" id="body"></div>
+  <div class="ob-foot">
+    <div class="req-note" id="reqnote"></div>
+    <button class="cont" id="cont" onclick="next()">Continue</button>
+  </div>
+</div>
+
+<script>
+  var UNIS = {
+    'gcu.edu':'Grand Canyon University|GCU','asu.edu':'Arizona State University|ASU','arizona.edu':'University of Arizona|U of A',
+    'nau.edu':'Northern Arizona University|NAU','asu.edu':'Arizona State University|ASU','ucla.edu':'UCLA|UCLA','usc.edu':'USC|USC',
+    'berkeley.edu':'UC Berkeley|Cal','stanford.edu':'Stanford|Stanford','utexas.edu':'UT Austin|Texas','tamu.edu':'Texas A&M|A&M',
+    'ufl.edu':'University of Florida|UF','fsu.edu':'Florida State|FSU','umich.edu':'Michigan|Michigan','osu.edu':'Ohio State|OSU',
+    'psu.edu':'Penn State|PSU','wisc.edu':'Wisconsin|Wisco','indiana.edu':'Indiana|IU','ku.edu':'Kansas|KU','arizona.edu':'University of Arizona|U of A',
+    'colorado.edu':'CU Boulder|CU','oregon.edu':'Oregon|Oregon','washington.edu':'UW|UW','byu.edu':'BYU|BYU','utah.edu':'Utah|Utah',
+    'unlv.edu':'UNLV|UNLV','ttu.edu':'Texas Tech|Tech','ua.edu':'Alabama|Bama','uga.edu':'Georgia|UGA','clemson.edu':'Clemson|Clemson',
+    'msu.edu':'Michigan State|MSU','iastate.edu':'Iowa State|ISU','ncsu.edu':'NC State|NCSU','purdue.edu':'Purdue|Purdue'
+  };
+  var INTERESTS = ['Live music','Pool days','Gym','Coffee runs','Church','Intramurals','Greek life','Foodie','Hiking','Dog person','Cat person','Study dates','Night owl','Concerts','Thrifting','Gaming','Road trips','Cooking','Photography','Sports fan','Art','Reading','Volunteering','Travel','Anime','Tattoos','Beach','Yoga','Startup hustle','Outdoors'];
+  var PROMPTS = ['Two truths and a lie...','My ideal Sunday is...','The way to win me over is...','I am looking for someone who...','My most controversial opinion...','You will find me on campus at...','A green flag I look for...','Best spot on campus no one knows about...','My go-to karaoke song is...','We will get along if...'];
+
+  var data = { campus:null, interests:{}, prompts:[{},{},{}], photos:[false,false,false,false,false,false], selfie:false, perms:{}, consent:{} };
+
+  var steps = [
+    {t:'intro'},
+    {t:'email'}, {t:'phone'}, {t:'code'},
+    {t:'name'}, {t:'dob'},
+    {t:'photos'}, {t:'selfie'},
+    {t:'iam'}, {t:'showme'}, {t:'looking'},
+    {t:'year'}, {t:'interests'}, {t:'prompts'},
+    {t:'instagram'}, {t:'bio'},
+    {t:'permLoc'}, {t:'permNotif'},
+    {t:'consent'}, {t:'done'}
+  ];
+  var i = 0;
+
+  function ic(n){
+    var p={pin:'<path d="M12 21s-6.5-5-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 16 12 21 12 21z"/><circle cx="12" cy="10.2" r="2.3"/>',
+      bell:'<path d="M18 9a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',
+      shield:'<path d="M12 3l7 3v5c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/>',
+      check:'<path d="M5 12.5l4.2 4.2L19 7"/>',cam:'<rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="12" cy="13.5" r="3.4"/><path d="M8 7l1.5-2.5h5L16 7"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'};
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+p[n]+'</svg>';
+  }
+  function reqTag(req){ return req?'<span class="req-tag">REQUIRED</span>':'<span class="opt-tag">OPTIONAL</span>'; }
+  function why(txt){ return '<div class="why">'+ic('info')+'<span>'+txt+'</span></div>'; }
+  function head(kick,req,title,sub){ return '<div class="kick">'+kick+' '+reqTag(req)+'</div><h1>'+title+'</h1>'+(sub?'<div class="sub">'+sub+'</div>':''); }
+
+  function render(){
+    var s = steps[i], b = document.getElementById('body'), h='';
+    document.getElementById('bar').style.width = Math.round(i/(steps.length-1)*100)+'%';
+    document.getElementById('stepno').textContent = (s.t==='intro'||s.t==='done')?'':(i)+' / '+(steps.length-2);
+    document.getElementById('back').classList.toggle('hide', i===0 || s.t==='done');
+    var cont = document.getElementById('cont'); cont.textContent = 'Continue';
+
+    if(s.t==='intro'){
+      h = '<div style="padding-top:26px"><div class="logo" style="margin-bottom:26px"><svg width="24" height="24" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="#ff5c56"/><circle cx="14" cy="14" r="8.5" stroke="#ff5c56" stroke-width="1.8" opacity="0.55"/><circle cx="14" cy="14" r="12.5" stroke="#f43f6e" stroke-width="1.4" opacity="0.3"/></svg><span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">closer</span></div>'
+        +head("Let's build your account", false, 'A few real questions, then you’re in.')
+        +'<div class="sub">This takes about 3 minutes. Everything we ask keeps Closer real, verified, and safe, which is the whole point. The starred steps are required to be on the platform.</div>'
+        +'<div class="choices">'
+        +'<div class="choice on"><span class="rd"></span><div><b style="font-weight:600">Verify + build in one flow</b><div style="font-size:12.5px;color:var(--muted)">School, phone, photos, and your profile</div></div></div>'
+        +'</div>'+why('We never share your info. Verification is what stops bots, catfish, and anyone who is not a real student.');
+      cont.textContent = 'Get started';
+    }
+    else if(s.t==='email'){
+      h = head('Your school email','required','What school are you at?','Sign in with your university email. This is how we prove you’re a real, current student.')
+        +'<input class="f" id="in" type="email" inputmode="email" placeholder="you@my.gcu.edu" value="'+(data.email||'')+'" oninput="detectCampus(this.value)">'
+        +'<div class="campus" id="campus"></div>'
+        +why('In the real app this is a one-tap Microsoft or Google school login. Only verified .edu students get in.');
+      setTimeout(function(){ if(data.email) detectCampus(data.email); },0);
+    }
+    else if(s.t==='phone'){
+      h = head('Your number','required','Where can we text you?','We text a 6-digit code to confirm it’s really you. Your number is never shown to anyone.')
+        +'<input class="f" id="in" type="tel" inputmode="tel" placeholder="Phone number" value="'+(data.phone||'')+'" oninput="save(\'phone\',this.value)">'
+        +why('A verified phone is one account per person. It is also how we text your waitlist status and when you get accepted.');
+    }
+    else if(s.t==='code'){
+      h = head('Verify','required','Enter your code','We texted a 6-digit code to '+(data.phone||'your phone')+'.')
+        +'<div class="code-in">'+[0,1,2,3,4,5].map(function(n){return '<input class="f" maxlength="1" inputmode="numeric" id="c'+n+'" oninput="codeHop('+n+')">';}).join('')+'</div>'
+        +'<div class="resend">Resend code</div>';
+    }
+    else if(s.t==='name'){
+      h = head('Your name','required','What’s your name?','Use your real name. People see your first name and last initial. Real names keep Closer catfish-free.')
+        +'<div class="row"><input class="f" id="in" placeholder="First name" value="'+(data.first||'')+'" oninput="save(\'first\',this.value)"><input class="f" id="in2" placeholder="Last name" value="'+(data.last||'')+'" oninput="save(\'last\',this.value)"></div>'
+        +why('Your last name is only ever shown as an initial. We use the full name for verification and trust and safety.');
+    }
+    else if(s.t==='dob'){
+      var yrs=''; for(var y=2010;y>=1975;y--) yrs+='<option '+(data.dy==y?'selected':'')+'>'+y+'</option>';
+      var mos=''; ['Month','01','02','03','04','05','06','07','08','09','10','11','12'].forEach(function(m,idx){ mos+='<option value="'+(idx===0?'':m)+'" '+(data.dm==m?'selected':'')+'>'+m+'</option>'; });
+      var days=''; for(var d=1;d<=31;d++){ days+='<option '+(data.dd==d?'selected':'')+'>'+d+'</option>'; }
+      h = head('Your birthday','required','How old are you?','Closer is 18 and over, no exceptions. We use your date of birth to verify your age, not just a checkbox.')
+        +'<div class="row"><select class="f" id="mo" onchange="dob()"><option value="">Month</option>'+['01','02','03','04','05','06','07','08','09','10','11','12'].map(function(m){return '<option '+(data.dm==m?'selected':'')+'>'+m+'</option>';}).join('')+'</select>'
+        +'<select class="f" id="dd" onchange="dob()"><option value="">Day</option>'+Array.from({length:31},function(_,k){return '<option '+(data.dd==(k+1)?'selected':'')+'>'+(k+1)+'</option>';}).join('')+'</select>'
+        +'<select class="f" id="yy" onchange="dob()"><option value="">Year</option>'+yrs+'</select></div>'
+        +'<div class="age-out" id="age"></div>'
+        +why('Age verification is required by app stores and by law for a dating app. Anyone found under 18 is removed.');
+      setTimeout(dob,0);
+    }
+    else if(s.t==='photos'){
+      var f=data.photos.filter(Boolean).length;
+      h = head('Your photos','required','Add at least 2 photos','Clear shots of you, no group-only pics, no filters that hide your face. Drag the first one to set your main.')
+        +'<div class="photos">'+data.photos.map(function(on,idx){
+          return '<div class="pslot'+(idx===0?' main':'')+(on?' filled':'')+'" style="'+(on?'background:'+GRAD[idx%GRAD.length]:'')+'" onclick="togglePhoto('+idx+')">'
+            +(on?(idx===0?'<span class="mainlbl">MAIN</span>':'')+'<span class="x" onclick="event.stopPropagation();togglePhoto('+idx+')">&times;</span>':'<span class="plus">+</span>')+'</div>';
+        }).join('')+'</div>'
+        +why('Your photos plus a live selfie get matched by AI for your verified blue check, so everyone knows you are a real person.');
+    }
+    else if(s.t==='selfie'){
+      h = head('Photo verification','required','One quick selfie','We match a live selfie to your photos and your Instagram with AI. That gives you the blue verified check. It is never posted.')
+        +'<div class="selfie"><div class="ring'+(data.selfie?' done':'')+'" id="ring">'+ic(data.selfie?'check':'cam')+'</div>'
+        +'<button class="enable'+(data.selfie?' done':'')+'" style="max-width:280px" onclick="doSelfie()">'+(data.selfie?'Verified':'Take verification selfie')+'</button></div>'
+        +why('This is the single biggest thing that keeps a proximity app safe: everyone is a verified real face, not a bot or a fake.');
+    }
+    else if(s.t==='iam'){ h = choiceStep('About you','required','I am a...','iam',['Woman','Man','Nonbinary','More options']); }
+    else if(s.t==='showme'){ h = choiceStep('Who you meet','required','Show me...','showme',['Women','Men','Everyone']); }
+    else if(s.t==='looking'){ h = choiceStep('Your intent','required','You’re looking for...','looking',['Something serious','Something casual','New friends','Still figuring it out']); }
+    else if(s.t==='year'){ h = choiceStep('Campus context','required','What year are you?','year',['Freshman','Sophomore','Junior','Senior','Grad student']); }
+    else if(s.t==='interests'){
+      var c=Object.keys(data.interests).length;
+      h = head('Your interests','required','Pick what you’re about','Choose at least 3. These show on your profile and help Closer point you to the right spots. ('+c+' picked)')
+        +'<div class="chips">'+INTERESTS.map(function(o){return '<button class="chip'+(data.interests[o]?' on':'')+'" onclick="toggleInterest(\''+o+'\')">'+o+'</button>';}).join('')+'</div>';
+    }
+    else if(s.t==='prompts'){
+      h = head('Your prompts','required','Give people something to open with','Answer at least one. The best conversations start here.')
+        +[0,1,2].map(function(n){
+          var pr=data.prompts[n]||{};
+          return '<div class="prompt-card"><select class="f" onchange="savePrompt('+n+',\'q\',this.value)"><option value="">Pick a prompt'+(n>0?' (optional)':'')+'</option>'+PROMPTS.map(function(p){return '<option '+(pr.q===p?'selected':'')+'>'+p+'</option>';}).join('')+'</select>'
+            +'<input class="f" placeholder="Your answer" value="'+(pr.a||'')+'" oninput="savePrompt('+n+',\'a\',this.value)"></div>';
+        }).join('');
+    }
+    else if(s.t==='instagram'){
+      h = head('Instagram','required','Connect your Instagram','Links to your verification and lets you showcase up to 6 posts on your profile. Handle only, we never post.')
+        +'<input class="f" id="in" placeholder="@yourhandle" value="'+(data.ig||'')+'" oninput="save(\'ig\',this.value)">'
+        +why('Matching your face to a real, established Instagram is a core part of the verified check. It is optional to showcase, required to verify.');
+    }
+    else if(s.t==='bio'){
+      h = head('About you','optional','Write a short bio','A line or two about you. You can always edit it later.')
+        +'<textarea class="f" placeholder="Add three things you cannot live without and the rest is conversation." oninput="save(\'bio\',this.value)">'+(data.bio||'')+'</textarea>';
+      cont.textContent = data.bio?'Continue':'Skip for now';
+    }
+    else if(s.t==='permLoc'){
+      h = '<div class="perm"><div class="picon">'+ic('pin')+'</div>'
+        +head('Location','required','Turn on location','')
+        +'<div class="sub" style="text-align:left">Closer only works if it can tell when you physically cross paths with someone, within about 20 feet. <b style="color:var(--text)">Your live location is never shown to anyone, ever.</b> You only ever see that you crossed paths, after the fact.</div>'
+        +'<button class="enable'+(data.perms.loc?' done':'')+'" onclick="perm(\'loc\')">'+(data.perms.loc?'Location on':'Allow location')+'</button></div>';
+    }
+    else if(s.t==='permNotif'){
+      h = '<div class="perm"><div class="picon sea">'+ic('bell')+'</div>'
+        +head('Notifications','optional','Don’t miss a cross','')
+        +'<div class="sub" style="text-align:left">Get a heads up when someone hearts you, when a path drop lands, and when a hotspot near you is heating up. You can fine-tune these anytime.</div>'
+        +'<button class="enable'+(data.perms.notif?' done':'')+'" onclick="perm(\'notif\')">'+(data.perms.notif?'Notifications on':'Turn on notifications')+'</button></div>';
+      cont.textContent = data.perms.notif?'Continue':'Maybe later';
+    }
+    else if(s.t==='consent'){
+      var items=[['guidelines','I have read and agree to the <a href="app-prototype.html" onclick="event.preventDefault()">Community Guidelines</a>, <a href="#" onclick="event.preventDefault()">Terms</a>, and <a href="#" onclick="event.preventDefault()">Privacy Policy</a>.'],
+        ['age','I confirm I am 18 years of age or older.'],
+        ['real','Everything I entered is real and about me. I understand fake profiles are permanently removed.']];
+      h = head('Almost there','required','The ground rules','One strike and you are out. These keep Closer safe for everyone.')
+        +items.map(function(it){return '<div class="consent-item'+(data.consent[it[0]]?' on':'')+'" onclick="toggleConsent(\''+it[0]+'\')"><span class="ck">'+ic('check')+'</span><span>'+it[1]+'</span></div>';}).join('');
+      cont.textContent = 'Create my account';
+    }
+    else if(s.t==='done'){
+      var cn = data.campus? data.campus.split('|')[1] : 'your campus';
+      h = '<div class="done-wrap"><div class="dmark">'+ic('check')+'</div>'
+        +'<h1>You’re in.</h1><div class="sub" style="text-align:center">Welcome to Closer at '+cn+', '+(data.first||'')+'. Your profile is built and verified. Time to start crossing paths.</div></div>';
+      cont.textContent = 'Enter Closer';
+    }
+    b.innerHTML = h;
+    updateReq();
+  }
+
+  var GRAD = ['linear-gradient(135deg,#ff8a4c,#f43f6e)','linear-gradient(135deg,#4be0b8,#3b82f6)','linear-gradient(135deg,#f43f6e,#a855f7)','linear-gradient(135deg,#ffb14c,#ff5c7a)','linear-gradient(135deg,#38d0e0,#6366f1)','linear-gradient(135deg,#ff9d45,#ff5c56)'];
+
+  function choiceStep(kick,req,title,key,opts){
+    return head(kick,req,title,'')+'<div class="choices">'+opts.map(function(o){
+      return '<div class="choice'+(data[key]===o?' on':'')+'" onclick="pick(\''+key+'\',\''+o+'\')"><span class="rd"></span>'+o+'</div>';
+    }).join('')+'</div>';
+  }
+
+  /* input handlers */
+  function save(k,v){ data[k]=v; updateReq(); }
+  function pick(k,v){ data[k]=v; render(); }
+  function detectCampus(v){ data.email=v; var el=document.getElementById('campus'); if(!el) return;
+    var m=(v.split('@')[1]||'').toLowerCase().trim();
+    if(!m||m.indexOf('.')<0){ el.className='campus'; data.campus=null; updateReq(); return; }
+    if(UNIS[m]){ var parts=UNIS[m].split('|'); data.campus=UNIS[m]; el.className='campus show'; el.innerHTML='<div class="cdot">'+parts[1]+'</div><div>Nice, <b>'+parts[0]+'</b>. You’re a founding member here.</div>'; }
+    else if(/\.edu$/.test(m)){ data.campus=m+'|EDU'; el.className='campus show soon'; el.innerHTML='<div class="cdot">'+ic('pin')+'</div><div>We’re opening <b>'+m+'</b> soon. You’ll be first in line.</div>'; }
+    else { el.className='campus'; data.campus=null; }
+    updateReq();
+  }
+  function codeHop(n){ var el=document.getElementById('c'+n); if(el.value&&n<5) document.getElementById('c'+(n+1)).focus(); var code=''; for(var k=0;k<6;k++) code+=(document.getElementById('c'+k).value||''); data.code=code; updateReq(); }
+  function dob(){ var mo=document.getElementById('mo'),dd=document.getElementById('dd'),yy=document.getElementById('yy'); if(!mo)return;
+    data.dm=mo.value; data.dd=dd.value; data.dy=yy.value; var out=document.getElementById('age');
+    if(data.dm&&data.dd&&data.dy){ var age=2026-(+data.dy); var bd=new Date(2026,+data.dm-1,+data.dd); if(bd>new Date(2026,6,10)) age--;
+      if(age>=18){ out.className='age-out ok'; out.textContent=age+' years old, you’re good.'; data.age=age; }
+      else { out.className='age-out bad'; out.textContent='You must be 18 or older to use Closer.'; data.age=age; } }
+    else { out.textContent=''; data.age=null; }
+    updateReq();
+  }
+  function togglePhoto(idx){ data.photos[idx]=!data.photos[idx]; render(); }
+  function doSelfie(){ var r=document.getElementById('ring'); data.selfie=true; render(); }
+  function toggleInterest(o){ if(data.interests[o]) delete data.interests[o]; else { if(Object.keys(data.interests).length>=8){ return; } data.interests[o]=1; } render(); }
+  function savePrompt(n,k,v){ data.prompts[n]=data.prompts[n]||{}; data.prompts[n][k]=v; updateReq(); }
+  function perm(k){ data.perms[k]=true; render(); }
+  function toggleConsent(k){ data.consent[k]=!data.consent[k]; render(); }
+
+  /* required validation per step */
+  function canContinue(){
+    var t=steps[i].t;
+    if(t==='email') return !!(data.campus);
+    if(t==='phone') return (data.phone||'').replace(/\D/g,'').length>=10;
+    if(t==='code') return (data.code||'').length===6;
+    if(t==='name') return (data.first||'').trim().length>0 && (data.last||'').trim().length>0;
+    if(t==='dob') return data.age!=null && data.age>=18;
+    if(t==='photos') return data.photos.filter(Boolean).length>=2;
+    if(t==='selfie') return data.selfie;
+    if(t==='iam') return !!data.iam;
+    if(t==='showme') return !!data.showme;
+    if(t==='looking') return !!data.looking;
+    if(t==='year') return !!data.year;
+    if(t==='interests') return Object.keys(data.interests).length>=3;
+    if(t==='prompts') return data.prompts.some(function(p){return p&&p.q&&(p.a||'').trim();});
+    if(t==='instagram') return (data.ig||'').trim().length>0;
+    if(t==='permLoc') return !!data.perms.loc;
+    if(t==='consent') return data.consent.guidelines&&data.consent.age&&data.consent.real;
+    return true; // optional steps
+  }
+  function reqHint(){
+    var t=steps[i].t;
+    var map={email:'Enter your school email to continue',phone:'Enter a valid phone number',code:'Enter the 6-digit code',name:'Enter your first and last name',dob:'You must be 18 or older',photos:'Add at least 2 photos',selfie:'Take your verification selfie',iam:'Pick one',showme:'Pick one',looking:'Pick one',year:'Pick your year',interests:'Pick at least 3',prompts:'Answer at least one prompt',instagram:'Add your Instagram handle',permLoc:'Location is required for Closer to work',consent:'Check all three to continue'};
+    return map[t]||'';
+  }
+  function updateReq(){
+    var ok=canContinue(); document.getElementById('cont').disabled=!ok;
+    var note=document.getElementById('reqnote');
+    if(ok||steps[i].t==='intro'||steps[i].t==='done'){ note.className='req-note'; note.textContent=''; }
+    else { note.className='req-note'; note.textContent=reqHint(); }
+  }
+
+  function next(){
+    if(!canContinue()) { var n=document.getElementById('reqnote'); n.className='req-note warn'; n.textContent=reqHint(); return; }
+    if(steps[i].t==='done'){ window.location.href='app-prototype.html?enter=1'; return; }
+    if(i<steps.length-1){ i++; render(); window.scrollTo(0,0); }
+  }
+  document.getElementById('back').addEventListener('click', function(){ if(i>0){ i--; render(); window.scrollTo(0,0); } });
+
+  render();
+</script>
+</body>
+</html>
