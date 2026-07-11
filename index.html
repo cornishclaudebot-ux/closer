@@ -166,6 +166,14 @@
     .ring,.pin,.pulse,.hero-glow{animation:none!important}
     .btn{transition:none}
   }
+  .faq{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+  .faq details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 20px;transition:border-color .2s}
+  .faq details[open]{border-color:rgba(255,92,86,.35)}
+  .faq summary{cursor:pointer;list-style:none;padding:18px 0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";font-size:24px;line-height:1;color:var(--pink);font-weight:400;transition:transform .2s;flex-shrink:0}
+  .faq details[open] summary::after{transform:rotate(45deg)}
+  .faq details p{margin:0 0 18px;color:var(--muted);font-size:15px;line-height:1.65}
 </style>
 </head>
 <body>
@@ -188,6 +196,7 @@
       <a href="#spotlight">Spotlight</a>
       <a href="#events">Events</a>
       <a href="#safety">Safety</a>
+      <a href="#faq">FAQ</a>
       <a href="app-prototype.html">App preview</a>
     </div>
     <a href="#join" class="btn">Join the waitlist</a>
@@ -337,6 +346,25 @@
       <div class="safe-card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#pg)"/><path d="M7.5 12.3l3 3 6-6.5" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Verified students</h3><p>GCU email plus photo verification. Everyone is who they say they are.</p></div>
       <div class="safe-card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5a2 2 0 0 1-2 2H8l-4 3.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/></svg></div><h3>Match to talk</h3><p>No messages until you both like each other. You control who reaches you.</p></div>
       <div class="safe-card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></div><h3>One-tap block</h3><p>Block and report instantly. Consent-first Spotlight, nobody ranked without opting in.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-eyebrow">Questions</div>
+      <h2>The stuff you're wondering.</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Who can join Closer?</summary><p>Verified GCU students who are 18 and over. You sign in with your GCU email through Microsoft, so everyone on Closer is a real, current student.</p></details>
+      <details><summary>How do you know people are real?</summary><p>Two checks. Your GCU email confirms you're a student, and an AI photo match ties your face to your Instagram for the verified check. Real faces, no bots, no catfish.</p></details>
+      <details><summary>Does Closer track my location?</summary><p>Closer uses proximity to notice when you cross paths with someone, but your live location is never shown to anyone, ever. You only see that you crossed paths, after the fact, never where a person is right now.</p></details>
+      <details><summary>How is this different from Tinder or Hinge?</summary><p>You only match with people you were physically near, on your own campus. No endless feed of strangers, no bots, no one three states away. The people you see are people you'd actually run into.</p></details>
+      <details><summary>What does it cost?</summary><p>Joining and matching are free. Closer+ is an optional upgrade for extras like unlimited priority matches and your full crossed-paths history. You never have to pay to meet people.</p></details>
+      <details><summary>When does it launch?</summary><p>Closer opens at GCU first. Join the waitlist and we'll text you the moment you're in. Founding members get in first and keep founding perks.</p></details>
+      <details><summary>Is it safe?</summary><p>Safety is built in. No live location, verified students only, messaging only after you both match, one-tap block and report, opt-in Spotlight, and a one-strike ban policy for anyone who breaks the rules.</p></details>
+      <details><summary>What if the people I want aren't on it yet?</summary><p>Invite them. Closer gets better the more of your circle joins, and inviting friends earns you perks. Your circle is smaller than you think, and bigger than you can imagine.</p></details>
     </div>
   </div>
 </section>
