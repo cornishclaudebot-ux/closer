@@ -230,8 +230,8 @@
   .hbubble .heart-dot{position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;border-radius:50%;background:var(--grad);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;color:#fff}
   .hbubble .heart-dot .ic{width:11px;height:11px}
   .conv-title{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin:8px 0 8px}
-  .conv{display:flex;align-items:center;gap:12px;padding:11px 8px;border-radius:14px;cursor:pointer}
-  .conv:hover{background:var(--surface)}
+  .conv{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:16px;cursor:pointer;background:var(--surface);border:1px solid var(--line);margin-bottom:10px}
+  .conv:hover{border-color:rgba(255,92,86,.3)}
   .conv .ci{flex:1;min-width:0}.conv .cn{font-weight:600;font-size:15px;display:flex;align-items:center;gap:7px}
   .conv .cp{font-size:12.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .conv .ct{font-size:11px;color:var(--muted2);align-self:flex-start;margin-top:3px}
@@ -240,11 +240,11 @@
   /* PROFILE */
   .prof-top{display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 0 16px}
   .prof-top .av{width:94px;height:94px;font-size:34px;margin-bottom:13px;position:relative}
-  .prof-badge{position:absolute;bottom:3px;right:0;width:26px;height:26px;border-radius:50%;background:var(--grad);border:3px solid var(--bg);display:flex;align-items:center;justify-content:center}.prof-badge .ic{width:13px;height:13px;color:#fff}
+  .prof-badge{position:absolute;bottom:1px;right:-3px;width:26px;height:26px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center}
   .prof-top h2{font-family:'Anton';font-weight:700;font-size:23px}
   .vbadges{display:flex;gap:8px;justify-content:center;margin-top:11px;flex-wrap:wrap}
   .vbadge{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;font-family:'Anton';letter-spacing:.05em;color:var(--text);background:var(--surface);border:1px solid var(--line);padding:7px 13px 7px 7px;border-radius:999px}
-  .vcheck{width:19px;height:19px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center}.vcheck .ic{width:11px;height:11px;color:#fff}
+  .vcheck{width:20px;height:20px;background:none;display:flex;align-items:center;justify-content:center}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
   .card .ct{font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:11px;display:flex;align-items:center;justify-content:space-between}
   .card .ct .ed{color:var(--sand);cursor:pointer;letter-spacing:.02em}
@@ -443,8 +443,6 @@
   .here-lock .hl-t{font-family:'Anton';font-size:21px;margin-bottom:8px}
   .here-lock .hl-s{font-size:14px;color:var(--muted);line-height:1.55;max-width:300px;margin:0 auto 18px}.here-lock .hl-s b{color:var(--text)}
   .conv{position:relative;overflow:hidden}
-  .conv-c{position:absolute;left:0;top:9px;bottom:9px;width:5px;border-radius:0 5px 5px 0}
-  .conv .av.sm{margin-left:9px}
   .warming{font-size:9px;font-weight:700;font-family:'Anton';color:var(--muted2);background:var(--surface2);padding:2px 6px;border-radius:5px;letter-spacing:.03em;vertical-align:middle}
 
   /* GAMIFICATION: drops, streaks, quests, surges */
@@ -552,8 +550,11 @@
   .acc.open .acc-b{display:block}
   .acc .card,.acc .pri-card,.acc .inv-card{background:var(--bg);margin-top:10px;margin-bottom:0}
   .verify-cap{font-size:11px;color:var(--muted2);margin-top:9px;max-width:270px;line-height:1.5}
-  .vcheck.blue{background:#0095f6}
-  .prof-badge.blue{background:#0095f6}
+  .vcheck.blue{background:none}
+  .pitem.fading{opacity:.55}
+  .fade-tag{position:absolute;top:8px;left:8px;font-size:9px;background:rgba(20,32,56,.55);color:#fff;padding:3px 7px;border-radius:6px;font-weight:700;font-family:'Anton';letter-spacing:.05em}
+  .turnover-note{grid-column:1 / -1;text-align:center;font-size:11.5px;color:var(--muted2);padding:10px 12px;line-height:1.5}
+  .prof-badge.blue{background:var(--bg)}
 
   /* HINGE-STYLE ABOUT CHIPS */
   .chips-note{font-size:11px;color:var(--muted2);margin:13px 0 9px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
@@ -924,9 +925,9 @@
     document.getElementById('passBtn').innerHTML=ic('x');
     document.getElementById('likeBtn').innerHTML=ic('heart');
     document.getElementById('starBtn').innerHTML=ic('star');
-    document.getElementById('vc1').innerHTML=ic('check');
-    document.getElementById('vc2').innerHTML=ic('check');
-    document.getElementById('profCheck').innerHTML=ic('check');
+    document.getElementById('vc1').innerHTML=seal('url(#wg)',20);
+    document.getElementById('vc2').innerHTML=seal('#1d9bf0',20);
+    document.getElementById('profCheck').innerHTML=seal('#1d9bf0',24);
     document.getElementById('invIco').innerHTML=ic('users');
     document.getElementById('fyIc').innerHTML=ic('spark')+'Recommended for you';
     document.getElementById('insNote').querySelector('span').innerHTML=ic('spark');
@@ -982,6 +983,9 @@
   var hereOrder=[6,10,8,9,5,3]; var hereIdx=0;
   var PH={1:['women',44],2:['men',32],3:['women',68],4:['women',12],5:['men',75],6:['women',65],7:['women',90],8:['men',41],9:['women',33],10:['women',21],11:['men',55],12:['women',9]};
   people.forEach(function(p){ var g=PH[p.id]; if(g) p.photo='https://randomuser.me/api/portraits/'+g[0]+'/'+g[1]+'.jpg'; });
+  /* rolling 7-day portfolio: how many days ago each crossing happened */
+  var DAYS={1:7,2:3,3:1,4:5,5:14,6:7,7:4,8:30,9:6,10:2,11:21,12:1};
+  people.forEach(function(p){ p.days=DAYS[p.id]||1; });
 
   function byId(id){ for(var i=0;i<people.length;i++){ if(people[i].id===id) return people[i]; } }
   function av(p,cls){ if(p.photo){ return '<div class="av '+(cls||'')+'" style="background:'+G[p.g]+'"><img class="avimg" src="'+p.photo+'" alt="" onerror="this.remove();this.parentNode.textContent=\''+p.init+'\'"></div>'; } return '<div class="av '+(cls||'')+'" style="background:'+G[p.g]+'">'+p.init+'</div>'; }
@@ -1035,19 +1039,26 @@
       +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">I will wait</div></div>';
     showOverlay('heartSheet');
   }
-  /* PORTFOLIO = yesterday's crossings. Free to browse, this is your history. Today's crossings live behind the drop. */
+  /* PORTFOLIO = a rolling 7-day window. It grows forever, but each crossing fades away 7 days after
+     it happened unless you connect (match). Constant turnover, no timers shown. */
   var portfolioUnlocked=false;
+  function daysLabel(d){ return d===0?'Today':(d===1?'Yesterday':d+' days ago'); }
   function renderPortfolio(q){
     q=(q||'').toLowerCase();
-    var list=people.filter(function(p){return p.name.toLowerCase().indexOf(q)>=0;});
+    var list=people.filter(function(p){return p.name.toLowerCase().indexOf(q)>=0;})
+      .filter(function(p){ return p.matched || p.days<=7; })
+      .sort(function(a,b){ return a.days-b.days; });
+    var fadedCount=people.filter(function(p){ return !p.matched && p.days>7; }).length;
     var el=document.getElementById('portfolio-grid');
-    if(!list.length){ el.innerHTML='<div class="empty">No one by that name in yesterday\'s crossings.</div>'; return; }
+    if(!list.length){ el.innerHTML='<div class="empty">No one by that name in your portfolio right now.</div>'; return; }
     el.innerHTML=list.map(function(p){
-      return '<div class="pitem" onclick="openDetail('+p.id+')"><div class="pphoto" style="background:'+G[p.g]+'"><span class="pinit">'+p.init+'</span>'
-        +(p.matched?'<span class="badge-match">MATCHED</span>':'')+'</div>'
-        +'<div class="pbody"><div class="pn">'+p.name+', '+p.age+'</div><div class="psub">Yesterday, within '+p.ft+' ft</div>'
+      var fading=!p.matched && p.days>=6;
+      return '<div class="pitem'+(fading?' fading':'')+'" onclick="openDetail('+p.id+')"><div class="pphoto" style="background:'+G[p.g]+'"><span class="pinit">'+p.init+'</span>'
+        +(p.matched?'<span class="badge-match">MATCHED</span>':(fading?'<span class="fade-tag">FADING</span>':''))+'</div>'
+        +'<div class="pbody"><div class="pn">'+p.name+', '+p.age+'</div><div class="psub">'+daysLabel(p.days)+', within '+p.ft+' ft</div>'
         +'<div class="pmini">'+(p.matched?'<button onclick="event.stopPropagation();openChat('+p.id+')">'+ic('chat')+' Message</button>':'<button onclick="event.stopPropagation();window.open(\'https://instagram.com/'+p.ig+'\',\'_blank\')">'+ic('insta')+' Instagram</button>')+'<button class="h" onclick="event.stopPropagation();openHeartSheet('+p.id+')">'+ic('heart')+'</button></div></div></div>';
-    }).join('');
+    }).join('')
+    +(!q?'<div class="turnover-note">Crossings fade 7 days after they happen unless you connect. '+(fadedCount?fadedCount+' faded away this week.':'')+'</div>':'');
   }
   function openUnlock(){
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('lock')+'</div>'
@@ -1117,7 +1128,7 @@
     c.style.background=(p.photo?'url('+p.photo+') center/cover, ':'')+G[p.g];
     c.onclick=function(){ openDetail(p.id); };
     c.innerHTML='<div class="gc"></div><div class="likes-badge">'+ic('heart')+'<span id="hereLikes">0</span><span class="lt">likes today</span></div>'
-      +'<div class="verified">'+ic('shield')+'Verified</div>'
+      +'<div class="verified">'+seal('#1d9bf0',14)+'Verified</div>'
       +'<div class="meta"><div class="nm">'+p.name+', '+p.age+'</div><div class="vchip">'+ic('pin')+'Path crossed, '+p.mins+' mins ago</div><div class="bio">'+p.bio+'</div></div>';
     countUp(document.getElementById('hereLikes'), p.likes);
   }
@@ -1167,7 +1178,7 @@
     if(!list.length){ document.getElementById('conv-list').innerHTML='<div class="empty">Chats open when you match. Reveal a heart above, or send one of your own.</div>'; return; }
     document.getElementById('conv-list').innerHTML=list.map(function(p,idx){
       var prev=p.heart&&revealed[p.id]?'<span style="color:var(--orange2)">'+p.heart+'</span>':'You matched. Say something.';
-      return '<div class="conv" onclick="openChat('+p.id+')"><span class="conv-c" style="background:'+G[idx%G.length]+'"></span>'+av(p,'sm')+'<div class="ci"><div class="cn">'+p.name+', '+p.age+' <span class="mini-badge">MATCHED</span></div><div class="cp">'+prev+'</div></div><div class="ct">'+p.times+'x</div></div>';
+      return '<div class="conv" onclick="openChat('+p.id+')">'+av(p,'sm')+'<div class="ci"><div class="cn">'+p.name+', '+p.age+' <span class="mini-badge">MATCHED</span></div><div class="cp">'+prev+'</div></div><div class="ct">'+p.times+'x</div></div>';
     }).join('');
   }
   function revealHeart(id){
@@ -1466,6 +1477,13 @@
     showOverlay('heartSheet');
   }
   function ringAv(p,cls){ return '<span class="ring-av">'+av(p,cls)+'</span>'; }
+  /* The identifiable verification seal: a scalloped badge with a white check, like X and Instagram. */
+  function seal(fill,size){
+    size=size||20;
+    return '<svg class="seal" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" aria-label="Verified">'
+      +'<path fill="'+fill+'" d="M12 1.3l2.34 1.8 2.9-.45 1.08 2.73 2.73 1.08-.45 2.9L22.7 12l-2.1 2.34.45 2.9-2.73 1.08-1.08 2.73-2.9-.45L12 22.7l-2.34-2.1-2.9.45-1.08-2.73-2.73-1.08.45-2.9L1.3 12l2.1-2.34-.45-2.9 2.73-1.08L6.76 2.95l2.9.45z"/>'
+      +'<path d="M8.2 12.4l2.5 2.5 5.1-5.4" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
   function startToasts(){ clearInterval(toastTimer); setTimeout(showToast,2600); toastTimer=setInterval(showToast,22000); }
   function stopToasts(){ clearInterval(toastTimer); var el=document.getElementById('toast'); if(el) el.classList.remove('show'); }
   function burst(container){ if(!container)return; var colors=night?['#39ffd0','#2ec5ff','#ff5cae','#7a5cff']:['#ff8a4c','#f43f6e','#4be0b8','#3b82f6']; var c=document.createElement('div'); c.className='confetti'; for(var i=0;i<28;i++){ var d=document.createElement('i'); d.style.left=(50+(Math.random()*64-32))+'%'; d.style.background=colors[i%colors.length]; d.style.setProperty('--dx',(Math.random()*220-110)+'px'); d.style.setProperty('--dy',(120+Math.random()*170)+'px'); d.style.animationDelay=(Math.random()*0.15)+'s'; c.appendChild(d); } container.appendChild(c); setTimeout(function(){ c.remove(); },1700); }
