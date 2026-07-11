@@ -242,7 +242,7 @@
   /* PROFILE */
   .prof-top{display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 0 16px}
   .prof-top .av{width:94px;height:94px;font-size:34px;margin-bottom:13px;position:relative}
-  .prof-badge{position:absolute;bottom:1px;right:-3px;width:26px;height:26px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center}
+  .prof-badge{position:absolute;bottom:-3px;right:-8px;width:27px;height:27px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(20,50,90,.18)}
   .prof-top h2{font-family:'Anton';font-weight:700;font-size:23px}
   .vbadges{display:flex;gap:8px;justify-content:center;margin-top:11px;flex-wrap:wrap}
   .vbadge{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;font-family:'Anton';letter-spacing:.05em;color:var(--text);background:var(--surface);border:1px solid var(--line);padding:7px 13px 7px 7px;border-radius:999px}
@@ -279,7 +279,7 @@
   /* stats */
   .stats{display:flex;gap:10px;margin-bottom:14px}
   .stat{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px;text-align:center}
-  .stat .n{font-family:'Anton';font-weight:700;font-size:21px}.stat .l{font-size:10.5px;color:var(--muted2);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+  .stat .n{font-family:'Anton';font-weight:700;font-size:18px;width:54px;height:54px;margin:0 auto 7px;border-radius:50%;border:2.5px solid #3b82f6;box-shadow:0 0 0 4px rgba(59,130,246,.13);display:flex;align-items:center;justify-content:center}.stat .l{font-size:10.5px;color:var(--muted2);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
   /* insights */
   .ins-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:11px}
   .ins-chip{font-size:12px;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:7px 13px;color:var(--text)}
@@ -438,7 +438,10 @@
   .more-locked{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted2);font-size:12.5px;font-weight:600;padding:12px;cursor:pointer}.more-locked .ic{width:14px;height:14px}
   .drop-open{display:flex;align-items:center;gap:8px;font-family:'Anton';font-size:14px;color:var(--cactus);margin-bottom:12px}.drop-open .ic{width:16px;height:16px;color:var(--orange)}
   .here-lock{text-align:center;padding:26px 18px}
-  .here-lock .hl-ic{width:74px;height:74px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--orange2);margin:0 auto 18px}.here-lock .hl-ic svg{width:34px;height:34px}
+  .here-lock .hl-ic{position:relative;width:74px;height:74px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--orange2);margin:0 auto 18px}.here-lock .hl-ic svg{width:34px;height:34px;position:relative;z-index:1}
+  .here-lock .hl-ic::before,.here-lock .hl-ic::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,92,86,.55);animation:hlpulse 2.6s ease-out infinite}
+  .here-lock .hl-ic::after{animation-delay:1.3s}
+  @keyframes hlpulse{0%{transform:scale(.72);opacity:.9}100%{transform:scale(2.05);opacity:0}}
   .here-lock .hl-t{font-family:'Anton';font-size:21px;margin-bottom:8px}
   .here-lock .hl-s{font-size:14px;color:var(--muted);line-height:1.55;max-width:300px;margin:0 auto 18px}.here-lock .hl-s b{color:var(--text)}
   .conv{position:relative;overflow:hidden}
@@ -553,6 +556,17 @@
   .pitem.fading{opacity:.55}
   .fade-tag{position:absolute;top:8px;left:8px;font-size:9px;background:rgba(20,32,56,.55);color:#fff;padding:3px 7px;border-radius:6px;font-weight:700;font-family:'Anton';letter-spacing:.05em}
   .turnover-note{grid-column:1 / -1;text-align:center;font-size:11.5px;color:var(--muted2);padding:10px 12px;line-height:1.5}
+  .cross-slider{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;margin-top:-4px}
+  .cross-slider::-webkit-scrollbar{height:0}
+  .cross-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:7px 12px;border-radius:999px;background:#d2e5fb;border:1px solid rgba(59,130,246,.3);color:var(--text)}
+  .cross-chip .ic{width:11px;height:11px;color:#2f6fd0}
+  .compat{display:flex;gap:9px;align-items:flex-start;background:linear-gradient(135deg,rgba(75,224,184,.13),rgba(59,130,246,.10));border:1px solid rgba(59,130,246,.25);border-radius:14px;padding:13px 15px;margin:0 0 16px;font-size:13px;line-height:1.5}
+  .compat .ic{width:16px;height:16px;flex-shrink:0;margin-top:1px;color:#0a9e77}
+  .proof-row{display:flex;gap:9px;justify-content:center;margin:2px 0 16px}
+  .proof{width:62px;height:62px;border-radius:12px;border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted2);cursor:pointer;background:var(--surface2)}
+  .proof .ic{width:20px;height:20px}
+  .proof.on{border-style:solid;border-color:#3b82f6;background:#d2e5fb;color:#2f6fd0}
+  .sug-link{font-size:12.5px;color:#3b82f6;margin-top:12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
   .prof-badge.blue{background:var(--bg)}
 
   /* HINGE-STYLE ABOUT CHIPS */
@@ -700,7 +714,7 @@
               <div id="hereLock" class="here-lock" style="display:none">
                 <div class="hl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 16 12 21 12 21z"/><circle cx="12" cy="10.2" r="2.3"/></svg></div>
                 <div class="hl-t">You are not at a hotspot</div>
-                <div class="hl-s">Here Now only turns on when you are somewhere with <b>50 or more Closers</b> around you. Get to a hotspot to see who is here right now.</div>
+                <div class="hl-s"><b style="font-family:'Anton';letter-spacing:.04em">HERE NOW</b> only turns on when you are somewhere with <b>50 or more Closers</b> around you. Get to a hotspot to see who is here right now.</div>
                 <button class="btn" onclick="hereTab('hotspots', document.querySelectorAll('#hereDongle button')[1])">See the hotspots</button>
                 <div class="dismiss" onclick="simAtHotspot()">Simulate arriving at a hotspot (demo)</div>
               </div>
@@ -715,11 +729,10 @@
               </div>
             </div>
             <div id="pane-hotspots" style="display:none">
-              <div class="hot-intro">A hotspot is <b>50 or more Closers within about 500 feet</b> right now. The blue dot is you. Circles run cool when quiet and heat toward red-orange as the crowd grows. Tap one for distance and directions.</div>
+              <div class="hot-intro">Hotspots appear on their own wherever <b>50 or more Closers gather within about 500 feet</b>, nobody can add one by hand. We name each spot by cross-referencing maps and what students actually call it. Cool circles are quiet, red-orange is packed. Tap one for distance and directions.</div>
               <div class="hot-map" id="hotMap"></div>
               <div class="hot-list-title">Today's hotspots <span>updated live</span></div>
               <div id="hot-list"></div>
-              <button class="add-spot" id="addSpotBtn" onclick="addSpot()"></button>
             </div>
             <div id="pane-events" style="display:none">
               <div class="for-you"><div class="fyt" id="fyIc">Recommended for you</div><div class="fyn">Sunset Rooftop Social</div><div class="fyd">Based on who you like, you will vibe with this crowd. A lot of marketing and design students go.</div></div>
@@ -751,8 +764,8 @@
             <div class="prof-top">
               <div class="av" id="profAv" style="background:linear-gradient(135deg,#ff8a4c,#f43f6e)">AC<div class="prof-badge" id="profCheck"></div></div>
               <h2>Alex, 21</h2>
-              <div class="vbadges"><span class="vbadge"><span class="vcheck" id="vc1"></span> GCU VERIFIED</span><span class="vbadge"><span class="vcheck blue" id="vc2"></span> AI VERIFIED</span></div>
-              <div class="verify-cap">The blue check means AI matched this face to their Instagram. A real person, not a bot.</div>
+              <div class="vbadges"><span class="vbadge"><span class="vcheck" id="vc1"></span> GCU VERIFIED</span><span class="vbadge"><span class="vcheck blue" id="vc2"></span> VERIFIED</span></div>
+              <div class="verify-cap">The blue check means Closer verified this is a real person, face-matched to their photos and Instagram.</div>
             </div>
 
             <div class="stats">
@@ -833,8 +846,9 @@
               <div class="acc-b" style="padding-top:12px">
                 <div class="setting"><span class="si" id="set-star"></span><span class="lbl">Spotlight</span><span class="val">Off</span></div>
                 <div class="setting"><span class="si" id="set-pin"></span><span class="lbl">Show my exact location to others</span><span class="val on">Never</span></div>
-                <div class="setting"><span class="si" id="set-shield"></span><span class="lbl">AI verification</span><span class="val on">Verified</span></div>
+                <div class="setting"><span class="si" id="set-shield"></span><span class="lbl">Verification</span><span class="val on">Verified</span></div>
                 <div class="setting"><span class="si" id="set-age"></span><span class="lbl">Age</span><span class="val on">18+ confirmed</span></div>
+                <div class="setting"><span class="si" id="set-incog"></span><span class="lbl">Incognito mode</span><button class="switch off" role="switch" aria-checked="false" aria-label="Incognito mode" onclick="toggleIncog(this)"><span class="knob"></span></button></div>
                 <div class="setting"><span class="si" id="set-block"></span><span class="lbl">Blocked &amp; reported</span><span class="val">Manage</span></div>
                 <div class="setting" onclick="openGuidelines()" style="cursor:pointer"><span class="si" id="set-guide"></span><span class="lbl">Community Guidelines</span><span class="val">View</span></div>
               </div>
@@ -936,6 +950,7 @@
     document.getElementById('set-block').innerHTML=ic('block');
     var sa=document.getElementById('set-age'); if(sa) sa.innerHTML='<span style="font-family:Anton;font-weight:700;font-size:10px">18+</span>';
     var sg=document.getElementById('set-guide'); if(sg) sg.innerHTML=ic('shield');
+    var sic=document.getElementById('set-incog'); if(sic) sic.innerHTML=ic('moon');
     document.querySelectorAll('.acc-chev').forEach(function(el){ el.innerHTML=ic('chevron'); });
     var pc=document.getElementById('profCheck'); if(pc) pc.classList.add('blue');
     renderChips();
@@ -945,7 +960,6 @@
     document.getElementById('tab-messages').innerHTML=navIc('messages');
     document.getElementById('tab-prof').innerHTML=navIc('prof');
     document.getElementById('themeBtn').innerHTML=ic('moon');
-    document.getElementById('addSpotBtn').innerHTML=ic('plus')+' Add a spot';
     var ae=document.getElementById('addEventBtn'); if(ae) ae.innerHTML=ic('plus')+' Add an event';
     document.getElementById('flameIc').innerHTML=ic('flame');
     document.getElementById('streakPill').innerHTML=ic('flame')+'<span>6</span>';
@@ -986,6 +1000,11 @@
   /* rolling 7-day portfolio: how many days ago each crossing happened */
   var DAYS={1:7,2:3,3:1,4:5,5:14,6:7,7:4,8:30,9:6,10:2,11:21,12:1};
   people.forEach(function(p){ p.days=DAYS[p.id]||1; });
+  people.forEach(function(p){ if(p.id===4) p.incog=true; }); // Avery runs incognito in the demo
+  var PLACES=['Rivers Pool','Lopes Way','Thunder Grounds','Riverside Bar','Campus Rec','Antelope Hall','Thunder Alley','The Grove'];
+  function placesFor(p){ var n=Math.min(4,Math.max(2,Math.round(p.times/2)+1)), out=[]; for(var k=0;k<n;k++) out.push(PLACES[(p.g*2+k)%PLACES.length]); return out; }
+  var VIBES=['live music','pool days','late nights','coffee runs','concerts','the gym'];
+  function compatFor(p){ var a=VIBES[p.g%VIBES.length], b=VIBES[(p.g+2)%VIBES.length]; return 'you both run on '+a+' and '+b+', and you keep ending up at the same spots.'; }
 
   function byId(id){ for(var i=0;i<people.length;i++){ if(people[i].id===id) return people[i]; } }
   function av(p,cls){ if(p.photo){ return '<div class="av '+(cls||'')+'" style="background:'+G[p.g]+'"><img class="avimg" src="'+p.photo+'" alt="" onerror="this.remove();this.parentNode.textContent=\''+p.init+'\'"></div>'; } return '<div class="av '+(cls||'')+'" style="background:'+G[p.g]+'">'+p.init+'</div>'; }
@@ -1012,20 +1031,21 @@
   }
   function renderRecent(){
     var el=document.getElementById('seg-recent'); if(!el)return;
+    var vis=justCrossed.filter(function(id){ return !blocked[id]; });
     if(recentsUnlocked){
       el.innerHTML='<div class="drop-open">'+ic('bolt')+' Drop open. Everyone who crossed you today.</div>'
-        + justCrossed.map(function(id){ return recentCardOpen(byId(id)); }).join('');
+        + vis.map(function(id){ return recentCardOpen(byId(id)); }).join('');
       return;
     }
     el.innerHTML='<div class="drop-card tappable'+(dropOpen?' open':'')+'" onclick="toggleDrop()"><div class="drop-lab">'+ic('bolt')+'Next path drop<span class="drop-chev">'+ic('chevron')+'</span></div>'
       +'<div class="drop-clock" id="dropClock">'+fmtBig(dropSecs)+'</div>'
-      +'<div class="drop-count">'+justCrossed.length+' people crossed you today</div>'
+      +'<div class="drop-count">'+vis.length+' people crossed you today</div>'
       +'<div class="drop-x"><div class="drop-sub">Hidden until the drop. Every hotspot you hit takes an hour off the clock, or unlock them now.</div>'
       +'<div class="drop-actions"><button class="dbtn" onclick="event.stopPropagation();unlockRecentsAd()">'+ic('spark')+' Watch a video, unlock 10</button>'
       +'<button class="dbtn" onclick="event.stopPropagation();unlockRecentsAd()">'+ic('pin')+' Unlock the next 30 min</button>'
       +'<button class="dbtn plus" onclick="event.stopPropagation();buyCloserPlus()">'+ic('star')+' Closer+, unlock now</button></div></div></div>'
-      + justCrossed.slice(0,3).map(function(id){ return lockedRecentCard(byId(id)); }).join('')
-      + '<div class="more-locked" onclick="unlockRecentsPrompt()">'+ic('lock')+' '+justCrossed.length+' waiting behind the drop</div>';
+      + vis.slice(0,3).map(function(id){ return lockedRecentCard(byId(id)); }).join('')
+      + '<div class="more-locked" onclick="unlockRecentsPrompt()">'+ic('lock')+' '+vis.length+' waiting behind the drop</div>';
   }
   function startDrops(){ clearInterval(dropTimer); dropTimer=setInterval(tickDrop,1000); }
   function tickDrop(){ if(recentsUnlocked)return; dropSecs=Math.max(0,dropSecs-1); if(dropSecs<=0){ openDrop(); return; } var el=document.getElementById('dropClock'); if(el) el.textContent=fmtBig(dropSecs); }
@@ -1106,12 +1126,14 @@
     showOverlay('priorityModal');
   }
   function renderSpot(){
-    var p1=byId(spot[0].id),p2=byId(spot[1].id),p3=byId(spot[2].id);
+    var sp=spot.filter(function(x){return !blocked[x.id];});
+    if(sp.length<3){ document.getElementById('spot-list').innerHTML='<div class="empty">Spotlight refreshes tomorrow.</div>'; return; }
+    var p1=byId(sp[0].id),p2=byId(sp[1].id),p3=byId(sp[2].id);
     var html='<div class="podium">'
-      +'<div class="pod two" onclick="openDetail('+p2.id+')">'+av(p2)+'<div class="rk grad-text">#2</div><div class="nm">'+p2.name+'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+spot[1].likes+'">0</span></div></div>'
-      +'<div class="pod one glow" onclick="openDetail('+p1.id+')"><span class="win-ring">'+av(p1)+'<span class="win-num">1</span></span><div class="rk grad-text">#1</div><div class="nm">'+p1.name+'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+spot[0].likes+'">0</span></div></div>'
-      +'<div class="pod three" onclick="openDetail('+p3.id+')">'+av(p3)+'<div class="rk grad-text">#3</div><div class="nm">'+p3.name+'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+spot[2].likes+'">0</span></div></div></div>';
-    html+=spot.slice(3).map(function(s){ var p=byId(s.id);
+      +'<div class="pod two" onclick="openDetail('+p2.id+')">'+av(p2)+'<div class="rk grad-text">#2</div><div class="nm">'+p2.name+'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+sp[1].likes+'">0</span></div></div>'
+      +'<div class="pod one glow" onclick="openDetail('+p1.id+')"><span class="win-ring">'+av(p1)+'<span class="win-num">1</span></span><div class="rk grad-text">#1</div><div class="nm">'+p1.name+'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+sp[0].likes+'">0</span></div></div>'
+      +'<div class="pod three" onclick="openDetail('+p3.id+')">'+av(p3)+'<div class="rk grad-text">#3</div><div class="nm">'+p3.name+'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+sp[2].likes+'">0</span></div></div></div>';
+    html+=sp.slice(3).map(function(s){ var p=byId(s.id);
       return '<div class="rank-row" onclick="openDetail('+p.id+')"><span class="pos">'+s.rk+'</span>'+av(p)
         +'<div class="rinfo"><div class="nm">'+p.name+(p.showcase?' <span class="showcase-tag">SHOWCASE</span>':'')+'</div>'
         +'</div><div class="lk">'+ic('heart')+'<span class="cnt" data-v="'+s.likes+'">0</span></div></div>';
@@ -1121,6 +1143,7 @@
   function animateSpotlight(){ renderSpot(); document.querySelectorAll('#spot-list .cnt').forEach(function(el){ countUp(el,+el.dataset.v); }); }
 
   function renderHere(pop){
+    var guard=0; while(blocked[hereOrder[hereIdx]]&&guard++<hereOrder.length){ hereIdx=(hereIdx+1)%hereOrder.length; }
     var p=byId(hereOrder[hereIdx]);
     var c=document.getElementById('hereCard');
     c.className='deck-card'+(pop?' pop':'');
@@ -1164,7 +1187,7 @@
   }
 
   function renderMessages(){
-    var hearts=people.filter(function(p){return p.heart;});
+    var hearts=people.filter(notBlocked).filter(function(p){return p.heart;});
     document.getElementById('heartCount').textContent=hearts.length;
     document.getElementById('hearts-row').innerHTML=hearts.map(function(p){
       var rv=revealed[p.id];
@@ -1174,7 +1197,7 @@
     renderConv();
   }
   function renderConv(){
-    var list=people.filter(function(p){return p.matched;});
+    var list=people.filter(notBlocked).filter(function(p){return p.matched;});
     if(!list.length){ document.getElementById('conv-list').innerHTML='<div class="empty">Chats open when you match. Reveal a heart above, or send one of your own.</div>'; return; }
     document.getElementById('conv-list').innerHTML=list.map(function(p,idx){
       var prev=p.heart&&revealed[p.id]?'<span style="color:var(--orange2)">'+p.heart+'</span>':'You matched. Say something.';
@@ -1269,7 +1292,7 @@
     document.getElementById('detailSheet').innerHTML='<button class="sheet-close" aria-label="Close" onclick="closeOverlay(\'detailSheet\')">'+ic('x')+'</button>'
       +'<div class="d-photo" style="background:'+(p.photo?'url('+p.photo+') center/cover, ':'')+G[p.g]+'">'+(p.photo?'':'<span class="d-init">'+p.init+'</span>')+(p.showcase?'<span class="d-showcase">'+ic('star')+'Spotlight showcase</span>':'')+'<div class="d-photo-grad"></div><div class="d-name">'+p.name+', '+p.age+(p.matched?' <span class="mini-badge">MATCHED</span>':'')+'</div></div>'
       +'<div class="d-body"><div class="d-cross"><span>Came within their space, '+p.when+', within '+p.ft+' ft</span></div>'
-      +'<div class="d-times"><div class="num">'+p.times+'</div><div><div class="tl">You have crossed paths <b>'+p.times+' times</b></div><div class="ts">Across campus and events this semester</div></div></div>'
+      +(p.incog?'<div class="d-times"><div class="num" style="font-size:18px">?</div><div><div class="tl"><b>Incognito</b></div><div class="ts">They chose not to share their crossings</div></div></div>':'<div class="d-times"><div class="num" style="font-size:16px">'+p.times+'x</div><div><div class="tl"><b>times you\'ve crossed their path</b></div><div class="ts">Swipe the places you two possibly crossed</div></div></div>'+'<div class="cross-slider">'+placesFor(p).map(function(x){return '<span class="cross-chip">'+ic('pin')+x+'</span>';}).join('')+'</div>'+'<div class="compat">'+ic('spark')+'<span><b>Why you two would click:</b> '+compatFor(p)+'</span></div>')
       +'<div class="d-bio">'+p.bio+'</div>'+soc
       +'<div class="d-acts">'+(p.matched?'<button class="d-btn msg" onclick="openChat('+p.id+')">'+ic('chat')+' Message</button>':'<button class="d-btn msg" onclick="window.open(\'https://instagram.com/'+p.ig+'\',\'_blank\')">'+ic('insta')+' Instagram</button>')+'<button class="d-btn heart" onclick="openHeartSheet('+p.id+')">'+ic('heart')+' Heart</button><button class="d-btn star" onclick="sendPriority('+p.id+')">'+ic('star')+'</button></div>'
       +'<div class="rep-link" onclick="openReport('+p.id+')">Report or block '+p.name+'</div></div>';
@@ -1427,6 +1450,8 @@
   }
 
   /* PROFILE ACCORDIONS */
+  var myIncognito=false;
+  function toggleIncog(el){ el.classList.toggle('off'); var on=!el.classList.contains('off'); el.setAttribute('aria-checked',on?'true':'false'); myIncognito=on; toastNow('moon', on?'Incognito on. Nobody sees how many times you crossed them, where, or why you would click.':'Incognito off. Your crossings show again.'); }
   function toggleAcc(id){ var el=document.getElementById(id); if(el) el.classList.toggle('open'); }
 
   /* HINGE-STYLE ABOUT CHIPS */
@@ -1448,14 +1473,40 @@
   }
 
   /* REPORT + PERMANENT BAN */
+  /* Reports go deep: what happened, photo proof, AI review, strikes or instant ban for anything
+     illegal, one human-reviewed appeal, and the reported person vanishes from the reporter's world. */
+  var blocked={};
+  function notBlocked(p){ return !blocked[p.id]; }
   function openReport(id){
     var p=byId(id);
-    var reasons=['Fake profile or catfish','Harassment or threats','Inappropriate content','Looks under 18','Spam or scam'];
+    var reasons=[['Fake profile or catfish',0],['Harassment or threats',1],['Inappropriate content',0],['Looks under 18',1],['Spam or scam',0]];
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('flag')+'</div>'
       +'<h3>Report '+p.name+'</h3><p>Reports are anonymous. '+p.name+' will never know it was you.</p>'
-      +reasons.map(function(r){return '<button class="rep-reason" onclick="submitReport()">'+ic('flag')+r+'</button>';}).join('')
+      +reasons.map(function(r){return '<button class="rep-reason" onclick="reportStep2('+id+','+r[1]+')">'+ic('flag')+r[0]+'</button>';}).join('')
       +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>';
     showOverlay('heartSheet');
+  }
+  function reportStep2(id,severe){
+    var p=byId(id);
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('flag')+'</div>'
+      +'<h3>What happened?</h3><p>Tell us exactly what '+p.name+' did, and add photos as proof. Evidence makes the review fast and fair.</p>'
+      +'<textarea id="repDetail" placeholder="Describe what happened..."></textarea>'
+      +'<div class="proof-row"><div class="proof" onclick="toggleProof(this)">'+ic('plus')+'</div><div class="proof" onclick="toggleProof(this)">'+ic('plus')+'</div><div class="proof" onclick="toggleProof(this)">'+ic('plus')+'</div></div>'
+      +'<button class="btn" onclick="finishReport('+id+','+severe+')">'+ic('flag')+' Submit report</button>'
+      +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>';
+  }
+  function toggleProof(el){ el.classList.toggle('on'); el.innerHTML=el.classList.contains('on')?ic('check'):ic('plus'); }
+  function finishReport(id,severe){
+    var p=byId(id);
+    blocked[id]=true;
+    closeOverlay('detailSheet'); closeOverlay('chatView');
+    renderRecent(); renderPortfolio((document.getElementById('searchBox')||{}).value||''); renderMessages(); renderSpot();
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('shield')+'</div>'
+      +'<h3>Report submitted</h3><p>The review runs on your evidence and decides if the rules were broken. '
+      +(severe?'Anything illegal, or involving a minor, means the account is banned immediately.':'Confirmed violations earn a strike, three strikes and the account is gone. Anything illegal skips straight to a ban.')
+      +' Every ban gets one appeal, reviewed by a person, and an appeal never reveals who reported.</p>'
+      +'<p style="font-weight:600;color:var(--text)">'+p.name+' is now invisible to you, everywhere. No drops, no hotspots, no Spotlight, no events. Gone from your world.</p>'
+      +'<button class="btn" onclick="closeOverlay(\'heartSheet\')">Done</button></div>';
   }
   function submitReport(){
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('shield')+'</div>'
@@ -1469,7 +1520,7 @@
       +'<div class="g-row"><span class="gd"></span><span><b>GCU students only.</b> Verified through your school Microsoft account.</span></div>'
       +'<div class="g-row"><span class="gd"></span><span><b>Real faces only.</b> AI matches your photos to your Instagram for the blue check.</span></div>'
       +'<div class="g-row"><span class="gd"></span><span><b>Zero tolerance</b> for harassment, hate, nudity, threats, or spam. Same standards as every major dating app.</span></div>'
-      +'<div class="g-row"><span class="gd"></span><span><b>One strike, permanent.</b> Banned users are blocked by device and network fingerprint. New accounts do not work.</span></div>'
+      +'<div class="g-row"><span class="gd"></span><span><b>Strikes and bans.</b> Violations earn strikes, three and you are out. Anything illegal is an instant ban. Every ban gets one human-reviewed appeal. Banned devices cannot make new accounts.</span></div>'
       +'<div class="g-row"><span class="gd"></span><span><b>Your location is private.</b> Nobody ever sees where you are live, only that your paths crossed, after the fact.</span></div>'
       +'<button class="btn" onclick="closeOverlay(\'heartSheet\')" style="margin-top:8px">Got it</button></div>';
     showOverlay('heartSheet');
@@ -1552,7 +1603,9 @@
     var isHot=s.count>=HOTSPOT_MIN;
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('pin')+'</div><h3>'+s.name+'</h3><p>'+s.count+' Closers here right now, from live location. '+fmtDist(s)+' from you. '+s.go+'.'+(isHot?' This is a hotspot, so Here Now turns on when you arrive.':' Not a hotspot yet, it needs '+HOTSPOT_MIN+' Closers.')+'</p>'
     +'<div class="map-btns"><a class="map-btn" href="https://maps.apple.com/?daddr='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Apple Maps</a><a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Google Maps</a></div>'
-    +'<button class="btn" onclick="closeOverlay(\'heartSheet\');goingSpot(\''+id+'\')">'+ic('check')+(hereMine[id]?' You are going':' I am going')+'</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Close</div></div>'; showOverlay('heartSheet'); }
+    +'<button class="btn" onclick="closeOverlay(\'heartSheet\');goingSpot(\''+id+'\')">'+ic('check')+(hereMine[id]?' You are going':' I am going')+'</button>'
+    +'<div class="sug-link" onclick="suggestName(\''+id+'\')">Is this place called something else? Suggest a name</div>'
+    +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Close</div></div>'; showOverlay('heartSheet'); }
   /* Tap YOUR dot: where should you go right now? Top spots by heat, then straight into directions. */
   function openSuggest(){
     var top=spots.slice().sort(function(a,b){return b.count-a.count;}).slice(0,3);
@@ -1587,8 +1640,15 @@
     closeOverlay('heartSheet'); renderEvents();
     toastNow('check','Pin checks out. Your event is live at '+loc+'.','surge');
   }
-  function addSpot(){ document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('plus')+'</div><h3>Add a spot</h3><p>Drop a spot at your live location, say what is going on, and you become its owner.</p><input id="spotName" placeholder="Spot name" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:10px;outline:none"><textarea id="spotGo" placeholder="What is going on and why" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;resize:none;height:64px;margin-bottom:14px;outline:none"></textarea><button class="btn" onclick="postSpot()">'+ic('plus')+' Post, become owner</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>'; showOverlay('heartSheet'); }
-  function postSpot(){ var n=escP(document.getElementById('spotName').value||'New Spot'); var g=escP(document.getElementById('spotGo').value||'Something is happening'); var s={id:'u'+(spots.length+1),name:n,count:8,go:g,admin:'You',ai:'A',ag:0,lat:userLoc[0]+0.002,lng:userLoc[1]+0.002,q:n+' Phoenix AZ'}; spots.unshift(s); if(lmap){ spotMarkers[s.id]=L.marker([s.lat,s.lng],{icon:spotIcon(s)}).addTo(lmap).on('click',function(){ openSpot(s.id); }); } closeOverlay('heartSheet'); renderHotList(); }
+  /* Spots are auto-detected, never hand-added. If we got the name wrong, students tell us (Snapchat style). */
+  function suggestName(id){
+    var sp=spots.filter(function(x){return x.id===id;})[0];
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('pin')+'</div><h3>What do people call this place?</h3><p>We name spots by cross-referencing maps and what students actually say. If we missed it, set us straight.</p>'
+      +'<input id="sugName" placeholder="What this spot is really called" style="width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);font-family:Inter;font-size:14px;margin-bottom:14px;outline:none">'
+      +'<button class="btn" onclick="submitName()">'+ic('check')+' Send it in</button><div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Cancel</div></div>';
+    showOverlay('heartSheet');
+  }
+  function submitName(){ closeOverlay('heartSheet'); toastNow('check','Got it. We will cross-check the name and update the map.'); }
 
   function go(tab){
     var idx=+tab.dataset.i;
@@ -1608,7 +1668,7 @@
   }
   function resetProto(){
     ['detailSheet','chatView','matchModal','priorityModal','heartSheet','revealModal','adModal'].forEach(closeOverlay);
-    clearInterval(hotTimer); clearInterval(dropTimer); clearInterval(adTimer); clearTimeout(toastHide); stopToasts(); hereMine={}; portfolioUnlocked=false; isPlus=false; recentsUnlocked=false; dropSecs=DROP_START; atHotspot=false; adForRecents=false;
+    clearInterval(hotTimer); clearInterval(dropTimer); clearInterval(adTimer); clearTimeout(toastHide); stopToasts(); hereMine={}; portfolioUnlocked=false; isPlus=false; recentsUnlocked=false; dropSecs=DROP_START; atHotspot=false; adForRecents=false; blocked={}; myIncognito=false;
     document.getElementById('tabbar').style.display='none';
     document.getElementById('login').style.display='flex';
     priorityLeft=10; revealsUsed=0; REVEAL_LIMIT=50; revealed={}; hereIdx=0; applyNight(false); updateCounter();
