@@ -6,7 +6,8 @@ export const config = { schedule: '*/15 * * * *' }
 
 export default async () => {
   const base = process.env.URL || 'https://closer-gcu.netlify.app'
-  const key = process.env.WAITLIST_ADMIN_KEY || 'set-a-key'
+  const key = process.env.WAITLIST_ADMIN_KEY
+  if (!key) return new Response('drip-skipped: WAITLIST_ADMIN_KEY not set', { status: 503 })
   try {
     const r = await fetch(`${base}/.netlify/functions/waitlist?action=drip&key=${encodeURIComponent(key)}`, { method: 'POST' })
     const body = await r.text()

@@ -7,13 +7,39 @@ import { getStore } from '@netlify/blobs'
 // GET  ?action=list&key=... (admin)                        -> returns all captured leads as JSON.
 // GET  ?action=export&key=... (admin)                      -> returns all leads as CSV.
 
-const CORS = {
+import { timingSafeEqual } from 'node:crypto'
+
+// Public actions (submit/verify) can be called cross-origin from the onboarding flow,
+// so they carry CORS. Admin actions use ajson (no CORS) so a malicious page can never
+// read the lead roster cross-origin, even with a key.
+const PUBLIC_CORS = {
   'access-control-allow-origin': '*',
   'access-control-allow-methods': 'GET,POST,OPTIONS',
-  'access-control-allow-headers': 'content-type',
+  'access-control-allow-headers': 'content-type,x-admin-key',
 }
 const json = (obj, status = 200) =>
-  new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json', ...CORS } })
+  new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json', ...PUBLIC_CORS } })
+const ajson = (obj, status = 200) =>
+  new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json' } })
+
+// Admin auth: fail CLOSED if no key is configured, accept the key from a header or the
+// query string, and compare in constant time so it can't be recovered by timing.
+function adminOk(url, req) {
+  const secret = process.env.WAITLIST_ADMIN_KEY
+  if (!secret) return false
+  const given = req.headers.get('x-admin-key') || url.searchParams.get('key') || ''
+  const a = Buffer.from(String(given))
+  const b = Buffer.from(String(secret))
+  return a.length === b.length && timingSafeEqual(a, b)
+}
+
+// Prefix cells Excel/Sheets would execute as a formula, so an injected =HYPERLINK/cmd
+// payload in a stored field can't run when the exported CSV is opened.
+const csvCell = (c) => {
+  let s = String(c == null ? '' : c)
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s
+  return `"${s.replace(/"/g, '""')}"`
+}
 
 const isGcu = (e) => /@(my\.)?gcu\.edu$/i.test(String(e || '').trim())
 // Every accredited US university email domain (2,393), for campus-by-campus expansion.
@@ -99,7 +125,7 @@ async function readBody(req) {
 }
 
 export default async (req) => {
-  if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS })
+  if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: PUBLIC_CORS })
   const url = new URL(req.url)
   const action = url.searchParams.get('action')
 
@@ -114,6 +140,13 @@ export default async (req) => {
   if (req.method === 'POST' && action === 'submit') {
     const d = await readBody(req)
     if (d.hp) return json({ ok: true }) // honeypot filled, silently drop the bot
+    // Per-IP throttle so the endpoint can't be scripted to mass-inject leads or burn SMS
+    const ip = req.headers.get('x-nf-client-connection-ip')
+      || (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || 'unknown'
+    const rlKey = `rl:${ip}:${new Date().toISOString().slice(0, 13)}` // per hour
+    const rl = (await store.get(rlKey, { type: 'json' })) || { n: 0 }
+    if (rl.n >= 20) return json({ ok: false, error: 'rate-limited' }, 429)
+    await store.setJSON(rlKey, { n: rl.n + 1 })
     const email = String(d.email || '').trim()
     const phone = String(d.phone || '').trim()
     if (!validEmail(email)) return json({ ok: false, error: 'bad-email' }, 400)
@@ -178,8 +211,7 @@ export default async (req) => {
 
   // ADMIN: list / export
   if (req.method === 'GET' && (action === 'list' || action === 'export')) {
-    const key = url.searchParams.get('key')
-    if (key !== (process.env.WAITLIST_ADMIN_KEY || 'set-a-key')) return json({ ok: false }, 401)
+    if (!adminOk(url, req)) return ajson({ ok: false }, 401)
     const { blobs } = await store.list({ prefix: 'lead:' })
     const leads = []
     for (const b of blobs) {
@@ -190,16 +222,15 @@ export default async (req) => {
     if (action === 'export') {
       const rows = [['email', 'phone', 'school', 'verified', 'accepted', 'cta', 'ts']]
       leads.forEach((l) => rows.push([l.email, l.phone, l.school, l.verified, l.accepted || false, l.cta, l.ts]))
-      const csv = rows.map((r) => r.map((c) => `"${String(c == null ? '' : c).replace(/"/g, '""')}"`).join(',')).join('\n')
+      const csv = rows.map((r) => r.map(csvCell).join(',')).join('\n')
       return new Response(csv, { headers: { 'content-type': 'text/csv', 'content-disposition': 'attachment; filename=closer-waitlist.csv' } })
     }
-    return json({ ok: true, count: leads.length, provider: twilioReady() ? 'sms-on' : 'capture-only', leads })
+    return ajson({ ok: true, count: leads.length, provider: twilioReady() ? 'sms-on' : 'capture-only', leads })
   }
 
   // ADMIN: clear all leads (reset)
   if (req.method === 'POST' && action === 'clear') {
-    const key = url.searchParams.get('key')
-    if (key !== (process.env.WAITLIST_ADMIN_KEY || 'set-a-key')) return json({ ok: false }, 401)
+    if (!adminOk(url, req)) return ajson({ ok: false }, 401)
     let n = 0
     const leads = await store.list({ prefix: 'lead:' })
     for (const b of leads.blobs) { await store.delete(b.key); n++ }
@@ -207,13 +238,12 @@ export default async (req) => {
     for (const b of pend.blobs) { await store.delete(b.key); n++ }
     const cnt = await store.list({ prefix: 'accepted_count:' })
     for (const b of cnt.blobs) { await store.delete(b.key) }
-    return json({ ok: true, cleared: n })
+    return ajson({ ok: true, cleared: n })
   }
 
   // ADMIN: accept people and text them "you're in". POST {phone} for one, or {all:true} for everyone not yet accepted.
   if (req.method === 'POST' && action === 'accept') {
-    const key = url.searchParams.get('key')
-    if (key !== (process.env.WAITLIST_ADMIN_KEY || 'set-a-key')) return json({ ok: false }, 401)
+    if (!adminOk(url, req)) return ajson({ ok: false }, 401)
     const d = await readBody(req)
     const target = d.phone ? e164(String(d.phone)) : null
     const all = !!d.all
@@ -236,14 +266,13 @@ export default async (req) => {
       )
       if (sms.sent) texted++
     }
-    return json({ ok: true, accepted, texted, sms: twilioReady() ? 'on' : 'off, add Twilio to text them' })
+    return ajson({ ok: true, accepted, texted, sms: twilioReady() ? 'on' : 'off, add Twilio to text them' })
   }
 
   // CRON + ADMIN: one drip pass. Texts a processing/position update at PROCESSING_DELAY_MIN,
   // then accepts eligible leads (oldest first) at ACCEPT_DELAY_MIN, capped at DAILY_ACCEPT_CAP per day.
   if (action === 'drip') {
-    const key = url.searchParams.get('key')
-    if (key !== (process.env.WAITLIST_ADMIN_KEY || 'set-a-key')) return json({ ok: false }, 401)
+    if (!adminOk(url, req)) return ajson({ ok: false }, 401)
     const fast = url.searchParams.get('fast') // test override: treat delays as 0
     const PROC_MIN = fast ? 0 : Number(process.env.PROCESSING_DELAY_MIN || 60)
     const ACC_MIN = fast ? 0 : Number(process.env.ACCEPT_DELAY_MIN || 120)
@@ -290,7 +319,7 @@ export default async (req) => {
       }
     }
     await store.setJSON(countKey, { n: acceptedToday })
-    return json({ ok: true, processed, accepted, acceptedToday, cap: CAP, sms: twilioReady() ? 'on' : 'off' })
+    return ajson({ ok: true, processed, accepted, acceptedToday, cap: CAP, sms: twilioReady() ? 'on' : 'off' })
   }
 
   return json({ ok: false, error: 'unknown-action' }, 400)
