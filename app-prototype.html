@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Closer, Interactive Prototype</title>
-<meta name="description" content="Interactive concept prototype of Closer, the GCU-only dating app where matches happen when you actually cross paths.">
+<title>Hot Spots, Interactive Prototype</title>
+<meta name="description" content="Interactive concept prototype of Hot Spots, the GCU-only app that shows you where everyone is at and connects you to the people you actually cross paths with.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Ccircle cx='14' cy='14' r='4' fill='%23ff5c56'/%3E%3Ccircle cx='14' cy='14' r='8.5' stroke='%23f43f6e' stroke-width='1.8' fill='none' opacity='0.6'/%3E%3Ccircle cx='14' cy='14' r='12.5' stroke='%233b82f6' stroke-width='1.4' fill='none' opacity='0.4'/%3E%3C/svg%3E">
-<meta property="og:title" content="Closer, interactive app prototype">
-<meta property="og:description" content="Tap through the Closer concept: paths, hearts, hotspots, and events.">
+<meta property="og:title" content="Hot Spots, interactive app prototype">
+<meta property="og:description" content="Tap through the Hot Spots concept: paths, hearts, spots, and events.">
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -392,8 +392,8 @@
   body.night .hot-spot .bub{animation:hotpulseN 2.6s ease-in-out infinite}
   @keyframes hotpulseN{0%,100%{box-shadow:0 0 0 0 rgba(57,255,200,.45)}50%{box-shadow:0 0 0 12px rgba(57,255,200,0)}}
   .hot-spot .lab{font-size:9.5px;color:var(--text);font-weight:600;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.8)}
-  .closer-orb{position:absolute;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:var(--bg);border:2px solid var(--text);display:flex;align-items:center;justify-content:center;z-index:5;transition:left 1.6s cubic-bezier(.45,0,.2,1),top 1.6s cubic-bezier(.45,0,.2,1);box-shadow:0 0 24px rgba(255,92,0,.55)}
-  body.night .closer-orb{box-shadow:0 0 24px rgba(46,197,255,.6)}
+  .hotspots-orb{position:absolute;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:var(--bg);border:2px solid var(--text);display:flex;align-items:center;justify-content:center;z-index:5;transition:left 1.6s cubic-bezier(.45,0,.2,1),top 1.6s cubic-bezier(.45,0,.2,1);box-shadow:0 0 24px rgba(255,92,0,.55)}
+  body.night .hotspots-orb{box-shadow:0 0 24px rgba(46,197,255,.6)}
   .hot-list-title{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
   .hot-list-title span{color:var(--cactus2);font-size:10px;display:flex;align-items:center;gap:5px}
   .hot-list-title span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cactus2);animation:blink 1.4s infinite}
@@ -657,8 +657,8 @@
 
 <div class="page">
   <div class="intro">
-    <div class="logo"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="url(#wg)"/><circle cx="14" cy="14" r="8.5" stroke="url(#wg)" stroke-width="1.8" opacity="0.55"/><circle cx="14" cy="14" r="12.5" stroke="url(#wg)" stroke-width="1.4" opacity="0.25"/></svg><span class="grad-text">closer</span></div>
-    <h1>The Closer prototype</h1>
+    <div class="logo"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="url(#wg)"/><circle cx="14" cy="14" r="8.5" stroke="url(#wg)" stroke-width="1.8" opacity="0.55"/><circle cx="14" cy="14" r="12.5" stroke="url(#wg)" stroke-width="1.4" opacity="0.25"/></svg><span class="grad-text">hotspots</span></div>
+    <h1>The Hot Spots prototype</h1>
     <p>Tap the tabs (the dial slides), flip the toggles, swipe a card, reveal hearts that grow with how often you cross, level up, and invite friends for unlimited priority matches. Concept only, not real users. <a href="index.html" style="color:var(--sand)">Join the waitlist</a></p>
     <div class="circleline">Your circle is smaller than you think, and bigger than you can imagine.</div>
   </div>
@@ -667,7 +667,7 @@
     <div class="annotations">
       <div class="anno"><div class="k"><span class="d"></span>Hearts grow with your circle</div><p>Each heart is a circle. The more times you have crossed paths with that person, the bigger their circle. Reveal who sent it.</p></div>
       <div class="anno"><div class="k"><span class="d"></span>50 reveals a day</div><p>You never see the count. When your 50 are up, you are offered to wait, or invite a friend to unlock another 50.</p></div>
-      <div class="anno"><div class="k"><span class="d"></span>Invite to level up</div><p>Every friend who joins grants priority matches with no cap, and Closer learns who you like to suggest where to go.</p></div>
+      <div class="anno"><div class="k"><span class="d"></span>Invite to level up</div><p>Every friend who joins grants priority matches with no cap, and Hot Spots learns who you like to suggest where to go.</p></div>
     </div>
 
     <div class="phone">
@@ -678,8 +678,8 @@
 
         <div class="login" id="login">
           <div class="mark"><svg width="64" height="64" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="url(#wg)"/><circle cx="14" cy="14" r="8.5" stroke="url(#wg)" stroke-width="1.6" opacity="0.6"/><circle cx="14" cy="14" r="12.5" stroke="url(#wg)" stroke-width="1.3" opacity="0.3"/></svg></div>
-          <h2 class="grad-text">closer</h2>
-          <p>Match with GCU and ASU students you physically cross paths with, within about 20 feet. Real students only.</p>
+          <h2 class="grad-text">hotspots</h2>
+          <p>See where everyone is at, and match with GCU and ASU students you physically cross paths with, within about 20 feet. Real students only.</p>
           <button class="ms-btn" onclick="location.href='onboarding.html'"><span class="ms-grid"><span style="background:#F25022"></span><span style="background:#7FBA00"></span><span style="background:#00A4EF"></span><span style="background:#FFB900"></span></span>Continue with ASU email</button>
           <button class="ms-btn" onclick="location.href='onboarding.html'" style="margin-top:12px"><span class="ms-grid"><span style="background:#F25022"></span><span style="background:#7FBA00"></span><span style="background:#00A4EF"></span><span style="background:#FFB900"></span></span>Continue with GCU email</button>
           <div class="verified-chip"><span id="lockIc"></span> Verified through your school, @asu.edu or @gcu.edu</div>
@@ -691,7 +691,7 @@
         <!-- PATHS -->
         <div class="view active" id="v-paths">
           <div class="vhead">
-            <div><h2 id="pathsTitle">Closer</h2><div class="sub" id="pathsSub">People you crossed paths with</div></div>
+            <div><h2 id="pathsTitle">Hot Spots</h2><div class="sub" id="pathsSub">People you crossed paths with</div></div>
             <div class="hicon"><span class="pri-pill streak-pill" id="streakPill" title="Night streak"></span><span class="pri-pill" id="priPill"></span></div>
           </div>
           <div class="vbody">
@@ -719,17 +719,17 @@
         <div class="view" id="v-here">
           <div class="vhead"><div><h2 id="hereTitle">Here Now</h2><div class="sub" id="hereSub">People at your spot right now</div></div></div>
           <div class="vbody">
-            <div class="dongle three" id="hereDongle"><button class="on" onclick="hereTab('now',this)">Here Now</button><button onclick="hereTab('hotspots',this)">Hotspots</button><button onclick="hereTab('events',this)">Events</button><span class="dongle-pill"></span></div>
+            <div class="dongle three" id="hereDongle"><button class="on" onclick="hereTab('now',this)">Here Now</button><button onclick="hereTab('hotspots',this)">Spots</button><button onclick="hereTab('events',this)">Events</button><span class="dongle-pill"></span></div>
             <div id="pane-now">
               <div id="hereLock" class="here-lock" style="display:none">
                 <div class="hl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 16 12 21 12 21z"/><circle cx="12" cy="10.2" r="2.3"/></svg></div>
-                <div class="hl-t">You are not at a hotspot</div>
-                <div class="hl-s"><b style="font-family:'Anton';letter-spacing:.04em">HERE NOW</b> only turns on when you are somewhere with <b>50 or more Closers</b> around you. Get to a hotspot to see who is here right now.</div>
-                <button class="btn" onclick="hereTab('hotspots', document.querySelectorAll('#hereDongle button')[1])">See the hotspots</button>
-                <div class="dismiss" onclick="simAtHotspot()">Simulate arriving at a hotspot (demo)</div>
+                <div class="hl-t">You are not at a hot spot</div>
+                <div class="hl-s"><b style="font-family:'Anton';letter-spacing:.04em">HERE NOW</b> only turns on when you are somewhere with <b>50 or more people</b> around you. Get to a hot spot to see who is here right now.</div>
+                <button class="btn" onclick="hereTab('hotspots', document.querySelectorAll('#hereDongle button')[1])">See the hot spots</button>
+                <div class="dismiss" onclick="simAtHotspot()">Simulate arriving at a hot spot (demo)</div>
               </div>
               <div id="hereReal">
-                <div class="here-chip"><span class="live"></span>At <b>&nbsp;Rivers Pool</b><span style="opacity:.4">·</span>hotspot<span style="opacity:.4">·</span>84 Closers here</div>
+                <div class="here-chip"><span class="live"></span>At <b>&nbsp;Rivers Pool</b><span style="opacity:.4">·</span>hot spot<span style="opacity:.4">·</span>84 people here</div>
                 <div class="deck"><div class="deck-peek"></div><div class="deck-card" id="hereCard"></div></div>
                 <div class="swipe-acts">
                   <button class="big-circ pass" title="Pass" aria-label="Pass" onclick="actHere('pass')" id="passBtn"></button>
@@ -740,9 +740,9 @@
             </div>
             <div id="pane-hotspots" style="display:none">
               <div class="hot-map" id="hotMap"></div>
-              <div class="hot-list-title">Today's hotspots near you <span>updated live</span></div>
+              <div class="hot-list-title">Today's hot spots near you <span>updated live</span></div>
               <div id="hot-list"></div>
-              <div class="hot-intro hot-intro-foot">Hotspots appear on their own wherever <b>50 or more Closers gather within about 500 feet</b>, nobody can add one by hand. We name each spot by cross-referencing maps and what students actually call it. Cool circles are quiet, red-orange is packed. Tap one for distance and directions.</div>
+              <div class="hot-intro hot-intro-foot">Hot spots appear on their own wherever <b>50 or more people gather within about 500 feet</b>, nobody can add one by hand. We name each spot by cross-referencing maps and what students actually call it. Cool circles are quiet, red-orange is packed. Tap one for distance and directions.</div>
 
             </div>
             <div id="pane-events" style="display:none">
@@ -776,7 +776,7 @@
               <div class="av" id="profAv" style="background:linear-gradient(135deg,#ff8a4c,#f43f6e)">AC<div class="prof-badge" id="profCheck"></div></div>
               <h2>Alex, 21</h2>
               <div class="vbadges"><span class="vbadge"><span class="vcheck" id="vc1"></span> GCU VERIFIED</span><span class="vbadge"><span class="vcheck blue" id="vc2"></span> VERIFIED</span></div>
-              <div class="verify-cap">The blue check means Closer verified this is a real person, face-matched to their photos and Instagram.</div>
+              <div class="verify-cap">The blue check means Hot Spots verified this is a real person, face-matched to their photos and Instagram.</div>
             </div>
 
             <div class="stats">
@@ -831,7 +831,7 @@
               <div class="acc-b">
                 <div class="ins-row" style="margin-top:12px"><span class="ins-chip">Marketing majors</span><span class="ins-chip">Riverside Bar regulars</span><span class="ins-chip">Live music</span></div>
                 <div class="ins-rec">The paths you have walked keep crossing at <b>Riverside Bar</b> and <b>Lopes Way</b>. The journey ahead points to <b>Sunset Rooftop Social</b> and <b>Rivers Pool</b>, more of your kind of people gather there.</div>
-                <div class="ins-note" id="insNote"><span></span>Closer learns from every path you cross to guide where you go next.</div>
+                <div class="ins-note" id="insNote"><span></span>Hot Spots learns from every path you cross to guide where you go next.</div>
               </div>
             </div>
 
@@ -889,7 +889,7 @@
 
     <div class="annotations">
       <div class="anno"><div class="k"><span class="d"></span>Path drops</div><p>Crossings land in timed drops, not a live feed. The countdown builds the itch, and the only way to fill the next drop is to go out. First drop hits 40 seconds in.</p></div>
-      <div class="anno"><div class="k"><span class="d"></span>Learns your type</div><p>Profile shows what Closer infers from your likes and suggests where to meet more people like them.</p></div>
+      <div class="anno"><div class="k"><span class="d"></span>Learns your type</div><p>Profile shows what Hot Spots infers from your likes and suggests where to meet more people like them.</p></div>
       <div class="anno"><div class="k"><span class="d"></span>Instagram showcase</div><p>Feature up to six circular Instagram posts. Tap a showcase profile to see theirs.</p></div>
     </div>
   </div>
@@ -1056,10 +1056,10 @@
     el.innerHTML='<div class="drop-card tappable'+(dropOpen?' open':'')+'" onclick="toggleDrop()"><div class="drop-lab">'+ic('bolt')+'Next path drop<span class="drop-chev">'+ic('chevron')+'</span></div>'
       +'<div class="drop-clock" id="dropClock">'+fmtBig(dropSecs)+'</div>'
       +'<div class="drop-count">'+vis.length+' people crossed you today</div>'
-      +'<div class="drop-x"><div class="drop-sub">Hidden until the drop. Every hotspot you hit takes an hour off the clock, or unlock them now.</div>'
+      +'<div class="drop-x"><div class="drop-sub">Hidden until the drop. Every hot spot you hit takes an hour off the clock, or unlock them now.</div>'
       +'<div class="drop-actions"><button class="dbtn" onclick="event.stopPropagation();unlockRecentsAd()">'+ic('spark')+' Watch a video, unlock 10</button>'
       +'<button class="dbtn" onclick="event.stopPropagation();unlockRecentsAd()">'+ic('pin')+' Unlock the next 30 min</button>'
-      +'<button class="dbtn plus" onclick="event.stopPropagation();buyCloserPlus()">'+ic('star')+' Closer+, unlock now</button></div></div></div>'
+      +'<button class="dbtn plus" onclick="event.stopPropagation();buyHotSpotsPlus()">'+ic('star')+' Hot Spots+, unlock now</button></div></div></div>'
       + vis.slice(0,3).map(function(id){ return lockedRecentCard(byId(id)); }).join('')
       + '<div class="more-locked" onclick="unlockRecentsPrompt()">'+ic('lock')+' '+vis.length+' waiting behind the drop</div>';
   }
@@ -1071,9 +1071,9 @@
   function openForAnHour(){ recentsUnlocked=true; portfolioUnlocked=true; timedUnlock=true; unlockUntil=Date.now()+UNLOCK_MS; clearInterval(relockTimer); relockTimer=setInterval(tickUnlock,1000); renderRecent(); renderPortfolio(''); }
   function tickUnlock(){ var left=Math.round((unlockUntil-Date.now())/1000); if(left<=0){ clearInterval(relockTimer); recentsUnlocked=false; portfolioUnlocked=false; timedUnlock=false; renderRecent(); renderPortfolio(''); toastNow('lock','Your hour is up. Watch another video to see who crossed you','surge'); return; } var el=document.getElementById('unlockLeft'); if(el) el.textContent=fmtBig(left); }
   function unlockRecentsPrompt(){
-    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('bolt')+'</div><h3>Skip the wait?</h3><p>See the people you crossed today right now, or hold out for the drop. Every hotspot you visit also takes an hour off the clock.</p>'
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('bolt')+'</div><h3>Skip the wait?</h3><p>See the people you crossed today right now, or hold out for the drop. Every hot spot you visit also takes an hour off the clock.</p>'
       +'<button class="btn" onclick="closeOverlay(\'heartSheet\');unlockRecentsAd()">'+ic('spark')+' Watch a video, unlock now</button>'
-      +'<button class="btn" style="background:transparent;border:1px solid var(--line);color:var(--text);margin-top:9px" onclick="closeOverlay(\'heartSheet\');buyCloserPlus()">'+ic('star')+' Closer+, unlock instantly</button>'
+      +'<button class="btn" style="background:transparent;border:1px solid var(--line);color:var(--text);margin-top:9px" onclick="closeOverlay(\'heartSheet\');buyHotSpotsPlus()">'+ic('star')+' Hot Spots+, unlock instantly</button>'
       +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">I will wait</div></div>';
     showOverlay('heartSheet');
   }
@@ -1102,7 +1102,7 @@
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('lock')+'</div>'
       +'<h3>This crossing is locked</h3><p>Your first 10 crossings are free. Unlock your full portfolio, everyone you have ever crossed paths with.</p>'
       +'<button class="btn" onclick="closeOverlay(\'heartSheet\');watchAd()" style="margin-bottom:9px">'+ic('spark')+' Watch an ad, unlock 1 hour</button>'
-      +'<button class="btn outline" style="background:transparent;border:1px solid var(--line);color:var(--text)" onclick="closeOverlay(\'heartSheet\');buyCloserPlus()">'+ic('star')+' Closer+, unlock forever</button>'
+      +'<button class="btn outline" style="background:transparent;border:1px solid var(--line);color:var(--text)" onclick="closeOverlay(\'heartSheet\');buyHotSpotsPlus()">'+ic('star')+' Hot Spots+, unlock forever</button>'
       +'<div class="dismiss" onclick="closeOverlay(\'heartSheet\')">Not now</div></div>';
     showOverlay('heartSheet');
   }
@@ -1135,10 +1135,10 @@
     toastNow('spark','Unlocked for 1 hour','surge');
     burst(document.getElementById('v-paths'));
   }
-  function buyCloserPlus(){
+  function buyHotSpotsPlus(){
     document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star">'+ic('star')+'</div>'
-      +'<h2>Closer+</h2><div class="pri-count" style="font-size:15px">$25/mo<span style="color:var(--muted);font-weight:400;font-family:Inter"> · billed through the App Store · cancel anytime</span></div><p>See everyone, unlimited priority matches, no ads, and every drop opens instantly. Founding members lock this rate for life.</p>'
-      +'<button class="btn" onclick="closeOverlay(\'priorityModal\');portfolioUnlocked=true;isPlus=true;recentsUnlocked=true;renderPortfolio(\'\');renderRecent();updateCounter();toastNow(\'star\',\'Closer+ active. Drops open instantly, priority unlimited.\')">Activate Closer+ (demo)</button>'
+      +'<h2>Hot Spots+</h2><div class="pri-count" style="font-size:15px">$25/mo<span style="color:var(--muted);font-weight:400;font-family:Inter"> · billed through the App Store · cancel anytime</span></div><p>See everyone, unlimited priority matches, no ads, and every drop opens instantly. Founding members lock this rate for life.</p>'
+      +'<button class="btn" onclick="closeOverlay(\'priorityModal\');portfolioUnlocked=true;isPlus=true;recentsUnlocked=true;renderPortfolio(\'\');renderRecent();updateCounter();toastNow(\'star\',\'Hot Spots+ active. Drops open instantly, priority unlimited.\')">Activate Hot Spots+ (demo)</button>'
       +'<div class="dismiss" onclick="closeOverlay(\'priorityModal\')">Maybe later</div></div>';
     showOverlay('priorityModal');
   }
@@ -1273,7 +1273,7 @@
     d.classList.toggle('r', name==='spotlight');
     document.getElementById('pane-paths').style.display=(name==='paths'?'block':'none');
     document.getElementById('pane-spotlight').style.display=(name==='spotlight'?'block':'none');
-    document.getElementById('pathsTitle').textContent=(name==='spotlight'?'Spotlight':'Closer');
+    document.getElementById('pathsTitle').textContent=(name==='spotlight'?'Spotlight':'Hot Spots');
     document.getElementById('pathsSub').textContent=(name==='spotlight'?'Yesterday, most liked and most matched':'People you crossed paths with');
     if(name==='spotlight') animateSpotlight();
   }
@@ -1284,14 +1284,14 @@
     document.getElementById('pane-now').style.display=(name==='now'?'block':'none');
     document.getElementById('pane-hotspots').style.display=(name==='hotspots'?'block':'none');
     document.getElementById('pane-events').style.display=(name==='events'?'block':'none');
-    var t={now:['Here Now','People at your spot right now'],hotspots:['Hotspots','Where Closers are right now'],events:['Events','Upcoming, who you could cross']};
+    var t={now:['Here Now','People at your spot right now'],hotspots:['Spots','Where people are right now'],events:['Events','Upcoming, who you could cross']};
     document.getElementById('hereTitle').textContent=t[name][0];
     document.getElementById('hereSub').textContent=t[name][1];
     if(name==='hotspots') startHot(); else clearInterval(hotTimer);
     if(name==='now') hereGate();
   }
   function hereGate(){ var lock=document.getElementById('hereLock'), real=document.getElementById('hereReal'); if(!lock||!real)return; if(atHotspot){ lock.style.display='none'; real.style.display='block'; renderHere(true); } else { lock.style.display='block'; real.style.display='none'; } }
-  function simAtHotspot(){ atHotspot=true; hereGate(); toastNow('pin','You arrived at a hotspot. Here Now is open.','surge'); }
+  function simAtHotspot(){ atHotspot=true; hereGate(); toastNow('pin','You arrived at a hot spot. Here Now is open.','surge'); }
 
   function postCircle(p,i){ return '<div class="ig-post" title="Instagram post"><div class="pg" style="background:'+G[(p.g+i)%5]+'"></div></div>'; }
   function igShowcase(p){
@@ -1342,10 +1342,10 @@
     var p=byId(id);
     if(isPlus||priorityLeft>0){
       if(!isPlus){ priorityLeft--; updateCounter(); }
-      var leftTxt=isPlus?'Unlimited with Closer+':priorityLeft+' priority matches left today';
+      var leftTxt=isPlus?'Unlimited with Hot Spots+':priorityLeft+' priority matches left today';
       document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star">'+ic('star')+'</div><h2>Priority Match sent</h2><p>'+p.name+' jumps to the top of their hearts with a glow. Priority Matches get noticed first.</p><div class="pri-count">'+leftTxt+'</div><button class="btn" onclick="closeOverlay(\'priorityModal\')">Nice</button></div>';
     } else {
-      document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star dim">'+ic('star')+'</div><h2>Out of priority matches</h2><p>Get unlimited with Closer+, or invite friends to earn more.</p><button class="btn" onclick="buyCloserPlus()">'+ic('star')+' Get Closer+</button><button class="btn" style="background:transparent;border:1px solid var(--line);color:var(--text);margin-top:9px" onclick="closeOverlay(\'priorityModal\');go(document.getElementById(\'tab-prof\'))">'+ic('users')+' Invite friends</button><div class="dismiss" onclick="closeOverlay(\'priorityModal\')">Maybe later</div></div>';
+      document.getElementById('priorityInner').innerHTML='<div class="pri-modal-card"><div class="pri-star dim">'+ic('star')+'</div><h2>Out of priority matches</h2><p>Get unlimited with Hot Spots+, or invite friends to earn more.</p><button class="btn" onclick="buyHotSpotsPlus()">'+ic('star')+' Get Hot Spots+</button><button class="btn" style="background:transparent;border:1px solid var(--line);color:var(--text);margin-top:9px" onclick="closeOverlay(\'priorityModal\');go(document.getElementById(\'tab-prof\'))">'+ic('users')+' Invite friends</button><div class="dismiss" onclick="closeOverlay(\'priorityModal\')">Maybe later</div></div>';
     }
     showOverlay('priorityModal');
   }
@@ -1401,14 +1401,14 @@
     }
   }
   function toggleNight(){ var sw=document.getElementById('themeSweep'); if(sw){ sw.classList.remove('run'); void sw.offsetWidth; sw.classList.add('run'); } applyNight(!night); }
-  var toastMsgs=[['heart','Maya just entered your radius'],['bolt','SURGE, 87 Closers at Grace right now','surge'],['star','You moved up to number 5 on Spotlight'],['moon','Quiet 3 days. Grace is packed tonight, go earn The Comeback','surge'],['pin','12 Closers just arrived at Grace'],['users','Someone new just crossed your path'],['bolt','Rivers Pool is spiking, 52 and climbing','surge'],['heart','3 new hearts are waiting for you'],['crown','Splash 25 medallion drops Jul 25 only, one night'],['flame','Go out tonight to keep your 6 night streak'],['pin','The hotspot is shifting toward Rivers Pool']];
+  var toastMsgs=[['heart','Maya just entered your radius'],['bolt','SURGE, 87 people at Grace right now','surge'],['star','You moved up to number 5 on Spotlight'],['moon','Quiet 3 days. Grace is packed tonight, go earn The Comeback','surge'],['pin','12 people just arrived at Grace'],['users','Someone new just crossed your path'],['bolt','Rivers Pool is spiking, 52 and climbing','surge'],['heart','3 new hearts are waiting for you'],['crown','Splash 25 medallion drops Jul 25 only, one night'],['flame','Go out tonight to keep your 6 night streak'],['pin','The hot spot is shifting toward Rivers Pool']];
   var toastTimer=null, toastI=0, toastHide=null;
   function toastNow(icn,txt,cls){ var el=document.getElementById('toast'); if(!el)return; el.innerHTML='<div class="tdot">'+ic(icn)+'</div><div class="ttxt">'+txt+'</div>'; el.className='toast'+(cls?' '+cls:''); void el.offsetWidth; el.classList.add('show'); clearTimeout(toastHide); toastHide=setTimeout(function(){ el.classList.remove('show'); },4200); }
   function showToast(){ var m=toastMsgs[toastI%toastMsgs.length]; toastI++; toastNow(m[0],m[1],m[2]); }
 
   /* QUESTS + XP: rewards for going out, never for scrolling */
   var quests=[
-    {t:'Check in at a hotspot',cur:0,max:1,xp:15,icn:'pin'},
+    {t:'Check in at a hot spot',cur:0,max:1,xp:15,icn:'pin'},
     {t:'Cross paths with 5 new people',cur:3,max:5,xp:50,icn:'users'},
     {t:'Send one heart',cur:0,max:1,xp:20,icn:'heart'}
   ];
@@ -1427,13 +1427,13 @@
   var meds=[
     {id:'first',   n:'First Cross',   icn:'heart',  rar:'common', earned:true,  how:'Cross paths with your first person.', pct:'92% of GCU has this'},
     {id:'butterfly',n:'Butterfly',    icn:'users',  rar:'common', earned:true,  how:'Cross paths with 25 different people.', pct:'41% of GCU has this'},
-    {id:'tonight', n:'Out Tonight',   icn:'spark',  rar:'common', earned:false, how:'Check in at any hotspot tonight.', pct:'Earn it right now, check in somewhere'},
+    {id:'tonight', n:'Out Tonight',   icn:'spark',  rar:'common', earned:false, how:'Check in at any hot spot tonight.', pct:'Earn it right now, check in somewhere'},
     {id:'comeback',n:'The Comeback',  icn:'replay', rar:'common', earned:false, how:'Go back out after 3 quiet days.', pct:'28% of GCU has this'},
     {id:'owl',     n:'Night Owl',     icn:'moon',   rar:'rare',   earned:true,  how:'Cross paths with someone after midnight.', pct:'18% of GCU has this'},
     {id:'fire',    n:'Week of Fire',  icn:'flame',  rar:'rare',   earned:false, how:'Hold a 7 night streak.', pct:'12% of GCU has this'},
-    {id:'sunday',  n:'Sunday Service',icn:'pin',    rar:'rare',   earned:false, how:'Check in at a church hotspot on a Sunday.', gate:'Sundays only', pct:'9% of GCU has this'},
+    {id:'sunday',  n:'Sunday Service',icn:'pin',    rar:'rare',   earned:false, how:'Check in at a church hot spot on a Sunday.', gate:'Sundays only', pct:'9% of GCU has this'},
     {id:'friday',  n:'First Friday',  icn:'star',   rar:'rare',   earned:false, how:'Go out on the first Friday of the month.', gate:'First Fridays only', pct:'7% of GCU has this'},
-    {id:'dayone',  n:'Day One',       icn:'crown',  rar:'legend', earned:true,  how:'Joined Closer in the first semester.', gate:'Never available again', pct:'2% of GCU has this'},
+    {id:'dayone',  n:'Day One',       icn:'crown',  rar:'legend', earned:true,  how:'Joined Hot Spots in the first semester.', gate:'Never available again', pct:'2% of GCU has this'},
     {id:'splash',  n:'Splash 25',     icn:'bolt',   rar:'legend', earned:false, how:'Cross paths at Summer Splash, Jul 25, Rivers Pool. One night only.', gate:'Event exclusive, Jul 25', pct:'0% so far, be first'}
   ];
   function renderMeds(){
@@ -1522,7 +1522,7 @@
       +'<h3>Report submitted</h3><p>The review runs on your evidence and decides if the rules were broken. '
       +(severe?'Anything illegal, or involving a minor, means the account is banned immediately.':'Confirmed violations earn a strike, three strikes and the account is gone. Anything illegal skips straight to a ban.')
       +' Every ban gets one appeal, reviewed by a person, and an appeal never reveals who reported.</p>'
-      +'<p style="font-weight:600;color:var(--text)">'+p.name+' is now invisible to you, everywhere. No drops, no hotspots, no Spotlight, no events. Gone from your world.</p>'
+      +'<p style="font-weight:600;color:var(--text)">'+p.name+' is now invisible to you, everywhere. No drops, no spots, no Spotlight, no events. Gone from your world.</p>'
       +'<button class="btn" onclick="closeOverlay(\'heartSheet\')">Done</button></div>';
   }
   function submitReport(){
@@ -1532,11 +1532,11 @@
   }
   function openGuidelines(){
     document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('shield')+'</div>'
-      +'<h3>Community Guidelines</h3><p>Closer works because everyone here is real, verified, and safe. One strike and you are out.</p>'
+      +'<h3>Community Guidelines</h3><p>Hot Spots works because everyone here is real, verified, and safe. One strike and you are out.</p>'
       +'<div class="g-row"><span class="gd"></span><span><b>18 and over.</b> We verify GCU affiliation, and you confirm you are 18 or older. Anyone found to be under 18 is removed.</span></div>'
       +'<div class="g-row"><span class="gd"></span><span><b>GCU students only.</b> Verified through your school Microsoft account.</span></div>'
       +'<div class="g-row"><span class="gd"></span><span><b>Real faces only.</b> AI matches your photos to your Instagram for the blue check.</span></div>'
-      +'<div class="g-row"><span class="gd"></span><span><b>Zero tolerance</b> for harassment, hate, nudity, threats, or spam. Same standards as every major dating app.</span></div>'
+      +'<div class="g-row"><span class="gd"></span><span><b>Zero tolerance</b> for harassment, hate, nudity, threats, or spam. Same standards as every major social app.</span></div>'
       +'<div class="g-row"><span class="gd"></span><span><b>Strikes and bans.</b> Violations earn strikes, three and you are out. Anything illegal is an instant ban. Every ban gets one human-reviewed appeal. Banned devices cannot make new accounts.</span></div>'
       +'<div class="g-row"><span class="gd"></span><span><b>Your location is private.</b> Nobody ever sees where you are live, only that your paths crossed, after the fact.</span></div>'
       +'<button class="btn" onclick="closeOverlay(\'heartSheet\')" style="margin-top:8px">Got it</button></div>';
@@ -1567,7 +1567,7 @@
     {id:'pickle',name:'Pickleball Courts',count:29,go:'Open courts, bring a paddle',admin:'Bella',ai:'B',ag:1,lat:33.5000,lng:-112.1250,q:'Pickleball Courts Phoenix AZ'}
   ];
   var hereMine={}, hotTimer=null, atHotspot=false;
-  var HOTSPOT_MIN=50; // a hotspot = 50+ Closers within a close radius right now
+  var HOTSPOT_MIN=50; // a hot spot = 50+ people within a close radius right now
   var lmap=null, spotMarkers={}, youMarker=null, tileLight=null, tileDark=null, userLoc=[33.5165,-112.1298]; /* GCU campus fallback until live location grants */
   function pinSize(c){ return Math.max(30,Math.min(58, 24+c*0.22)); }
   /* Circle heat: cool sea when quiet, ramping through amber to hot red-orange as the crowd grows. */
@@ -1628,13 +1628,13 @@
     }).join('');
   }
   function goingSpot(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(s&&!hereMine[id]){ hereMine[id]=true; questTick(0); addXp(15); earnMed('tonight');
-      cutDrop(1); // every hotspot you hit takes an hour off your next path drop
+      cutDrop(1); // every hot spot you hit takes an hour off your next path drop
       if(s.count>=HOTSPOT_MIN && !atHotspot){ atHotspot=true; hereGate(); toastNow('pin','You are at '+s.name+'. Here Now just unlocked.','surge'); }
       else { toastNow('bolt','An hour cut off your next drop for going to '+s.name); }
     } renderHotList(); }
   function openSpot(id){ var s=spots.filter(function(x){return x.id===id;})[0]; if(!s)return; var q=encodeURIComponent(s.q||(s.name+' Phoenix AZ'));
     var isHot=s.count>=HOTSPOT_MIN;
-    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('pin')+'</div><h3>'+s.name+'</h3><p>'+s.count+' Closers here right now, from live location. '+fmtDist(s)+' from you. '+s.go+'.'+(isHot?' This is a hotspot, so Here Now turns on when you arrive.':' Not a hotspot yet, it needs '+HOTSPOT_MIN+' Closers.')+'</p>'
+    document.getElementById('heartInner').innerHTML='<div class="sheet-card"><div class="hs-star">'+ic('pin')+'</div><h3>'+s.name+'</h3><p>'+s.count+' people here right now, from live location. '+fmtDist(s)+' from you. '+s.go+'.'+(isHot?' This is a hot spot, so Here Now turns on when you arrive.':' Not a hot spot yet, it needs '+HOTSPOT_MIN+' people.')+'</p>'
     +'<div class="map-btns"><a class="map-btn" href="https://maps.apple.com/?daddr='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Apple Maps</a><a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination='+q+'" target="_blank" rel="noopener">'+ic('pin')+' Google Maps</a></div>'
     +'<button class="btn" onclick="closeOverlay(\'heartSheet\');goingSpot(\''+id+'\')">'+ic('check')+(hereMine[id]?' You are going':' I am going')+'</button>'
     +'<div class="sug-link" onclick="suggestName(\''+id+'\')">Is this place called something else? Suggest a name</div>'
