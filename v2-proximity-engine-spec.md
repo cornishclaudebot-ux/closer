@@ -17,8 +17,8 @@ Everything else (likes, chat) is standard. This is the part worth getting right.
 3. **Collapse into sessions** — an `encounters` row is upserted per unordered pair. Standing
    next to someone for 20 min is ONE encounter; the count only ticks up when there's a
    **>30 min gap** since you last crossed. That's how "3rd time this week" stays honest.
-4. **Label it** — `closer_nearest_place()` tags the encounter with a campus POI ("Library
-   Commons") from `campus_places`.
+4. **Label it (internal only)** — `closer_nearest_place()` tags the encounter with the nearest
+   campus POI from `campus_places`. This stays server-side and is NEVER shown to users.
 
 Three knobs, all in the SQL: **radius 50 m · window 5 min · new-session gap 30 min.**
 
@@ -36,7 +36,7 @@ pings from a **pg_cron batch every 1–2 min** so the write path stays fast.
   (the value) persist; the breadcrumb trail does not.
 - **Nobody reads anyone's raw location.** `location_pings` RLS is `user_id = auth.uid()`.
   Detection runs `SECURITY DEFINER`, so the cross-user math happens server-side and only the
-  derived encounter ("you crossed paths at the Library at 2:14") is ever exposed.
+  derived encounter (that you crossed, plus time and distance) is ever exposed.
 - **Never name the place.** The feed shows *time + distance* only ("came within their space,
   2:14 PM, ~20 ft"). `last_place` is computed server-side for internal use and is never
   returned to a client, so no one's location history is exposed.
@@ -113,7 +113,7 @@ SUPABASE_SERVICE_ROLE_KEY=...        # server only, never shipped to client
 
 ## Build order (maps to the vision's 5 steps)
 1. **Waitlist → Supabase** — repoint the current form at `signups`. *(ready now)*
-2. **Auth + profiles** — .edu OTP gate, profile + photo upload, discoverable toggle.
+2. **Auth + profiles** — GCU Microsoft (Entra) sign-in, profile + photo upload, discoverable toggle.
 3. **Proximity engine** — run this migration, ship `useProximityReporter` + the Discover feed. Seed `campus_places` with GCU POIs.
 4. **Realtime match + chat** — likes → match trigger, messages, presence.
 5. **Launch on Vercel** — custom domain, edge, and the n8n signup/safety/digest workflows.

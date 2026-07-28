@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Closer, Create your account</title>
+<title>Hot Spots, Create your account</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -157,9 +157,9 @@
     var cont = document.getElementById('cont'); cont.textContent = 'Continue';
 
     if(s.t==='intro'){
-      h = '<div style="padding-top:26px"><div class="logo" style="margin-bottom:26px"><svg width="24" height="24" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="#ff5c56"/><circle cx="14" cy="14" r="8.5" stroke="#ff5c56" stroke-width="1.8" opacity="0.55"/><circle cx="14" cy="14" r="12.5" stroke="#f43f6e" stroke-width="1.4" opacity="0.3"/></svg><span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">closer</span></div>'
+      h = '<div style="padding-top:26px"><div class="logo" style="margin-bottom:26px"><svg width="24" height="24" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="4" fill="#ff5c56"/><circle cx="14" cy="14" r="8.5" stroke="#ff5c56" stroke-width="1.8" opacity="0.55"/><circle cx="14" cy="14" r="12.5" stroke="#f43f6e" stroke-width="1.4" opacity="0.3"/></svg><span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">hotspots</span></div>'
         +head("Let's build your account", false, 'A few real questions, then you’re in.')
-        +'<div class="sub">This takes about 3 minutes. Everything we ask keeps Closer real, verified, and safe, which is the whole point. The starred steps are required to be on the platform.</div>'
+        +'<div class="sub">This takes about 3 minutes. Everything we ask keeps Hot Spots real, verified, and safe, which is the whole point. The starred steps are required to be on the platform.</div>'
         +'<div class="choices">'
         +'<div class="choice on"><span class="rd"></span><div><b style="font-weight:600">Verify + build in one flow</b><div style="font-size:12.5px;color:var(--muted)">School, phone, photos, and your profile</div></div></div>'
         +'</div>'+why('We never share your info. Verification is what stops bots, catfish, and anyone who is not a real student.');
@@ -183,7 +183,7 @@
         +'<div class="resend" onclick="resendCode()">Resend code</div>';
     }
     else if(s.t==='name'){
-      h = head('Your name','required','What’s your name?','Use your real name. People see your first name and last initial. Real names keep Closer catfish-free.')
+      h = head('Your name','required','What’s your name?','Use your real name. People see your first name and last initial. Real names keep Hot Spots catfish-free.')
         +'<div class="row"><input class="f" id="in" placeholder="First name" value="'+(data.first||'')+'" oninput="save(\'first\',this.value)"><input class="f" id="in2" placeholder="Last name" value="'+(data.last||'')+'" oninput="save(\'last\',this.value)"></div>'
         +why('Your last name is only ever shown as an initial. We use the full name for verification and trust and safety.');
     }
@@ -191,7 +191,7 @@
       var yrs=''; for(var y=2010;y>=1975;y--) yrs+='<option '+(data.dy==y?'selected':'')+'>'+y+'</option>';
       var mos=''; ['Month','01','02','03','04','05','06','07','08','09','10','11','12'].forEach(function(m,idx){ mos+='<option value="'+(idx===0?'':m)+'" '+(data.dm==m?'selected':'')+'>'+m+'</option>'; });
       var days=''; for(var d=1;d<=31;d++){ days+='<option '+(data.dd==d?'selected':'')+'>'+d+'</option>'; }
-      h = head('Your birthday','required','How old are you?','Closer is 18 and over, no exceptions. We use your date of birth to verify your age, not just a checkbox.')
+      h = head('Your birthday','required','How old are you?','Hot Spots is 18 and over, no exceptions. We use your date of birth to verify your age, not just a checkbox.')
         +'<div class="row"><select class="f" id="mo" onchange="dob()"><option value="">Month</option>'+['01','02','03','04','05','06','07','08','09','10','11','12'].map(function(m){return '<option '+(data.dm==m?'selected':'')+'>'+m+'</option>';}).join('')+'</select>'
         +'<select class="f" id="dd" onchange="dob()"><option value="">Day</option>'+Array.from({length:31},function(_,k){return '<option '+(data.dd==(k+1)?'selected':'')+'>'+(k+1)+'</option>';}).join('')+'</select>'
         +'<select class="f" id="yy" onchange="dob()"><option value="">Year</option>'+yrs+'</select></div>'
@@ -220,7 +220,7 @@
     else if(s.t==='year'){ h = choiceStep('Campus context','required','What year are you?','year',['Freshman','Sophomore','Junior','Senior','Grad student']); }
     else if(s.t==='interests'){
       var c=Object.keys(data.interests).length;
-      h = head('Your interests','required','Pick what you’re about','Choose at least 3. These show on your profile and help Closer point you to the right spots. ('+c+' picked)')
+      h = head('Your interests','required','Pick what you’re about','Choose at least 3. These show on your profile and help Hot Spots point you to the right spots. ('+c+' picked)')
         +'<div class="chips">'+INTERESTS.map(function(o){return '<button class="chip'+(data.interests[o]?' on':'')+'" onclick="toggleInterest(\''+o+'\')">'+o+'</button>';}).join('')+'</div>';
     }
     else if(s.t==='prompts'){
@@ -244,7 +244,7 @@
     else if(s.t==='permLoc'){
       h = '<div class="perm"><div class="picon">'+ic('pin')+'</div>'
         +head('Location','required','Turn on location','')
-        +'<div class="sub" style="text-align:left">Closer only works if it can tell when you physically cross paths with someone, within about 20 feet. <b style="color:var(--text)">Your live location is never shown to anyone, ever.</b> You only ever see that you crossed paths, after the fact.</div>'
+        +'<div class="sub" style="text-align:left">Hot Spots only works if it can tell when you physically cross paths with someone, within about 20 feet. <b style="color:var(--text)">Your live location is never shown to anyone, ever.</b> You only ever see that you crossed paths, after the fact.</div>'
         +'<button class="enable'+(data.perms.loc?' done':'')+'" onclick="perm(\'loc\')">'+(data.perms.loc?'Location on':'Allow location')+'</button></div>';
     }
     else if(s.t==='permNotif'){
@@ -258,15 +258,15 @@
       var items=[['guidelines','I have read and agree to the <a href="app-prototype.html" onclick="event.preventDefault()">Community Guidelines</a>, <a href="#" onclick="event.preventDefault()">Terms</a>, and <a href="#" onclick="event.preventDefault()">Privacy Policy</a>.'],
         ['age','I confirm I am 18 years of age or older.'],
         ['real','Everything I entered is real and about me. I understand fake profiles are permanently removed.']];
-      h = head('Almost there','required','The ground rules','One strike and you are out. These keep Closer safe for everyone.')
+      h = head('Almost there','required','The ground rules','One strike and you are out. These keep Hot Spots safe for everyone.')
         +items.map(function(it){return '<div class="consent-item'+(data.consent[it[0]]?' on':'')+'" onclick="toggleConsent(\''+it[0]+'\')"><span class="ck">'+ic('check')+'</span><span>'+it[1]+'</span></div>';}).join('');
       cont.textContent = 'Create my account';
     }
     else if(s.t==='done'){
       var cn = data.campus? data.campus.split('|')[1] : 'your campus';
       h = '<div class="done-wrap"><div class="dmark">'+ic('check')+'</div>'
-        +'<h1>You’re in.</h1><div class="sub" style="text-align:center">Welcome to Closer at '+cn+', '+(data.first||'')+'. Your profile is built and verified. Time to start crossing paths.</div></div>';
-      cont.textContent = 'Enter Closer';
+        +'<h1>You’re in.</h1><div class="sub" style="text-align:center">Welcome to Hot Spots at '+cn+', '+(data.first||'')+'. Your profile is built and verified. Time to start crossing paths.</div></div>';
+      cont.textContent = 'Enter Hot Spots';
     }
     b.innerHTML = h;
     updateReq();
@@ -296,7 +296,7 @@
     data.dm=mo.value; data.dd=dd.value; data.dy=yy.value; var out=document.getElementById('age');
     if(data.dm&&data.dd&&data.dy){ var age=2026-(+data.dy); var bd=new Date(2026,+data.dm-1,+data.dd); if(bd>new Date(2026,6,10)) age--;
       if(age>=18){ out.className='age-out ok'; out.textContent=age+' years old, you’re good.'; data.age=age; }
-      else { out.className='age-out bad'; out.textContent='You must be 18 or older to use Closer.'; data.age=age; } }
+      else { out.className='age-out bad'; out.textContent='You must be 18 or older to use Hot Spots.'; data.age=age; } }
     else { out.textContent=''; data.age=null; }
     updateReq();
   }
@@ -330,7 +330,7 @@
   }
   function reqHint(){
     var t=steps[i].t;
-    var map={email:'Enter your school email to continue',phone:'Enter a valid phone number',code:'Enter the 6-digit code',name:'Enter your first and last name',dob:'You must be 18 or older',photos:'Add at least 2 photos',selfie:'Take your verification selfie',iam:'Pick one',showme:'Pick one',looking:'Pick one',year:'Pick your year',interests:'Pick at least 3',prompts:'Answer at least one prompt',instagram:'Add your Instagram handle',permLoc:'Location is required for Closer to work',consent:'Check all three to continue'};
+    var map={email:'Enter your school email to continue',phone:'Enter a valid phone number',code:'Enter the 6-digit code',name:'Enter your first and last name',dob:'You must be 18 or older',photos:'Add at least 2 photos',selfie:'Take your verification selfie',iam:'Pick one',showme:'Pick one',looking:'Pick one',year:'Pick your year',interests:'Pick at least 3',prompts:'Answer at least one prompt',instagram:'Add your Instagram handle',permLoc:'Location is required for Hot Spots to work',consent:'Check all three to continue'};
     return map[t]||'';
   }
   function updateReq(){

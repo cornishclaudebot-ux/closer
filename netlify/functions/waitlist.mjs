@@ -1,6 +1,6 @@
 import { getStore } from '@netlify/blobs'
 
-// Closer waitlist backend.
+// Hot Spots waitlist backend.
 // POST ?action=submit  { email, phone, cta_location, hp }  -> stores the lead. If a texting
 //   provider (Twilio) is configured, texts a 6-digit code and asks the client to verify.
 // POST ?action=verify  { phone, code }                     -> confirms the code, marks verified.
@@ -84,16 +84,16 @@ async function sendSms(to, body) {
   return { sent: r.ok, status: r.status }
 }
 
-// Emails each new signup to the DartyForLife inbox, tagged "Closer CVC" in the subject
+// Emails each new signup to the DartyForLife inbox, tagged "Hot Spots CVC" in the subject
 // so a Gmail filter can auto-label it. Dormant until RESEND_API_KEY is set.
 async function notify(rec) {
   const key = process.env.RESEND_API_KEY
   if (!key) return
   const to = process.env.NOTIFY_EMAIL || 'dartyforlife@gmail.com'
-  const from = process.env.RESEND_FROM || 'Closer Waitlist <onboarding@resend.dev>'
-  const subject = `Closer CVC | new signup: ${rec.email}`
+  const from = process.env.RESEND_FROM || 'Hot Spots Waitlist <onboarding@resend.dev>'
+  const subject = `Hot Spots CVC | new signup: ${rec.email}`
   const html =
-    '<h2 style="font-family:sans-serif">New Closer waitlist signup</h2>' +
+    '<h2 style="font-family:sans-serif">New Hot Spots waitlist signup</h2>' +
     '<table style="font-family:sans-serif;font-size:14px;border-collapse:collapse">' +
     `<tr><td style="padding:2px 10px 2px 0"><b>Email</b></td><td>${rec.email}</td></tr>` +
     `<tr><td style="padding:2px 10px 2px 0"><b>Phone</b></td><td>${rec.phone}</td></tr>` +
@@ -101,7 +101,7 @@ async function notify(rec) {
     `<tr><td style="padding:2px 10px 2px 0"><b>Phone verified</b></td><td>${rec.verified ? 'Yes' : 'Not yet'}</td></tr>` +
     `<tr><td style="padding:2px 10px 2px 0"><b>Source</b></td><td>${rec.cta || 'n/a'}</td></tr>` +
     `<tr><td style="padding:2px 10px 2px 0"><b>When</b></td><td>${rec.ts}</td></tr>` +
-    '</table><p style="color:#888;font-family:sans-serif;font-size:12px">Category: Closer CVC</p>'
+    '</table><p style="color:#888;font-family:sans-serif;font-size:12px">Category: Hot Spots CVC</p>'
   try {
     await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -113,8 +113,8 @@ async function notify(rec) {
 
 function welcomeMsg(rec) {
   return rec.school === 'gcu'
-    ? "You're on the Closer waitlist and locked in as a founding member. We'll text you the moment your invite is ready. Your circle is smaller than you think."
-    : "You're on the Closer general list. GCU students get in first, and we'll text you when your campus unlocks."
+    ? "You're on the Hot Spots waitlist and locked in as a founding member. We'll text you the moment your invite is ready. See where everyone's at."
+    : "You're on the Hot Spots general list. GCU students get in first, and we'll text you when your campus unlocks."
 }
 
 async function readBody(req) {
@@ -171,7 +171,7 @@ export default async (req) => {
         expires: Date.now() + 10 * 60 * 1000,
         attempts: 0,
       })
-      const sms = await sendSms(e164(phone), `Your Closer verification code is ${code}. It expires in 10 minutes.`)
+      const sms = await sendSms(e164(phone), `Your Hot Spots verification code is ${code}. It expires in 10 minutes.`)
       return json({ ok: true, needCode: true, sent: sms.sent })
     }
 
@@ -223,7 +223,7 @@ export default async (req) => {
       const rows = [['email', 'phone', 'school', 'verified', 'accepted', 'cta', 'ts']]
       leads.forEach((l) => rows.push([l.email, l.phone, l.school, l.verified, l.accepted || false, l.cta, l.ts]))
       const csv = rows.map((r) => r.map(csvCell).join(',')).join('\n')
-      return new Response(csv, { headers: { 'content-type': 'text/csv', 'content-disposition': 'attachment; filename=closer-waitlist.csv' } })
+      return new Response(csv, { headers: { 'content-type': 'text/csv', 'content-disposition': 'attachment; filename=hotspots-waitlist.csv' } })
     }
     return ajson({ ok: true, count: leads.length, provider: twilioReady() ? 'sms-on' : 'capture-only', leads })
   }
@@ -262,7 +262,7 @@ export default async (req) => {
       accepted++
       const sms = await sendSms(
         v.phone,
-        "You're in. Closer just accepted you at GCU. Open the app and start crossing paths: https://closer-gcu.netlify.app"
+        "You're in. Hot Spots just accepted you at GCU. Open the app and start crossing paths: https://closer-gcu.netlify.app"
       )
       if (sms.sent) texted++
     }
@@ -299,7 +299,7 @@ export default async (req) => {
       if (!d.procTexted && ageMin >= PROC_MIN) {
         d.procTexted = true
         await store.setJSON(k, d)
-        await sendSms(d.phone, `Closer is reviewing your account. You are about number ${i + 1} in line at GCU. We'll text you the moment you're in.`)
+        await sendSms(d.phone, `Hot Spots is reviewing your account. You are about number ${i + 1} in line at GCU. We'll text you the moment you're in.`)
         processed++
       }
     }
@@ -313,7 +313,7 @@ export default async (req) => {
         d.accepted = true
         d.acceptedAt = new Date().toISOString()
         await store.setJSON(k, d)
-        await sendSms(d.phone, "You're in. Closer just accepted you at GCU. Open the app and start crossing paths: https://closer-gcu.netlify.app")
+        await sendSms(d.phone, "You're in. Hot Spots just accepted you at GCU. Open the app and start crossing paths: https://closer-gcu.netlify.app")
         acceptedToday++
         accepted++
       }
